@@ -11,12 +11,15 @@ package org.gs1.epcglobal.epcis;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
+
 import org.w3c.dom.Element;
 
 
@@ -65,6 +68,7 @@ import org.w3c.dom.Element;
     "extension",
     "anies"
 })
+@XmlRootElement
 public class ObjectEventType
     extends EPCISEventType
     implements Serializable

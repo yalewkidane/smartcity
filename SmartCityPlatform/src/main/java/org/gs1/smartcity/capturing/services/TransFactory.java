@@ -1,5 +1,7 @@
 package org.gs1.smartcity.capturing.services;
 
+import org.gs1.smartcity.capturing.services.bus.BusTranslator;
+
 public class TransFactory {
 	
 	public Translator getTrans(String type) {
@@ -8,7 +10,7 @@ public class TransFactory {
 		
 		if(type.equals("busanBus")) {
 			
-			trans = new BusanBusTranslator();
+			trans = new BusTranslator();
 		}
 		
 		return trans;

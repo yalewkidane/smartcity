@@ -31,6 +31,9 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
+	private final static QName _EPCISDocument_QNAME = new QName("", "EPCISDocument");
+	private final static QName _EPCISBody_QNAME = new QName("", "EPCISBody");
+	private final static QName _EventList_QNAME = new QName("", "EventList");
     private final static QName _EventListTypeObjectEvent_QNAME = new QName("", "ObjectEvent");
     private final static QName _EventListTypeAggregationEvent_QNAME = new QName("", "AggregationEvent");
     private final static QName _EventListTypeQuantityEvent_QNAME = new QName("", "QuantityEvent");
@@ -459,7 +462,34 @@ public class ObjectFactory {
     public TransformationEventExtensionType createTransformationEventExtensionType() {
         return new TransformationEventExtensionType();
     }
+    
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ObjectEventType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "EPCISDocument")
+    public JAXBElement<EPCISDocument> createEPCISDocument(EPCISDocument value) {
+        return new JAXBElement<EPCISDocument>(_EPCISDocument_QNAME, EPCISDocument.class, null, value);
+    }
+    
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ObjectEventType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "EPCISBody")
+    public JAXBElement<EPCISBodyType> createEPCISBody(EPCISBodyType value) {
+        return new JAXBElement<EPCISBodyType>(_EPCISBody_QNAME, EPCISBodyType.class, null, value);
+    }
 
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link ObjectEventType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "EventList")
+    public JAXBElement<EventListType> createEventList(EventListType value) {
+        return new JAXBElement<EventListType>(_EventList_QNAME, EventListType.class, null, value);
+    }
+    
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link ObjectEventType }{@code >}}
      * 
