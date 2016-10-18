@@ -38,8 +38,9 @@ public class QueryProcessor {
 		while ((output = br.readLine()) != null) {
 			System.out.println(output);
 			response.append(output);
-			if(output.compareTo("") != 0)
+			if(output.compareTo("") != 0) {
 				response.append("\n");
+			}
 		}
 		br.close();
 

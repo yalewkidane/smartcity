@@ -3,6 +3,8 @@ package org.gs1.smartcity.capturing.services;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -25,6 +27,7 @@ import org.gs1.epcglobal.epcis.ReadPointType;
 import org.gs1.epcglobal.epcis.VocabularyElementListType;
 import org.gs1.epcglobal.epcis.VocabularyElementType;
 import org.gs1.epcglobal.epcis.VocabularyType;
+import org.gs1.smartcity.datatype.bus.BusStopInfo;
 import org.gs1.smartcity.util.EPCISEventMarshaller;
 import org.gs1.smartcity.util.EPCISVocabularyMarshaller;
 
@@ -63,33 +66,33 @@ public class Test {
 //		m.make(obj);
 //		String s = m.marshal();
 		
-		VocabularyType voc = new VocabularyType();
-		
-		voc.setType("urn:epcglobal:epcis:vtype:BusinessLocation");
-		
-		VocabularyElementListType vocElementList = new VocabularyElementListType();
-		VocabularyElementType vocElement = new VocabularyElementType();
-		vocElement.setId("urn:epc:id:sgln:0037000.00729.8202");
-		AttributeType att = new AttributeType();
-		att.setId("urn:epcglobal:cbv:mda:site");
-		att.getContent().add("0037000007296");
-		vocElement.getAttributes().add(att);
-		AttributeType att2 = new AttributeType();
-		att2.setId("urn:epcglobal:cbv:mda:sst");
-		att2.getContent().add("202");
-		vocElement.getAttributes().add(att2);
-		
-		vocElementList.getVocabularyElements().add(vocElement);
-		
-		voc.setVocabularyElementList(vocElementList);
-		
-		EPCISVocabularyMarshaller m = new EPCISVocabularyMarshaller();
-		m.make(voc);
-		String s = m.marshal();
-		
-		System.out.println(s);
-		
-
+//		VocabularyType voc = new VocabularyType();
+//		
+//		voc.setType("urn:epcglobal:epcis:vtype:BusinessLocation");
+//		
+//		VocabularyElementListType vocElementList = new VocabularyElementListType();
+//		VocabularyElementType vocElement = new VocabularyElementType();
+//		vocElement.setId("urn:epc:id:sgln:0037000.00729.8202");
+//		AttributeType att = new AttributeType();
+//		att.setId("urn:epcglobal:cbv:mda:site");
+//		att.getContent().add("0037000007296");
+//		vocElement.getAttributes().add(att);
+//		AttributeType att2 = new AttributeType();
+//		att2.setId("urn:epcglobal:cbv:mda:sst");
+//		att2.getContent().add("202");
+//		vocElement.getAttributes().add(att2);
+//		
+//		vocElementList.getVocabularyElements().add(vocElement);
+//		
+//		voc.setVocabularyElementList(vocElementList);
+//		
+//		EPCISVocabularyMarshaller m = new EPCISVocabularyMarshaller();
+//		m.make(voc);
+//		String s = m.marshal();
+//		
+//		System.out.println(s);
+//		
+	
 	}
 
 }

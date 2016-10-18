@@ -15,7 +15,6 @@ import org.gs1.epcglobal.epcis.EPCISHeaderType;
 import org.gs1.epcglobal.epcis.EPCISMasterDataType;
 import org.gs1.epcglobal.epcis.ObjectFactory;
 import org.gs1.epcglobal.epcis.VocabularyListType;
-import org.gs1.epcglobal.epcis.VocabularyType;
 
 public class EPCISVocabularyMarshaller {
 
@@ -24,7 +23,6 @@ public class EPCISVocabularyMarshaller {
 	private EPCISHeaderType epcisHeader;
 	private EPCISHeaderExtensionType headerExtension;
 	private EPCISMasterDataType masterdata;
-	private VocabularyListType vocList;
 
 	public EPCISVocabularyMarshaller() {
 		of = new ObjectFactory();
@@ -32,16 +30,14 @@ public class EPCISVocabularyMarshaller {
 		epcisHeader = of.createEPCISHeaderType();
 		headerExtension = of.createEPCISHeaderExtensionType();
 		masterdata = of.createEPCISMasterDataType();
-		vocList = of.createVocabularyListType();
-		masterdata.setVocabularyList(vocList);
 		headerExtension.setEPCISMasterData(masterdata);
 		epcisHeader.setExtension(headerExtension);
 		epcisDoc.setEPCISHeader(epcisHeader);
 	}
 
-	public void make(VocabularyType voc) {
+	public void make(VocabularyListType vocList) {
 		
-		vocList.getVocabularies().add(voc);
+		masterdata.setVocabularyList(vocList);
 	}
 
 	public String marshal() throws JAXBException, UnsupportedEncodingException {

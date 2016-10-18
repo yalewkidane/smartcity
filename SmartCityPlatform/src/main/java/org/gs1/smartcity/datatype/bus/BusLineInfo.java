@@ -3,29 +3,21 @@ package org.gs1.smartcity.datatype.bus;
 public class BusLineInfo {
 
 	private String gsrn;
+	private String lineid;
 	private String number;
 	private String busType;
 	private String company;
-	private String startPoint;
-	private String endPoint;
-	private String startTime;
-	private String endTime;
-	private int interval;
-	
-	public BusLineInfo() {}
-	
-	public BusLineInfo(String gsrn, String number, String busType, String company, String startPoint, String endPoint, String startTime, String endTime, int interval) {
-		
-		this.gsrn = gsrn;
-		this.number = number;
-		this.busType = busType;
-		this.company = company;
-		this.startPoint = startPoint;
-		this.endPoint = endPoint;
-		this.startTime = startTime;
-		this.endTime = endTime;
-		this.interval = interval;
-	}
+	private BusStopInfo startPoint;
+	private BusStopInfo endPoint;
+	private BusStopInfo turnPoint;
+	private BusTimeType startTime;
+	private BusTimeType endTime;
+	private BusTimeType turnStartTime;
+	private BusTimeType turnEndTime;
+	private BusIntervalType interval;
+	private String stopCount;
+	private String halfDistance;
+	private String avgRunTime;
 
 	public String getGsrn() {
 
@@ -35,6 +27,16 @@ public class BusLineInfo {
 	public void setGsrn(String value) {
 
 		this.gsrn = value;
+	}
+
+	public String getLineID() {
+
+		return lineid;
+	}
+
+	public void setLineID(String value) {
+
+		this.lineid = value;
 	}
 
 	public String getNumber() {
@@ -67,54 +69,113 @@ public class BusLineInfo {
 		this.company = value;
 	}
 
-	public String getStartPoint() {
+	public BusStopInfo getStartPoint() {
 
 		return startPoint;
 	}
 
-	public void setStartPoint(String value) {
+	public void setStartPoint(BusStopInfo value) {
 
 		this.startPoint = value;
 	}
 
-	public String getEndPoint() {
+	public BusStopInfo getEndPoint() {
 
 		return endPoint;
 	}
 
-	public void setEndPoint(String value) {
+	public void setEndPoint(BusStopInfo value) {
 
 		this.endPoint = value;
 	}
 
-	public String getStartTime() {
+	public BusStopInfo getTurnPoint() {
+
+		return turnPoint;
+	}
+
+	public void setTurnPoint(BusStopInfo value) {
+
+		this.turnPoint = value;
+	}
+
+	public BusTimeType getStartTime() {
 
 		return startTime;
 	}
 
-	public void setStartTime(String value) {
+	public void setStartTime(BusTimeType value) {
 
 		this.startTime = value;
 	}
 
-	public String getEndTime() {
+	public BusTimeType getEndTime() {
 
 		return endTime;
 	}
 
-	public void setEndTime(String value) {
+	public void setEndTime(BusTimeType value) {
 
 		this.endTime = value;
 	}
 
-	public int getInterval() {
+	public BusTimeType getTurnStartTime() {
+
+		return turnStartTime;
+	}
+
+	public void setTurnStartTime(BusTimeType value) {
+
+		this.turnStartTime = value;
+	}
+
+	public BusTimeType getTurnEndTime() {
+
+		return turnEndTime;
+	}
+
+	public void setTurnEndTime(BusTimeType value) {
+
+		this.turnEndTime = value;
+	}
+
+	public BusIntervalType getInterval() {
 
 		return interval;
 	}
 
-	public void setInterval(int value) {
+	public void setInterval(BusIntervalType value) {
 
 		this.interval = value;
 	}
 
+	public String getStopCount() {
+
+		return stopCount;
+	}
+
+	public void setStopCount(String value) {
+
+		this.stopCount = value;
+	}
+
+	public String getHalfDistance() {
+
+		return halfDistance;
+	}
+
+	public void setHalfDistance(String value) {
+
+		this.halfDistance = value;
+	}
+
+	public String getAvgRunTime() {
+
+		return avgRunTime;
+	}
+
+	public void setAvgRunTime(String value) {
+
+		this.avgRunTime = value;
+	}
 }

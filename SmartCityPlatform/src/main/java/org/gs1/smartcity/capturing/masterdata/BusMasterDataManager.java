@@ -4,38 +4,41 @@ import org.gs1.epcglobal.epcis.AttributeType;
 import org.gs1.epcglobal.epcis.VocabularyElementListType;
 import org.gs1.epcglobal.epcis.VocabularyElementType;
 import org.gs1.epcglobal.epcis.VocabularyType;
-import org.gs1.smartcity.capturing.services.bus.BusInfoFactory;
-import org.gs1.smartcity.datatype.bus.BusCompanyInfoType;
-import org.gs1.smartcity.datatype.bus.BusDriverInfoType;
-import org.gs1.smartcity.datatype.bus.BusLineInfoType;
-import org.gs1.smartcity.datatype.bus.BusStopInfoType;
+import org.gs1.smartcity.capturing.services.bus.BusServiceFactory;
+import org.gs1.smartcity.datatype.bus.BusCompanyInfo;
+import org.gs1.smartcity.datatype.bus.BusDriverInfo;
+import org.gs1.smartcity.datatype.bus.BusLineInfo;
+import org.gs1.smartcity.datatype.bus.BusLineRoute;
+import org.gs1.smartcity.datatype.bus.BusStopInfo;
 
 public class BusMasterDataManager extends MasterDataManager {
 
 	public VocabularyType modelingVocabulary(String type, Object object) {
 
-		if (type.compareTo(BusInfoFactory.BUS_LINE_INFO) == 0) {
-			lineModeling((BusLineInfoType) object);
-		} else if (type.compareTo(BusInfoFactory.BUS_STOP_INFO) == 0) {
-			stopModeling((BusStopInfoType) object);
-		} else if (type.compareTo(BusInfoFactory.BUS_DRIVER_INFO) == 0) {
-			driverModeling((BusDriverInfoType) object);
-		} else if (type.compareTo(BusInfoFactory.BUS_COMPANY_INFO) == 0) {
-			companyModeling((BusCompanyInfoType) object);
+		if (type.compareTo(BusServiceFactory.BUS_LINE_INFO) == 0) {
+			lineModeling((BusLineInfo) object);
+		} else if (type.compareTo(BusServiceFactory.BUS_STOP_INFO) == 0) {
+			stopModeling((BusStopInfo) object);
+		} else if (type.compareTo(BusServiceFactory.BUS_DRIVER_INFO) == 0) {
+			driverModeling((BusDriverInfo) object);
+		} else if (type.compareTo(BusServiceFactory.BUS_COMPANY_INFO) == 0) {
+			companyModeling((BusCompanyInfo) object);
+		} else if (type.compareTo(BusServiceFactory.BUS_LINE_ROUTE) == 0) {
+			lineRouteModeling((BusLineRoute) object);
 		}
 
 		return voc;
 	}
 
-	private void lineModeling(BusLineInfoType info) {
-
+	private void lineModeling(BusLineInfo info) {
+		
 		//vocabulary type
 		voc.setType("urn:gs1:epcisapp:bus:line:info");
 
 		//vocabulary element with gsrn
 		VocabularyElementListType vocElementList = new VocabularyElementListType();
 		VocabularyElementType vocElement = new VocabularyElementType();
-		vocElement.setId("urn:epc:id:gsrn:" + info.getGsrn().substring(0, 6) + "." + info.getGsrn().substring(7));
+		vocElement.setId("urn:epc:id:gsrn:" + info.getGsrn().substring(0, 7) + "." + info.getGsrn().substring(7));
 
 		//bus line id
 		AttributeType lineid = new AttributeType();
@@ -64,62 +67,64 @@ public class BusMasterDataManager extends MasterDataManager {
 		//start point
 		AttributeType startPoint = new AttributeType();
 		startPoint.setId("http://epcis.example.com/bus/line/startPoint");
+		startPoint.getContent().add(info.getStartPoint());
 
-		if(info.getStartPoint().getNameKR() != null) {
-			AttributeType startPoint_name = new AttributeType();
-			startPoint_name.setId("http://epcis.example.com/bus/line/startPoint/name_kr");
-			startPoint_name.getContent().add(info.getStartPoint().getNameKR());
-			startPoint.getContent().add(startPoint_name);
-		}
-		if(info.getStartPoint().getNameEN() != null) {
-			AttributeType startPoint_name = new AttributeType();
-			startPoint_name.setId("http://epcis.example.com/bus/line/startPoint/name_en");
-			startPoint_name.getContent().add(info.getStartPoint().getNameEN());
-			startPoint.getContent().add(startPoint_name);
-		}
-		if(info.getStartPoint().getStopID() != null) {
-			AttributeType startPoint_stopid = new AttributeType();
-			startPoint_stopid.setId("http://epcis.example.com/bus/line/startPoint/stopid");
-			startPoint_stopid.getContent().add(info.getStartPoint().getStopID());
-			startPoint.getContent().add(startPoint_stopid);
-		}
-		if(info.getStartPoint().getNumber() != null) {
-			AttributeType startPoint_number = new AttributeType();
-			startPoint_number.setId("http://epcis.example.com/bus/line/startPoint/number");
-			startPoint_number.getContent().add(info.getStartPoint().getStopID());
-			startPoint.getContent().add(startPoint_number);
-		}
+//		if(info.getStartPoint().getNameKR() != null) {
+//			AttributeType startPoint_name = new AttributeType();
+//			startPoint_name.setId("http://epcis.example.com/bus/line/startPoint/name_kr");
+//			startPoint_name.getContent().add(info.getStartPoint().getNameKR());
+//			startPoint.getContent().add(startPoint_name);
+//		}
+//		if(info.getStartPoint().getNameEN() != null) {
+//			AttributeType startPoint_name = new AttributeType();
+//			startPoint_name.setId("http://epcis.example.com/bus/line/startPoint/name_en");
+//			startPoint_name.getContent().add(info.getStartPoint().getNameEN());
+//			startPoint.getContent().add(startPoint_name);
+//		}
+//		if(info.getStartPoint().getStopID() != null) {
+//			AttributeType startPoint_stopid = new AttributeType();
+//			startPoint_stopid.setId("http://epcis.example.com/bus/line/startPoint/stopid");
+//			startPoint_stopid.getContent().add(info.getStartPoint().getStopID());
+//			startPoint.getContent().add(startPoint_stopid);
+//		}
+//		if(info.getStartPoint().getNumber() != null) {
+//			AttributeType startPoint_number = new AttributeType();
+//			startPoint_number.setId("http://epcis.example.com/bus/line/startPoint/number");
+//			startPoint_number.getContent().add(info.getStartPoint().getStopID());
+//			startPoint.getContent().add(startPoint_number);
+//		}
 
 		vocElement.getAttributes().add(startPoint);
 
 		//end point
 		AttributeType endPoint = new AttributeType();
 		endPoint.setId("http://epcis.example.com/bus/line/endPoint");
+		endPoint.getContent().add(info.getEndPoint());
 
-		if(info.getEndPoint().getNameKR() != null) {
-			AttributeType endPoint_name = new AttributeType();
-			endPoint_name.setId("http://epcis.example.com/bus/line/endPoint/name_kr");
-			endPoint_name.getContent().add(info.getStartPoint().getNameKR());
-			endPoint.getContent().add(endPoint_name);
-		}
-		if(info.getEndPoint().getNameEN() != null) {
-			AttributeType endPoint_name = new AttributeType();
-			endPoint_name.setId("http://epcis.example.com/bus/line/endPoint/name_en");
-			endPoint_name.getContent().add(info.getStartPoint().getNameEN());
-			endPoint.getContent().add(endPoint_name);
-		}
-		if(info.getEndPoint().getStopID() != null) {
-			AttributeType endPoint_stopid = new AttributeType();
-			endPoint_stopid.setId("http://epcis.example.com/bus/line/endPoint/stopid");
-			endPoint_stopid.getContent().add(info.getEndPoint().getStopID());
-			endPoint.getContent().add(endPoint_stopid);
-		}
-		if(info.getEndPoint().getNumber() != null) {
-			AttributeType endPoint_number = new AttributeType();
-			endPoint_number.setId("http://epcis.example.com/bus/line/endPoint/number");
-			endPoint_number.getContent().add(info.getEndPoint().getStopID());
-			endPoint.getContent().add(endPoint_number);
-		}
+//		if(info.getEndPoint().getNameKR() != null) {
+//			AttributeType endPoint_name = new AttributeType();
+//			endPoint_name.setId("http://epcis.example.com/bus/line/endPoint/name_kr");
+//			endPoint_name.getContent().add(info.getEndPoint().getNameKR());
+//			endPoint.getContent().add(endPoint_name);
+//		}
+//		if(info.getEndPoint().getNameEN() != null) {
+//			AttributeType endPoint_name = new AttributeType();
+//			endPoint_name.setId("http://epcis.example.com/bus/line/endPoint/name_en");
+//			endPoint_name.getContent().add(info.getStartPoint().getNameEN());
+//			endPoint.getContent().add(endPoint_name);
+//		}
+//		if(info.getEndPoint().getStopID() != null) {
+//			AttributeType endPoint_stopid = new AttributeType();
+//			endPoint_stopid.setId("http://epcis.example.com/bus/line/endPoint/stopid");
+//			endPoint_stopid.getContent().add(info.getEndPoint().getStopID());
+//			endPoint.getContent().add(endPoint_stopid);
+//		}
+//		if(info.getEndPoint().getNumber() != null) {
+//			AttributeType endPoint_number = new AttributeType();
+//			endPoint_number.setId("http://epcis.example.com/bus/line/endPoint/number");
+//			endPoint_number.getContent().add(info.getEndPoint().getStopID());
+//			endPoint.getContent().add(endPoint_number);
+//		}
 
 		vocElement.getAttributes().add(endPoint);
 
@@ -127,31 +132,32 @@ public class BusMasterDataManager extends MasterDataManager {
 		if(info.getTurnPoint() != null) {
 			AttributeType turnPoint = new AttributeType();
 			turnPoint.setId("http://epcis.example.com/bus/line/turnPoint");
+			turnPoint.getContent().add(info.getTurnPoint());
 
-			if(info.getTurnPoint().getNameKR() != null) {
-				AttributeType turnPoint_name = new AttributeType();
-				turnPoint_name.setId("http://epcis.example.com/bus/line/turnPoint/name_kr");
-				turnPoint_name.getContent().add(info.getTurnPoint().getNameKR());
-				turnPoint.getContent().add(turnPoint_name);
-			}
-			if(info.getTurnPoint().getNameEN() != null) {
-				AttributeType turnPoint_name = new AttributeType();
-				turnPoint_name.setId("http://epcis.example.com/bus/line/turnPoint/name_en");
-				turnPoint_name.getContent().add(info.getTurnPoint().getNameEN());
-				turnPoint.getContent().add(turnPoint_name);
-			}
-			if(info.getTurnPoint().getStopID() != null) {
-				AttributeType turnPoint_stopid = new AttributeType();
-				turnPoint_stopid.setId("http://epcis.example.com/bus/line/turnPoint/stopid");
-				turnPoint_stopid.getContent().add(info.getTurnPoint().getStopID());
-				turnPoint.getContent().add(turnPoint_stopid);
-			}
-			if(info.getTurnPoint().getNumber() != null) {
-				AttributeType turnPoint_number = new AttributeType();
-				turnPoint_number.setId("http://epcis.example.com/bus/line/turnPoint/number");
-				turnPoint_number.getContent().add(info.getTurnPoint().getStopID());
-				turnPoint.getContent().add(turnPoint_number);
-			}
+//			if(info.getTurnPoint().getNameKR() != null) {
+//				AttributeType turnPoint_name = new AttributeType();
+//				turnPoint_name.setId("http://epcis.example.com/bus/line/turnPoint/name_kr");
+//				turnPoint_name.getContent().add(info.getTurnPoint().getNameKR());
+//				turnPoint.getContent().add(turnPoint_name);
+//			}
+//			if(info.getTurnPoint().getNameEN() != null) {
+//				AttributeType turnPoint_name = new AttributeType();
+//				turnPoint_name.setId("http://epcis.example.com/bus/line/turnPoint/name_en");
+//				turnPoint_name.getContent().add(info.getTurnPoint().getNameEN());
+//				turnPoint.getContent().add(turnPoint_name);
+//			}
+//			if(info.getTurnPoint().getStopID() != null) {
+//				AttributeType turnPoint_stopid = new AttributeType();
+//				turnPoint_stopid.setId("http://epcis.example.com/bus/line/turnPoint/stopid");
+//				turnPoint_stopid.getContent().add(info.getTurnPoint().getStopID());
+//				turnPoint.getContent().add(turnPoint_stopid);
+//			}
+//			if(info.getTurnPoint().getNumber() != null) {
+//				AttributeType turnPoint_number = new AttributeType();
+//				turnPoint_number.setId("http://epcis.example.com/bus/line/turnPoint/number");
+//				turnPoint_number.getContent().add(info.getTurnPoint().getStopID());
+//				turnPoint.getContent().add(turnPoint_number);
+//			}
 
 			vocElement.getAttributes().add(turnPoint);
 		}
@@ -159,48 +165,50 @@ public class BusMasterDataManager extends MasterDataManager {
 		//start time
 		AttributeType startTime = new AttributeType();
 		startTime.setId("http://epcis.example.com/bus/line/startTime");
+		startTime.getContent().add(info.getStartTime());
 
-		AttributeType startTime_norm = new AttributeType();
-		startTime_norm.setId("http://epcis.example.com/bus/line/startTime/norm");
-		startTime_norm.getContent().add(info.getStartTime().getTime());
-		startTime.getContent().add(startTime_norm);
-
-		if(info.getStartTime().getTimeSat() != null) {
-			AttributeType startTime_sat = new AttributeType();
-			startTime_sat.setId("http://epcis.example.com/bus/line/startTime/sat");
-			startTime_sat.getContent().add(info.getStartTime().getTimeSat());
-			startTime.getContent().add(startTime_sat);
-		}
-		if(info.getStartTime().getTimeSun() != null) {
-			AttributeType startTime_sun = new AttributeType();
-			startTime_sun.setId("http://epcis.example.com/bus/line/startTime/sun");
-			startTime_sun.getContent().add(info.getStartTime().getTimeSun());
-			startTime.getContent().add(startTime_sun);
-		}
+//		AttributeType startTime_norm = new AttributeType();
+//		startTime_norm.setId("http://epcis.example.com/bus/line/startTime/norm");
+//		startTime_norm.getContent().add(info.getStartTime().getTime());
+//		startTime.getContent().add(startTime_norm);
+//
+//		if(info.getStartTime().getTimeSat() != null) {
+//			AttributeType startTime_sat = new AttributeType();
+//			startTime_sat.setId("http://epcis.example.com/bus/line/startTime/sat");
+//			startTime_sat.getContent().add(info.getStartTime().getTimeSat());
+//			startTime.getContent().add(startTime_sat);
+//		}
+//		if(info.getStartTime().getTimeSun() != null) {
+//			AttributeType startTime_sun = new AttributeType();
+//			startTime_sun.setId("http://epcis.example.com/bus/line/startTime/sun");
+//			startTime_sun.getContent().add(info.getStartTime().getTimeSun());
+//			startTime.getContent().add(startTime_sun);
+//		}
 
 		vocElement.getAttributes().add(startTime);
 
 		//end time
 		AttributeType endTime = new AttributeType();
 		endTime.setId("http://epcis.example.com/bus/line/endTime");
+		endTime.getContent().add(info.getEndTime());
 
-		AttributeType endTime_norm = new AttributeType();
-		endTime_norm.setId("http://epcis.example.com/bus/line/endTime/norm");
-		endTime_norm.getContent().add(info.getEndTime().getTime());
-		endTime.getContent().add(endTime_norm);
-
-		if(info.getEndTime().getTimeSat() != null) {
-			AttributeType endTime_sat = new AttributeType();
-			endTime_sat.setId("http://epcis.example.com/bus/line/endTime/sat");
-			endTime_sat.getContent().add(info.getEndTime().getTimeSat());
-			endTime.getContent().add(endTime_sat);
-		}
-		if(info.getEndTime().getTimeSun() != null) {
-			AttributeType endTime_sun = new AttributeType();
-			endTime_sun.setId("http://epcis.example.com/bus/line/endTime/sun");
-			endTime_sun.getContent().add(info.getEndTime().getTimeSun());
-			endTime.getContent().add(endTime_sun);
-		}
+//		AttributeType endTime_norm = new AttributeType();
+//		endTime_norm.setId("http://epcis.example.com/bus/line/endTime/norm");
+//		endTime_norm.getContent().add(info.getEndTime().getTime());
+//		endTime.getContent().add(endTime_norm);
+//
+//		if(info.getEndTime().getTimeSat() != null) {
+//			AttributeType endTime_sat = new AttributeType();
+//			endTime_sat.setId("http://epcis.example.com/bus/line/endTime/sat");
+//			endTime_sat.getContent().add(info.getEndTime().getTimeSat());
+//			endTime.getContent().add(endTime_sat);
+//		}
+//		if(info.getEndTime().getTimeSun() != null) {
+//			AttributeType endTime_sun = new AttributeType();
+//			endTime_sun.setId("http://epcis.example.com/bus/line/endTime/sun");
+//			endTime_sun.getContent().add(info.getEndTime().getTimeSun());
+//			endTime.getContent().add(endTime_sun);
+//		}
 
 		vocElement.getAttributes().add(endTime);
 
@@ -208,24 +216,25 @@ public class BusMasterDataManager extends MasterDataManager {
 		if(info.getTurnStartTime() != null) {
 			AttributeType turnStartTime = new AttributeType();
 			turnStartTime.setId("http://epcis.example.com/bus/line/turnStartTime");
+			turnStartTime.getContent().add(info.getTurnStartTime());
 
-			AttributeType turnStartTime_norm = new AttributeType();
-			turnStartTime_norm.setId("http://epcis.example.com/bus/line/turnStartTime/norm");
-			turnStartTime_norm.getContent().add(info.getTurnStartTime().getTime());
-			turnStartTime.getContent().add(turnStartTime_norm);
-
-			if(info.getTurnStartTime().getTimeSat() != null) {
-				AttributeType turnStartTime_sat = new AttributeType();
-				turnStartTime_sat.setId("http://epcis.example.com/bus/line/turnStartTime/sat");
-				turnStartTime_sat.getContent().add(info.getTurnStartTime().getTimeSat());
-				turnStartTime.getContent().add(turnStartTime_sat);
-			}
-			if(info.getTurnStartTime().getTimeSun() != null) {
-				AttributeType turnStartTime_sun = new AttributeType();
-				turnStartTime_sun.setId("http://epcis.example.com/bus/line/turnStartTime/sun");
-				turnStartTime_sun.getContent().add(info.getTurnStartTime().getTimeSun());
-				turnStartTime.getContent().add(turnStartTime_sun);
-			}
+//			AttributeType turnStartTime_norm = new AttributeType();
+//			turnStartTime_norm.setId("http://epcis.example.com/bus/line/turnStartTime/norm");
+//			turnStartTime_norm.getContent().add(info.getTurnStartTime().getTime());
+//			turnStartTime.getContent().add(turnStartTime_norm);
+//
+//			if(info.getTurnStartTime().getTimeSat() != null) {
+//				AttributeType turnStartTime_sat = new AttributeType();
+//				turnStartTime_sat.setId("http://epcis.example.com/bus/line/turnStartTime/sat");
+//				turnStartTime_sat.getContent().add(info.getTurnStartTime().getTimeSat());
+//				turnStartTime.getContent().add(turnStartTime_sat);
+//			}
+//			if(info.getTurnStartTime().getTimeSun() != null) {
+//				AttributeType turnStartTime_sun = new AttributeType();
+//				turnStartTime_sun.setId("http://epcis.example.com/bus/line/turnStartTime/sun");
+//				turnStartTime_sun.getContent().add(info.getTurnStartTime().getTimeSun());
+//				turnStartTime.getContent().add(turnStartTime_sun);
+//			}
 
 			vocElement.getAttributes().add(turnStartTime);
 		}
@@ -234,24 +243,25 @@ public class BusMasterDataManager extends MasterDataManager {
 		if(info.getTurnEndTime() != null) {
 			AttributeType turnEndTime = new AttributeType();
 			turnEndTime.setId("http://epcis.example.com/bus/line/endTime");
+			turnEndTime.getContent().add(info.getTurnEndTime());
 
-			AttributeType turnEndTime_norm = new AttributeType();
-			turnEndTime_norm.setId("http://epcis.example.com/bus/line/turnEndTime/norm");
-			turnEndTime_norm.getContent().add(info.getTurnEndTime().getTime());
-			turnEndTime.getContent().add(turnEndTime_norm);
-
-			if(info.getTurnEndTime().getTimeSat() != null) {
-				AttributeType turnEndTime_sat = new AttributeType();
-				turnEndTime_sat.setId("http://epcis.example.com/bus/line/turnEndTime/sat");
-				turnEndTime_sat.getContent().add(info.getTurnEndTime().getTimeSat());
-				turnEndTime.getContent().add(turnEndTime_sat);
-			}
-			if(info.getTurnEndTime().getTimeSun() != null) {
-				AttributeType turnEndTime_sun = new AttributeType();
-				turnEndTime_sun.setId("http://epcis.example.com/bus/line/turnEndTime/sun");
-				turnEndTime_sun.getContent().add(info.getTurnEndTime().getTimeSun());
-				turnEndTime.getContent().add(turnEndTime_sun);
-			}
+//			AttributeType turnEndTime_norm = new AttributeType();
+//			turnEndTime_norm.setId("http://epcis.example.com/bus/line/turnEndTime/norm");
+//			turnEndTime_norm.getContent().add(info.getTurnEndTime().getTime());
+//			turnEndTime.getContent().add(turnEndTime_norm);
+//
+//			if(info.getTurnEndTime().getTimeSat() != null) {
+//				AttributeType turnEndTime_sat = new AttributeType();
+//				turnEndTime_sat.setId("http://epcis.example.com/bus/line/turnEndTime/sat");
+//				turnEndTime_sat.getContent().add(info.getTurnEndTime().getTimeSat());
+//				turnEndTime.getContent().add(turnEndTime_sat);
+//			}
+//			if(info.getTurnEndTime().getTimeSun() != null) {
+//				AttributeType turnEndTime_sun = new AttributeType();
+//				turnEndTime_sun.setId("http://epcis.example.com/bus/line/turnEndTime/sun");
+//				turnEndTime_sun.getContent().add(info.getTurnEndTime().getTimeSun());
+//				turnEndTime.getContent().add(turnEndTime_sun);
+//			}
 
 			vocElement.getAttributes().add(turnEndTime);
 		}
@@ -260,44 +270,12 @@ public class BusMasterDataManager extends MasterDataManager {
 		if(info.getInterval() != null) {
 			AttributeType interval = new AttributeType();
 			interval.setId("http://epcis.example.com/bus/line/interval");
-
-			if(info.getInterval().getInterval() != null) {
-				interval.getContent().add(info.getInterval());
-			}
-
-			if(info.getInterval().getIntervalNorm() != null) {
-				AttributeType interval_norm = new AttributeType();
-				interval_norm.setId("http://epcis.example.com/bus/line/interval/norm");
-				interval_norm.getContent().add(info.getInterval().getIntervalNorm());
-				interval.getContent().add(interval_norm);
-			}
-
-			if(info.getInterval().getIntervalPeak() != null) {
-				AttributeType interval_peak = new AttributeType();
-				interval_peak.setId("http://epcis.example.com/bus/line/interval/peak");
-				interval_peak.getContent().add(info.getInterval().getIntervalPeak());
-				interval.getContent().add(interval_peak);
-			}
-
-			if(info.getInterval().getIntervalSat() != null) {
-				AttributeType interval_sat = new AttributeType();
-				interval_sat.setId("http://epcis.example.com/bus/line/interval/sat");
-				interval_sat.getContent().add(info.getInterval().getIntervalSat());
-				interval.getContent().add(interval_sat);
-			}
-
-			if(info.getInterval().getIntervalSun() != null) {
-				AttributeType interval_sun = new AttributeType();
-				interval_sun.setId("http://epcis.example.com/bus/line/interval/sun");
-				interval_sun.getContent().add(info.getInterval().getIntervalSun());
-				interval.getContent().add(interval_sun);
-			}
-
+			interval.getContent().add(info.getInterval());
 			vocElement.getAttributes().add(interval);
 		}
 
 		//stop count
-		if(info.getStopCount() != 0) {
+		if(info.getStopCount() != null) {
 			AttributeType stopCount = new AttributeType();
 			stopCount.setId("http://epcis.example.com/bus/line/stopCount");
 			stopCount.getContent().add(info.getStopCount());
@@ -313,7 +291,7 @@ public class BusMasterDataManager extends MasterDataManager {
 		}
 
 		//stop count
-		if(info.getAvgRunTime() != 0) {
+		if(info.getAvgRunTime() != null) {
 			AttributeType avgRunTime = new AttributeType();
 			avgRunTime.setId("http://epcis.example.com/bus/line/avgRunTime");
 			avgRunTime.getContent().add(info.getAvgRunTime());
@@ -324,14 +302,14 @@ public class BusMasterDataManager extends MasterDataManager {
 		voc.setVocabularyElementList(vocElementList);
 	}
 
-	private void stopModeling(BusStopInfoType info) {
+	private void stopModeling(BusStopInfo info) {
 
 		voc.setType("urn:gs1:epcisapp:bus:stop:info");
 
 		VocabularyElementListType vocElementList = new VocabularyElementListType();
 		VocabularyElementType vocElement = new VocabularyElementType();
-		vocElement.setId("urn:epc:id:gln:" + info.getGln().substring(0, 6) + "." + info.getGln().substring(7));
-		
+		vocElement.setId("urn:epc:id:gln:" + info.getGln().substring(0, 7) + "." + info.getGln().substring(7));
+
 		AttributeType stopid = new AttributeType();
 		stopid.setId("http://epcis.example.com/bus/stop/id");
 		stopid.getContent().add(info.getStopID());
@@ -346,7 +324,7 @@ public class BusMasterDataManager extends MasterDataManager {
 		name_kr.setId("http://epcis.example.com/bus/stop/name_kr");
 		name_kr.getContent().add(info.getNameKR());
 		vocElement.getAttributes().add(name_kr);
-		
+
 		if(info.getNameEN() != null) {
 			AttributeType name_en = new AttributeType();
 			name_en.setId("http://epcis.example.com/bus/stop/name_en");
@@ -363,21 +341,21 @@ public class BusMasterDataManager extends MasterDataManager {
 		gpsY.setId("http://epcis.example.com/bus/stop/gpsY");
 		gpsY.getContent().add(info.getGpsY());
 		vocElement.getAttributes().add(gpsY);
-		
+
 		if(info.getRoad() != null) {
 			AttributeType road = new AttributeType();
 			road.setId("http://epcis.example.com/bus/stop/road");
 			road.getContent().add(info.getRoad());
 			vocElement.getAttributes().add(road);
 		}
-		
+
 		if(info.getAddr() != null) {
 			AttributeType addr = new AttributeType();
 			addr.setId("http://epcis.example.com/bus/stop/addr");
 			addr.getContent().add(info.getAddr());
 			vocElement.getAttributes().add(addr);
 		}
-		
+
 		if(info.getLines() != null) {
 			AttributeType lines = new AttributeType();
 			lines.setId("http://epcis.example.com/bus/stop/lines");
@@ -389,15 +367,32 @@ public class BusMasterDataManager extends MasterDataManager {
 		voc.setVocabularyElementList(vocElementList);
 	}
 
-	private void driverModeling(BusDriverInfoType info) {
+	private void driverModeling(BusDriverInfo info) {
 
 
 	}
 
-	private void companyModeling(BusCompanyInfoType info) {
+	private void companyModeling(BusCompanyInfo info) {
 
 
 	}
 
+	private void lineRouteModeling(BusLineRoute info) {
+
+		voc.setType("urn:gs1:epcisapp:bus:line:route");
+
+		VocabularyElementListType vocElementList = new VocabularyElementListType();
+		VocabularyElementType vocElement = new VocabularyElementType();
+		vocElement.setId("urn:epc:id:gsrn:" + info.getGsrn().substring(0, 7) + "." + info.getGsrn().substring(7));
+
+		AttributeType stopList = new AttributeType();
+		stopList.setId("http://epcis.example.com/bus/line/route/stop_list");
+		stopList.getContent().add(info.getStopList());
+		
+		vocElement.getAttributes().add(stopList);
+
+		vocElementList.getVocabularyElements().add(vocElement);
+		voc.setVocabularyElementList(vocElementList);
+	}
 
 }

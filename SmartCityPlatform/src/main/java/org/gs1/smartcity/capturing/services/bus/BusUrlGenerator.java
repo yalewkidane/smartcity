@@ -27,19 +27,19 @@ public class BusUrlGenerator extends UrlGenerator {
 
 		String url = "http://61.43.246.153/openapi-data/service/busanBIMS/";
 
-		if(infoType.compareTo(BusInfoFactory.BUSAN_BUS_LINE_INFO) == 0) {
+		if(infoType.compareTo(BusServiceFactory.BUSAN_BUS_LINE_INFO) == 0) {
 			url = url + infoType + "?lineid=" + parm1 + "&";
-		} else if(infoType.compareTo(BusInfoFactory.BUSAN_BUS_STOP_INFO) == 0) {
+		} else if(infoType.compareTo(BusServiceFactory.BUSAN_BUS_STOP_INFO) == 0) {
 			url = url + infoType + "?arsno=" + parm1 + "&";
-		} else if(infoType.compareTo(BusInfoFactory.BUSAN_BUS_LINE_ROUTE) == 0) {
+		} else if(infoType.compareTo(BusServiceFactory.BUSAN_BUS_LINE_ROUTE) == 0) {
 			url = url + infoType + "?lineid=" + parm1 + "&";
-		} else if(infoType.compareTo(BusInfoFactory.BUSAN_BUS_STOP_ARR) == 0) {
+		} else if(infoType.compareTo(BusServiceFactory.BUSAN_BUS_STOP_ARR) == 0) {
 			url = url + infoType + "?bstopid=" + parm1 + "&";
-		} else if(infoType.compareTo(BusInfoFactory.BUSAN_BUS_LINE_STOP) == 0) {
+		} else if(infoType.compareTo(BusServiceFactory.BUSAN_BUS_LINE_STOP) == 0) {
 			url = url + infoType + "?bstopid=" + parm1 + "&lineid=" + parm2 + "&";
-		} else if(infoType.compareTo(BusInfoFactory.BUSAN_BUS_LINE_ALL) == 0) {
-			url = url + infoType + "?";
-		} else if(infoType.compareTo(BusInfoFactory.BUSAN_BUS_STOP_ALL) == 0) {
+		} else if(infoType.compareTo(BusServiceFactory.BUSAN_BUS_LINE_INFO_ALL) == 0) {
+			url = url + infoType.substring(0, 7) + "?";
+		} else if(infoType.compareTo(BusServiceFactory.BUSAN_BUS_STOP_INFO_ALL) == 0) {
 			url = url + infoType + "?";
 		}
 
@@ -52,33 +52,34 @@ public class BusUrlGenerator extends UrlGenerator {
 
 		String url = "http://openapitraffic.daejeon.go.kr/api/rest/";
 
-		if(infoType.compareTo(BusInfoFactory.DAEJEON_BUS_LINE_ROUTE) == 0) {
+		if(infoType.compareTo(BusServiceFactory.DAEJEON_BUS_LINE_ROUTE) == 0) {
 			url = url + infoType + "?busRouteId=" + parm + "&";
-		} else if(infoType.compareTo(BusInfoFactory.DAEJEON_BUS_LINE_ROUTE_ALL) == 0) {
+		} else if(infoType.compareTo(BusServiceFactory.DAEJEON_BUS_LINE_ROUTE_ALL) == 0) {
 			url = url + infoType + "?";
-		} else if(infoType.compareTo(BusInfoFactory.DAEJEON_BUS_LINE_INFO) == 0) {
+		} else if(infoType.compareTo(BusServiceFactory.DAEJEON_BUS_LINE_INFO) == 0) {
 			url = url + infoType + "?busRouteId=" + parm + "&";
-		} else if(infoType.compareTo(BusInfoFactory.DAEJEON_BUS_LINE_INFO_ALL) == 0) {
-			url = url + infoType + "?";
-		} else if(infoType.compareTo(BusInfoFactory.DAEJEON_BUS_STOP_INFO) == 0) {
+		} else if(infoType.compareTo(BusServiceFactory.DAEJEON_BUS_LINE_INFO_ALL) == 0) {
+			url = url + infoType + "?serviceKey=" + DAEJEON_SERVICE_KEY + "&reqPage=" + parm;
+			return url;
+		} else if(infoType.compareTo(BusServiceFactory.DAEJEON_BUS_STOP_INFO) == 0) {
 			if(parm.length() == 7) {
 				url = url + infoType + "StopID?busStopID=" + parm + "&";
 			} else if(parm.length() == 5) {
 				url = url + infoType + "Uid?arsId=" + parm + "&";
 			}
-		} else if(infoType.compareTo(BusInfoFactory.DAEJEON_BUS_LINE_POS) == 0) {
+		} else if(infoType.compareTo(BusServiceFactory.DAEJEON_BUS_LINE_POS) == 0) {
 			url = url + infoType + "?busRouteId=" + parm + "&";
-		} else if(infoType.compareTo(BusInfoFactory.DAEJEON_BUS_STOP_ARR) == 0) {
+		} else if(infoType.compareTo(BusServiceFactory.DAEJEON_BUS_STOP_ARR) == 0) {
 			if(parm.length() == 7) {
 				url = url + infoType + "StopID?busStopID=" + parm + "&";
 			} else if(parm.length() == 5) {
 				url = url + infoType + "Uid?arsId=" + parm + "&";
 			}
-		} else if(infoType.compareTo(BusInfoFactory.DAEJEON_BUS_REG_INFO_ALL) == 0) {
+		} else if(infoType.compareTo(BusServiceFactory.DAEJEON_BUS_REG_INFO_ALL) == 0) {
 			url = url + infoType + "?";
-		} else if(infoType.compareTo(BusInfoFactory.DAEJEON_BUS_REG_INFO) == 0) {
+		} else if(infoType.compareTo(BusServiceFactory.DAEJEON_BUS_REG_INFO) == 0) {
 			url = url + infoType + "?busRouteId=" + parm + "&";
-		} else if(infoType.compareTo(BusInfoFactory.DAEJEON_BUS_COMPANY_INFO) == 0) {
+		} else if(infoType.compareTo(BusServiceFactory.DAEJEON_BUS_COMPANY_INFO) == 0) {
 			url = url + infoType + "?";
 		}
 

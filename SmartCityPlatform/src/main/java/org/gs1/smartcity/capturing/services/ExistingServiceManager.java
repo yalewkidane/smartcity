@@ -3,31 +3,32 @@ package org.gs1.smartcity.capturing.services;
 import java.io.IOException;
 
 import javax.xml.bind.JAXBException;
+import javax.xml.parsers.ParserConfigurationException;
 
-import org.gs1.epcglobal.epcis.VocabularyType;
-import org.gs1.smartcity.capturing.services.bus.BusInfoFactory;
+import org.gs1.epcglobal.epcis.VocabularyListType;
+import org.gs1.smartcity.capturing.services.bus.BusServiceFactory;
+import org.gs1.smartcity.capturing.services.bus.BusUrlGenerator;
 import org.gs1.smartcity.util.EPCISVocabularyMarshaller;
 
 public class ExistingServiceManager {
 
-	public static void main(String[] args) throws IOException, JAXBException {
+	public static void main(String[] args) throws IOException, JAXBException, ParserConfigurationException {
 		// TODO Auto-generated method stub
 		
 		QueryProcessor queryProcessor = new QueryProcessor();
 		
 		TransFactory transFactory = new TransFactory();
-		Translator trans = transFactory.getTrans(ServiceFactory.BUSAN_BUS);
+		VocabularyTranslator trans = transFactory.getTrans(ServiceFactory.BUS);
 		
-		ServiceUrlFactory urlFactory = new ServiceUrlFactory();
-		UrlGenerator urlGenerator = urlFactory.getUrlGenerator(ServiceFactory.BUSAN_BUS);
+		UrlGenerator urlGenerator = new BusUrlGenerator(ServiceFactory.DAEJEON_BUS);
 		
-		String url = urlGenerator.generate(BusInfoFactory.BUSAN_BUS_STOP_INFO, "13045", null);
+		String url = urlGenerator.generate(BusServiceFactory.DAEJEON_BUS_LINE_INFO_ALL, "2", null);
 		String data = queryProcessor.query(url);
-		
-		VocabularyType voc = trans.masterDataTranslate(BusInfoFactory.BUSAN_BUS_STOP_INFO, data);
+		System.out.println(url);
+		VocabularyListType vocList = trans.translate(BusServiceFactory.DAEJEON_BUS_LINE_INFO_ALL, data);
 		
 		EPCISVocabularyMarshaller vm = new EPCISVocabularyMarshaller();
-		vm.make(voc);
+		vm.make(vocList);
 		
 		String s = vm.marshal();
 		System.out.println(s);

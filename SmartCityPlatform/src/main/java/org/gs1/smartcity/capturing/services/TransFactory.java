@@ -1,16 +1,18 @@
 package org.gs1.smartcity.capturing.services;
 
-import org.gs1.smartcity.capturing.services.bus.BusTranslator;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.gs1.smartcity.capturing.services.bus.BusVocabularyTranslator;
 
 public class TransFactory {
 	
-	public Translator getTrans(String type) {
+	public VocabularyTranslator getTrans(String type) throws ParserConfigurationException {
 		
-		Translator trans = null;
+		VocabularyTranslator trans = null;
 		
-		if(type.equals("busanBus")) {
+		if(type.equals("bus")) {
 			
-			trans = new BusTranslator();
+			trans = new BusVocabularyTranslator();
 		}
 		
 		return trans;
