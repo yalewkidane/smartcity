@@ -2,21 +2,23 @@ package org.gs1.smartcity.capturing.services.bus;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.gs1.epcglobal.epcis.VocabularyListType;
-import org.gs1.epcglobal.epcis.VocabularyType;
-import org.gs1.smartcity.capturing.masterdata.BusMasterDataManager;
 import org.gs1.smartcity.capturing.services.VocabularyTranslator;
+import org.gs1.smartcity.datatype.bus.BusCompanyInfoType;
 import org.gs1.smartcity.datatype.bus.BusIntervalType;
-import org.gs1.smartcity.datatype.bus.BusLineInfo;
-import org.gs1.smartcity.datatype.bus.BusLineRoute;
-import org.gs1.smartcity.datatype.bus.BusRouteStopInfo;
-import org.gs1.smartcity.datatype.bus.BusStopInfo;
+import org.gs1.smartcity.datatype.bus.BusLineInfoType;
+import org.gs1.smartcity.datatype.bus.BusLineRouteType;
+import org.gs1.smartcity.datatype.bus.BusRouteStopInfoType;
+import org.gs1.smartcity.datatype.bus.BusStopInfoType;
 import org.gs1.smartcity.datatype.bus.BusTimeType;
+import org.gs1.smartcity.db.mongo.DAOFactory;
+import org.gs1.smartcity.db.mongo.DataAccessObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -32,69 +34,67 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 
 	public BusVocabularyTranslator() throws ParserConfigurationException {
 
-		mdm = new BusMasterDataManager();
-
 		factory = DocumentBuilderFactory.newInstance();
 		builder = factory.newDocumentBuilder();
 	}
 
-	public VocabularyListType translate(String type, String data)  {
+	public Object translate(String type, String data)  {
 
-		if (type.compareTo(BusServiceFactory.BUSAN_BUS_LINE_INFO) == 0 || type.compareTo(BusServiceFactory.BUSAN_BUS_LINE_INFO_ALL) == 0) {
+		if (type.equals(BusServiceFactory.BUSAN_BUS_LINE_INFO) || type.equals(BusServiceFactory.BUSAN_BUS_LINE_INFO_ALL)) {
 			try {
-				return busanBusLineInfo(data);
+				return translateBusanBusLineInfo(data);
 			} catch (SAXException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		} else if (type.compareTo(BusServiceFactory.BUSAN_BUS_STOP_INFO) == 0) {
+		} else if (type.equals(BusServiceFactory.BUSAN_BUS_STOP_INFO)) {
 			try {
-				return busanBusStopInfo(data);
+				return translateBusanBusStopInfo(data);
 			} catch (SAXException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		} else if (type.compareTo(BusServiceFactory.BUSAN_BUS_LINE_ROUTE) == 0) {
+		} else if (type.equals(BusServiceFactory.BUSAN_BUS_LINE_ROUTE)) {
 			try {
-				return busanBusLineRouteInfo(data);
+				return translateBusanBusLineRouteInfo(data);
 			} catch (SAXException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		} else if (type.compareTo(BusServiceFactory.BUSAN_BUS_STOP_ARR) == 0) {
+		} else if (type.equals(BusServiceFactory.BUSAN_BUS_STOP_ARR)) {
 
-		} else if (type.compareTo(BusServiceFactory.BUSAN_BUS_LINE_STOP) == 0) {
+		} else if (type.equals(BusServiceFactory.BUSAN_BUS_LINE_STOP)) {
 
-		} else if (type.compareTo(BusServiceFactory.DAEJEON_BUS_LINE_INFO) == 0 || type.compareTo(BusServiceFactory.DAEJEON_BUS_LINE_INFO_ALL) == 0) {
+		} else if (type.equals(BusServiceFactory.DAEJEON_BUS_LINE_INFO) || type.equals(BusServiceFactory.DAEJEON_BUS_LINE_INFO_ALL)) {
 			try {
-				return daejeonBusLineInfo(data);
+				return translateDaejeonBusLineInfo(data);
 			} catch (SAXException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		} else if (type.compareTo(BusServiceFactory.DAEJEON_BUS_STOP_INFO) == 0) {
+		} else if (type.equals(BusServiceFactory.DAEJEON_BUS_STOP_INFO)) {
 			try {
-				return daejeonBusStopInfo(data);
+				return translateDaejeonBusStopInfo(data);
 			} catch (SAXException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		} else if (type.compareTo(BusServiceFactory.DAEJEON_BUS_LINE_ROUTE) == 0) {
+		} else if (type.equals(BusServiceFactory.DAEJEON_BUS_LINE_ROUTE)) {
 			try {
-				return daejeonBusLineRouteInfo(data);
+				return translateDaejeonBusLineRouteInfo(data);
 			} catch (SAXException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		} else if (type.compareTo(BusServiceFactory.DAEJEON_BUS_LINE_ROUTE_ALL) == 0) {
+		} else if (type.equals(BusServiceFactory.DAEJEON_BUS_COMPANY_INFO)) {
 			try {
-				return daejeonBusLineInfoAll(data);
+				return translateDaejeonBusCompanyInfo(data);
 			} catch (SAXException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
@@ -105,9 +105,9 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 		return null;
 	}
 
-	private VocabularyListType busanBusLineInfo(String data) throws SAXException, IOException {
+	private List<BusLineInfoType> translateBusanBusLineInfo(String data) throws SAXException, IOException {
 
-		VocabularyListType vocList = new VocabularyListType();
+		List<BusLineInfoType> infoList = new ArrayList<BusLineInfoType>();
 
 		document = builder.parse(new InputSource(new StringReader(data)));
 
@@ -117,16 +117,21 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 			Node nNode = nList.item(i);
 			Element element = (Element) nNode;
 
-			BusLineInfo info = new BusLineInfo();
-			info.setGsrn("8801234123456789");
+			BusLineInfoType info = new BusLineInfoType();
+			
+			//DAOFactory factory = new DAOFactory();
+			//DataAccessObject dao = factory.getDAO(DAOFactory.GSRN);
+			//info.setGsrn(dao.queryKey(element.getElementsByTagName("lineId").item(0).getFirstChild().getNodeValue()));
 
+			info.setGsrn("8801234123456");
+			
 			info.setLineID(element.getElementsByTagName("lineId").item(0).getFirstChild().getNodeValue());
 			info.setNumber(element.getElementsByTagName("buslinenum").item(0).getFirstChild().getNodeValue());
 			info.setBusType(element.getElementsByTagName("bustype").item(0).getFirstChild().getNodeValue());
 			info.setCompany(element.getElementsByTagName("companyid").item(0).getFirstChild().getNodeValue());
 
-			BusStopInfo startPoint = new BusStopInfo();
-			BusStopInfo endPoint = new BusStopInfo();
+			BusStopInfoType startPoint = new BusStopInfoType();
+			BusStopInfoType endPoint = new BusStopInfoType();
 			startPoint.setNameKR(element.getElementsByTagName("startpoint").item(0).getFirstChild().getNodeValue());
 			endPoint.setNameKR(element.getElementsByTagName("endpoint").item(0).getFirstChild().getNodeValue());
 			info.setStartPoint(startPoint);
@@ -151,17 +156,15 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 				info.setInterval(interval);
 			}
 
-			VocabularyType voc = new VocabularyType();
-			voc = mdm.modelingVocabulary(BusServiceFactory.BUS_LINE_INFO, info);
-			vocList.getVocabularies().add(voc);
+			infoList.add(info);
 		}
 
-		return vocList;
+		return infoList;
 	}
 
-	private VocabularyListType busanBusStopInfo(String data) throws SAXException, IOException {
+	private List<BusStopInfoType> translateBusanBusStopInfo(String data) throws SAXException, IOException {
 
-		VocabularyListType vocList = new VocabularyListType();
+		List<BusStopInfoType> infoList = new ArrayList<BusStopInfoType>();
 
 		document = builder.parse(new InputSource(new StringReader(data)));
 
@@ -171,7 +174,12 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 			Node nNode = nList.item(i);
 			Element element = (Element) nNode;
 
-			BusStopInfo info = new BusStopInfo();
+			BusStopInfoType info = new BusStopInfoType();
+			
+//			DAOFactory factory = new DAOFactory();
+//			DataAccessObject dao = factory.getDAO(DAOFactory.GLN);
+//			info.setGln(dao.queryKey(element.getElementsByTagName("bstopId").item(0).getFirstChild().getNodeValue()));
+			
 			info.setGln("8801234123456");
 
 			info.setStopID(element.getElementsByTagName("bstopId").item(0).getFirstChild().getNodeValue());
@@ -180,30 +188,33 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 			info.setGpsX(element.getElementsByTagName("gpsX").item(0).getFirstChild().getNodeValue());
 			info.setGpsY(element.getElementsByTagName("gpsY").item(0).getFirstChild().getNodeValue());
 
-			VocabularyType voc = new VocabularyType();
-			voc = mdm.modelingVocabulary(BusServiceFactory.BUS_STOP_INFO, info);
-			vocList.getVocabularies().add(voc);
+			infoList.add(info);
 		}
 
-		return vocList;
+		return infoList;
 	}
 
-	private VocabularyListType busanBusLineRouteInfo(String data) throws SAXException, IOException {
-
-		VocabularyListType vocList = new VocabularyListType();
-
-		document = builder.parse(new InputSource(new StringReader(data)));
+	private BusLineRouteType translateBusanBusLineRouteInfo(String data) throws SAXException, IOException {
+		
+		String dataBody = data.substring(data.lastIndexOf("<?xml"));
+		String key = data.substring(0, data.lastIndexOf("<?xml"));
+		
+		document = builder.parse(new InputSource(new StringReader(dataBody)));
 
 		NodeList nList = document.getElementsByTagName("item");
 
-		BusLineRoute info = new BusLineRoute();
-		info.setGsrn("8801234123456789");
+		BusLineRouteType info = new BusLineRouteType();
+		
+//		DAOFactory factory = new DAOFactory();
+//		DataAccessObject dao = factory.getDAO(DAOFactory.GSRN);
+//		info.setGsrn(dao.queryKey(key));
+		info.setGsrn("8801234123456");
 
 		for (int i = 0; i < nList.getLength(); i++) {
 			Node nNode = nList.item(i);
 			Element element = (Element) nNode;
 
-			BusRouteStopInfo bsinfo = new BusRouteStopInfo();
+			BusRouteStopInfoType bsinfo = new BusRouteStopInfoType();
 			bsinfo.setIndex(i+1);
 			bsinfo.setStopID(element.getElementsByTagName("nodeId").item(0).getFirstChild().getNodeValue());
 			bsinfo.setNumber(element.getElementsByTagName("arsNo").item(0).getFirstChild().getNodeValue());
@@ -212,17 +223,13 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 			info.getStopList().add(bsinfo);
 		}
 
-		VocabularyType voc = new VocabularyType();
-		voc = mdm.modelingVocabulary(BusServiceFactory.BUS_LINE_ROUTE, info);
-		vocList.getVocabularies().add(voc);
-
-		return vocList;
+		return info;
 	}
 
-	private VocabularyListType daejeonBusLineInfo(String data) throws SAXException, IOException {
+	private List<BusLineInfoType> translateDaejeonBusLineInfo(String data) throws SAXException, IOException {
 
-		VocabularyListType vocList = new VocabularyListType();
-
+		List<BusLineInfoType> infoList = new ArrayList<BusLineInfoType>();
+		
 		document = builder.parse(new InputSource(new StringReader(data)));
 
 		NodeList nList = document.getElementsByTagName("itemList");
@@ -231,16 +238,20 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 			Node nNode = nList.item(i);
 			Element element = (Element) nNode;
 
-			BusLineInfo info = new BusLineInfo();
-			info.setGsrn("8801234123456789");
+			BusLineInfoType info = new BusLineInfoType();
+			
+//			DAOFactory factory = new DAOFactory();
+//			DataAccessObject dao = factory.getDAO(DAOFactory.GSRN);
+//			info.setGsrn(dao.queryKey(element.getElementsByTagName("ROUTE_CD").item(0).getFirstChild().getNodeValue()));
+			info.setGsrn("8801234123456");
 
 			info.setLineID(element.getElementsByTagName("ROUTE_CD").item(0).getFirstChild().getNodeValue());
 			info.setNumber(element.getElementsByTagName("ROUTE_NO").item(0).getFirstChild().getNodeValue());
 			info.setBusType(element.getElementsByTagName("ROUTE_TP").item(0).getFirstChild().getNodeValue().substring(0, 1));
 
-			BusStopInfo startPoint = new BusStopInfo();
-			BusStopInfo endPoint = new BusStopInfo();
-			BusStopInfo turnPoint = new BusStopInfo();
+			BusStopInfoType startPoint = new BusStopInfoType();
+			BusStopInfoType endPoint = new BusStopInfoType();
+			BusStopInfoType turnPoint = new BusStopInfoType();
 			if(element.getElementsByTagName("START_NODE_ID").item(0) != null) {
 				startPoint.setStopID(element.getElementsByTagName("START_NODE_ID").item(0).getFirstChild().getNodeValue());
 			}
@@ -329,18 +340,16 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 			if(element.getElementsByTagName("RUN_TM").item(0) != null) {
 				info.setAvgRunTime(element.getElementsByTagName("RUN_TM").item(0).getFirstChild().getNodeValue().substring(0, 2));
 			}
-
-			VocabularyType voc = new VocabularyType();
-			voc = mdm.modelingVocabulary(BusServiceFactory.BUS_LINE_INFO, info);
-			vocList.getVocabularies().add(voc);
+			
+			infoList.add(info);
 		}
 
-		return vocList;
+		return infoList;
 	}
 
-	private VocabularyListType daejeonBusStopInfo(String data) throws SAXException, IOException {
-
-		VocabularyListType vocList = new VocabularyListType();
+	private List<BusStopInfoType> translateDaejeonBusStopInfo(String data) throws SAXException, IOException {
+		
+		List<BusStopInfoType> infoList = new ArrayList<BusStopInfoType>();
 
 		document = builder.parse(new InputSource(new StringReader(data)));
 
@@ -350,7 +359,11 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 			Node nNode = nList.item(i);
 			Element element = (Element) nNode;
 
-			BusStopInfo info = new BusStopInfo();
+			BusStopInfoType info = new BusStopInfoType();
+			
+//			DAOFactory factory = new DAOFactory();
+//			DataAccessObject dao = factory.getDAO(DAOFactory.GLN);
+//			info.setGln(dao.queryKey(element.getElementsByTagName("BUS_NODE_ID").item(0).getFirstChild().getNodeValue()));
 			info.setGln("8801234123456");
 
 			info.setStopID(element.getElementsByTagName("BUS_NODE_ID").item(0).getFirstChild().getNodeValue());
@@ -363,30 +376,33 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 			info.setAddr(element.getElementsByTagName("ROAD_NM_ADDR").item(0).getFirstChild().getNodeValue());
 			info.setLines(element.getElementsByTagName("ROUTE_NO").item(0).getFirstChild().getNodeValue());
 
-			VocabularyType voc = new VocabularyType();
-			voc = mdm.modelingVocabulary(BusServiceFactory.BUS_STOP_INFO, info);
-			vocList.getVocabularies().add(voc);
+			infoList.add(info);
 		}
-
-		return vocList;
+		
+		return infoList;
 	}
 
-	private VocabularyListType daejeonBusLineRouteInfo(String data) throws SAXException, IOException {
+	private BusLineRouteType translateDaejeonBusLineRouteInfo(String data) throws SAXException, IOException {
 
-		VocabularyListType vocList = new VocabularyListType();
+		String dataBody = data.substring(data.lastIndexOf("<?xml"));
+		String key = data.substring(0, data.lastIndexOf("<?xml"));
 
-		document = builder.parse(new InputSource(new StringReader(data)));
+		document = builder.parse(new InputSource(new StringReader(dataBody)));
 
 		NodeList nList = document.getElementsByTagName("itemList");
+
+		BusLineRouteType info = new BusLineRouteType();
+		
+//		DAOFactory factory = new DAOFactory();
+//		DataAccessObject dao = factory.getDAO(DAOFactory.GSRN);
+//		info.setGsrn(dao.queryKey(key));
+		info.setGsrn("8801234123456");
 
 		for (int i = 0; i < nList.getLength(); i++) {
 			Node nNode = nList.item(i);
 			Element element = (Element) nNode;
 
-			BusLineRoute info = new BusLineRoute();
-			info.setGsrn("8801234123456789");
-
-			BusRouteStopInfo bsinfo = new BusRouteStopInfo();
+			BusRouteStopInfoType bsinfo = new BusRouteStopInfoType();
 			bsinfo.setIndex(i+1);
 			bsinfo.setStopID(element.getElementsByTagName("BUS_NODE_ID").item(0).getFirstChild().getNodeValue());
 			bsinfo.setNumber(element.getElementsByTagName("BUS_STOP_ID").item(0).getFirstChild().getNodeValue());
@@ -394,84 +410,39 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 			bsinfo.setNameEN(element.getElementsByTagName("BUSSTOP_ENG_NM").item(0).getFirstChild().getNodeValue());
 
 			info.getStopList().add(bsinfo);
-
-			VocabularyType voc = new VocabularyType();
-			voc = mdm.modelingVocabulary(BusServiceFactory.BUS_LINE_ROUTE, info);
-			vocList.getVocabularies().add(voc);
 		}
 
-		return vocList;
+		return info;
 	}
 
-	private VocabularyListType daejeonBusLineInfoAll(String data) throws SAXException, IOException {
+	public List<BusCompanyInfoType> translateDaejeonBusCompanyInfo(String data) throws SAXException, IOException {
+
+		List<BusCompanyInfoType> infoList = new ArrayList<BusCompanyInfoType>();
 
 		document = builder.parse(new InputSource(new StringReader(data)));
 
 		NodeList nList = document.getElementsByTagName("itemList");
 
-		VocabularyListType vocList = new VocabularyListType();
-
 		for (int i = 0; i < nList.getLength(); i++) {
 			Node nNode = nList.item(i);
 			Element element = (Element) nNode;
 
-			BusLineInfo info = new BusLineInfo();
-			info.setGsrn("8801234123456789");
+			BusCompanyInfoType info = new BusCompanyInfoType();
+			
+//			DAOFactory factory = new DAOFactory();
+//			DataAccessObject dao = factory.getDAO(DAOFactory.GLN);
+//			info.setGln(dao.queryKey(element.getElementsByTagName("COMP_CD").item(0).getFirstChild().getNodeValue()));
+			info.setGln("8801234123456");
+			
+			info.setCompanyID(element.getElementsByTagName("COMP_CD").item(0).getFirstChild().getNodeValue());
+			info.setName(element.getElementsByTagName("COMP_NM").item(0).getFirstChild().getNodeValue());
+			info.setAddr(element.getElementsByTagName("ADDR1").item(0).getFirstChild().getNodeValue());
+			info.setTel(element.getElementsByTagName("TEL_NO").item(0).getFirstChild().getNodeValue());
 
-			info.setLineID(element.getElementsByTagName("ROUTE_CD").item(0).getFirstChild().getNodeValue());
-			info.setNumber(element.getElementsByTagName("ROUTE_NO").item(0).getFirstChild().getNodeValue());
-			info.setBusType(element.getElementsByTagName("ROUTE_TP").item(0).getFirstChild().getNodeValue());
-
-			BusStopInfo startPoint = new BusStopInfo();
-			BusStopInfo endPoint = new BusStopInfo();
-			BusStopInfo turnPoint = new BusStopInfo();
-			startPoint.setStopID(element.getElementsByTagName("START_NODE_ID").item(0).getFirstChild().getNodeValue());
-			startPoint.setNumber(element.getElementsByTagName("START_STOP_ID").item(0).getFirstChild().getNodeValue());
-			endPoint.setStopID(element.getElementsByTagName("END_NODE_ID").item(0).getFirstChild().getNodeValue());
-			endPoint.setNumber(element.getElementsByTagName("END_STOP_ID").item(0).getFirstChild().getNodeValue());
-			turnPoint.setStopID(element.getElementsByTagName("TURN_NODE_ID").item(0).getFirstChild().getNodeValue());
-			turnPoint.setNumber(element.getElementsByTagName("TURN_STOP_ID").item(0).getFirstChild().getNodeValue());
-			info.setStartPoint(startPoint);
-			info.setEndPoint(endPoint);
-			info.setTurnPoint(turnPoint);
-
-			BusTimeType startTime = new BusTimeType();
-			BusTimeType endTime = new BusTimeType();
-			BusTimeType turnStartTime = new BusTimeType();
-			BusTimeType turnEndTime = new BusTimeType();
-			startTime.setTime(element.getElementsByTagName("ORIGIN_START").item(0).getFirstChild().getNodeValue());
-			startTime.setTimeSat(element.getElementsByTagName("ORIGIN_START_SAT").item(0).getFirstChild().getNodeValue());
-			startTime.setTimeSun(element.getElementsByTagName("ORIGIN_START_SUN").item(0).getFirstChild().getNodeValue());
-			endTime.setTime(element.getElementsByTagName("ORIGIN_END").item(0).getFirstChild().getNodeValue());
-			endTime.setTimeSat(element.getElementsByTagName("ORIGIN_END_SAT").item(0).getFirstChild().getNodeValue());
-			endTime.setTimeSun(element.getElementsByTagName("ORIGIN_END_SUN").item(0).getFirstChild().getNodeValue());
-			turnStartTime.setTime(element.getElementsByTagName("TURN_START").item(0).getFirstChild().getNodeValue());
-			turnStartTime.setTimeSat(element.getElementsByTagName("TURN_START_SAT").item(0).getFirstChild().getNodeValue());
-			turnStartTime.setTimeSun(element.getElementsByTagName("TURN_START_SUN").item(0).getFirstChild().getNodeValue());
-			turnEndTime.setTime(element.getElementsByTagName("TURN_END").item(0).getFirstChild().getNodeValue());
-			turnEndTime.setTimeSat(element.getElementsByTagName("TURN_END_SAT").item(0).getFirstChild().getNodeValue());
-			turnEndTime.setTimeSun(element.getElementsByTagName("TURN_END_SUN").item(0).getFirstChild().getNodeValue());
-			info.setStartTime(startTime);
-			info.setEndTime(endTime);
-			info.setTurnStartTime(turnStartTime);
-			info.setTurnEndTime(turnEndTime);
-
-			BusIntervalType interval = new BusIntervalType();
-			interval.setInterval(element.getElementsByTagName("ALLO_INTERVAL").item(0).getFirstChild().getNodeValue());
-			interval.setIntervalSat(element.getElementsByTagName("ALLO_INTERVAL_SAT").item(0).getFirstChild().getNodeValue());
-			interval.setIntervalSun(element.getElementsByTagName("ALLO_INTERVAL_SUN").item(0).getFirstChild().getNodeValue());
-			info.setInterval(interval);
-
-			info.setStopCount(element.getElementsByTagName("BUSSTOP_CNT").item(0).getFirstChild().getNodeValue());
-			info.setHalfDistance(element.getElementsByTagName("RUN_DIST_HALF").item(0).getFirstChild().getNodeValue());
-			info.setAvgRunTime(element.getElementsByTagName("RUN_TM").item(0).getFirstChild().getNodeValue());
-
-			VocabularyType voc = new VocabularyType();
-			voc = mdm.modelingVocabulary(BusServiceFactory.BUS_LINE_ROUTE, info);
-			vocList.getVocabularies().add(voc);
+			infoList.add(info);
 		}
 
-		return vocList;
+		return infoList;
 	}
 
 }

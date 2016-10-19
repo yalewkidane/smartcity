@@ -15,52 +15,9 @@ public class BusLineInfoType {
 	private BusTimeType turnStartTime;
 	private BusTimeType turnEndTime;
 	private BusIntervalType interval;
-	private int stopCount;
+	private String stopCount;
 	private String halfDistance;
-	private int avgRunTime;
-
-
-	public BusLineInfoType() {
-		
-		this.gsrn = null;
-		this.lineid = null;
-		this.number = null;
-		this.busType = null;
-		this.company = null;
-		this.startPoint = null;
-		this.endPoint = null;
-		this.turnPoint = null;
-		this.startTime = null;
-		this.endTime = null;
-		this.turnStartTime = null;
-		this.turnEndTime = null;
-		this.interval = null;
-		this.stopCount = 0;
-		this.halfDistance = null;
-		this.avgRunTime = 0;
-	}
-
-	public BusLineInfoType(String gsrn, String lineid, String number, String busType, String company, BusStopInfoType startPoint, BusStopInfoType endPoint,
-			BusStopInfoType turnPoint, BusTimeType startTime, BusTimeType endTime, BusTimeType turnStartTime, BusTimeType turnEndTime, BusIntervalType interval,
-			int stopCount, String halfDistance, int avgRunTime) {
-
-		this.gsrn = gsrn;
-		this.lineid = lineid;
-		this.number = number;
-		this.busType = busType;
-		this.company = company;
-		this.startPoint = startPoint;
-		this.endPoint = endPoint;
-		this.turnPoint = turnPoint;
-		this.startTime = startTime;
-		this.endTime = endTime;
-		this.turnStartTime = turnStartTime;
-		this.turnEndTime = turnEndTime;
-		this.interval = interval;
-		this.stopCount = stopCount;
-		this.halfDistance = halfDistance;
-		this.avgRunTime = avgRunTime;
-	}
+	private String avgRunTime;
 
 	public String getGsrn() {
 
@@ -192,12 +149,12 @@ public class BusLineInfoType {
 		this.interval = value;
 	}
 
-	public int getStopCount() {
+	public String getStopCount() {
 
 		return stopCount;
 	}
 
-	public void setStopCount(int value) {
+	public void setStopCount(String value) {
 
 		this.stopCount = value;
 	}
@@ -212,12 +169,12 @@ public class BusLineInfoType {
 		this.halfDistance = value;
 	}
 
-	public int getAvgRunTime() {
+	public String getAvgRunTime() {
 
 		return avgRunTime;
 	}
 
-	public void setAvgRunTime(int value) {
+	public void setAvgRunTime(String value) {
 
 		this.avgRunTime = value;
 	}

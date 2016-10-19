@@ -3,23 +3,10 @@ package org.gs1.smartcity.datatype.bus;
 public class BusCompanyInfoType {
 	
 	private String gln;
+	private String companyid;
 	private String name;
-	private String street;
-	private String city;
-	private String country;
-	private String zip;
-	
-	public BusCompanyInfoType() {}
-	
-	public BusCompanyInfoType(String gln, String name, String street, String city, String country, String zip) {
-		
-		this.gln = gln;
-		this.name = name;
-		this.street = street;
-		this.city = city;
-		this.country = country;
-		this.zip = zip;
-	}
+	private String addr;
+	private String tel;
 	
 	public String getGln() {
 		
@@ -29,6 +16,16 @@ public class BusCompanyInfoType {
 	public void setGln(String value) {
 		
 		this.gln = value;
+	}
+
+	public String getCompanyID() {
+		
+		return companyid;
+	}
+	
+	public void setCompanyID(String value) {
+		
+		this.companyid = value;
 	}
 	
 	public String getName() {
@@ -41,39 +38,24 @@ public class BusCompanyInfoType {
 		this.name = value;
 	}
 	
-	public String getStreet() {
+	public String getAddr() {
 		
-		return street;
+		return addr;
 	}
 	
-	public void setStreet(String value) {
+	public void setAddr(String value) {
 		
-		this.street = value;
+		this.addr = value;
 	}
 	
-	public String getCity() {
+	public String getTel() {
 		
-		return city;
+		return tel;
 	}
 	
-	public void setCity(String value) {
+	public void setTel(String value) {
 		
-		this.city = value;
-	}
-	
-	public String getCountry() {
-		
-		return country;
-	}
-	
-	public void setCountry(String value) {
-		
-		this.zip = value;
-	}
-	
-	public String getZip() {
-		
-		return zip;
+		this.tel = value;
 	}
 
 }

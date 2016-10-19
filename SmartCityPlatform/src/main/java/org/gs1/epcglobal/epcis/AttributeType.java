@@ -27,8 +27,8 @@ import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
 import org.gs1.smartcity.datatype.bus.BusIntervalType;
-import org.gs1.smartcity.datatype.bus.BusStopInfo;
-import org.gs1.smartcity.datatype.bus.BusStopList;
+import org.gs1.smartcity.datatype.bus.BusStopInfoType;
+import org.gs1.smartcity.datatype.bus.BusStopListType;
 import org.gs1.smartcity.datatype.bus.BusTimeType;
 import org.w3c.dom.Element;
 
@@ -56,7 +56,7 @@ import org.w3c.dom.Element;
     "content"
 })
 @XmlRootElement
-@XmlSeeAlso({BusStopList.class, BusIntervalType.class, BusTimeType.class, BusStopInfo.class, Number.class})
+@XmlSeeAlso({BusStopListType.class, BusIntervalType.class, BusTimeType.class, BusStopInfoType.class, Number.class})
 public class AttributeType
     implements Serializable
 {

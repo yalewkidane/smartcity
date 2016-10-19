@@ -80,7 +80,8 @@ public class BusUrlGenerator extends UrlGenerator {
 		} else if(infoType.compareTo(BusServiceFactory.DAEJEON_BUS_REG_INFO) == 0) {
 			url = url + infoType + "?busRouteId=" + parm + "&";
 		} else if(infoType.compareTo(BusServiceFactory.DAEJEON_BUS_COMPANY_INFO) == 0) {
-			url = url + infoType + "?";
+			url = url + infoType + "?serviceKey=" + DAEJEON_SERVICE_KEY + "&reqPage=" + parm;
+			return url;
 		}
 
 		url = url + "serviceKey=" + DAEJEON_SERVICE_KEY;

@@ -1,19 +1,20 @@
 package org.gs1.smartcity.capturing.services;
 
 import java.io.IOException;
-
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.gs1.epcglobal.epcis.VocabularyListType;
+import org.gs1.epcglobal.epcis.VocabularyType;
+import org.gs1.smartcity.capturing.EPCISVocabularyMarshaller;
+import org.gs1.smartcity.capturing.masterdata.MasterDataManager;
+import org.gs1.smartcity.capturing.services.bus.BusMasterDataManager;
 import org.gs1.smartcity.capturing.services.bus.BusServiceFactory;
 import org.gs1.smartcity.capturing.services.bus.BusUrlGenerator;
-import org.gs1.smartcity.util.EPCISVocabularyMarshaller;
+import org.gs1.smartcity.util.QueryProcessor;
 
 public class ExistingServiceManager {
 
-	public static void main(String[] args) throws IOException, JAXBException, ParserConfigurationException {
-		// TODO Auto-generated method stub
+	public void queryData() throws IOException, JAXBException, ParserConfigurationException {
 		
 		QueryProcessor queryProcessor = new QueryProcessor();
 		
@@ -22,28 +23,22 @@ public class ExistingServiceManager {
 		
 		UrlGenerator urlGenerator = new BusUrlGenerator(ServiceFactory.DAEJEON_BUS);
 		
-		String url = urlGenerator.generate(BusServiceFactory.DAEJEON_BUS_LINE_INFO_ALL, "2", null);
+		String url = urlGenerator.generate(BusServiceFactory.DAEJEON_BUS_COMPANY_INFO, "1", null);
 		String data = queryProcessor.query(url);
 		System.out.println(url);
-		VocabularyListType vocList = trans.translate(BusServiceFactory.DAEJEON_BUS_LINE_INFO_ALL, data);
+		Object obj = trans.translate(BusServiceFactory.DAEJEON_BUS_COMPANY_INFO, data);
+		
+		MasterDataManager mdm = new BusMasterDataManager();
+		VocabularyType voc = mdm.modelingVocabulary(BusServiceFactory.BUS_COMPANY_INFO, obj);
 		
 		EPCISVocabularyMarshaller vm = new EPCISVocabularyMarshaller();
-		vm.make(vocList);
+		vm.make(voc);
 		
-		String s = vm.marshal();
-		System.out.println(s);
+		String result = vm.marshal();
+		System.out.println(result);
 		
-		//register master data - bus line, bus stop
+		mdm.registerEPCIS(result);
 		
-		
-		
-		
-		//register event data periodically - bus arrival, line-stop, bus location
-		
-		
-		
-		
-
 	}
 
 }

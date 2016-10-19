@@ -8,6 +8,12 @@ public class BusServiceFactory {
 	public static final String BUS_DRIVER_INFO = "busDriverInfo";
 	public static final String BUS_COMPANY_INFO = "busCompanyInfo";
 	public static final String BUS_LINE_ROUTE = "busLineRoute";
+	public static final String BUS_VEHICLE_INFO = "busVehicleInfo";
+	
+	//bus event data information
+	public static final String BUS_LIFE_INFO = "busLifeInfo";
+	public static final String BUS_RT_POS_INFO = "busRealTimePosInfo";
+	public static final String BUS_DRIVER_LIFE_INFO = "busDriverLifeInfo";
 	
 	//busan bus information
 	public static final String BUSAN_BUS_LINE_INFO = "busInfo";			//버스 노선 정보

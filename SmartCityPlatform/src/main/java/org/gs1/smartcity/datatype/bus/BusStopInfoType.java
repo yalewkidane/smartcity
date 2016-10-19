@@ -1,5 +1,8 @@
 package org.gs1.smartcity.datatype.bus;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class BusStopInfoType {
 
 	private String gln;

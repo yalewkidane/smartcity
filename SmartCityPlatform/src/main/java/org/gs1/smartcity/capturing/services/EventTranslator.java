@@ -7,6 +7,6 @@ public abstract class EventTranslator {
 	
 	protected EventDataManager edm;
 
-	public abstract EventListType eventDataTranslate(String type, String data);
+	public abstract EventListType translate(String type, String data);
 
 }
