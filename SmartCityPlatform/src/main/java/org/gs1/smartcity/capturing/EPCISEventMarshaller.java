@@ -12,7 +12,6 @@ import javax.xml.bind.Marshaller;
 import org.gs1.epcglobal.epcis.EPCISBodyType;
 import org.gs1.epcglobal.epcis.EPCISDocument;
 import org.gs1.epcglobal.epcis.EventListType;
-import org.gs1.epcglobal.epcis.ObjectEventType;
 import org.gs1.epcglobal.epcis.ObjectFactory;
 
 public class EPCISEventMarshaller {
@@ -20,20 +19,18 @@ public class EPCISEventMarshaller {
 	private ObjectFactory of;
 	private EPCISDocument epcisDoc;
 	private EPCISBodyType epcisBody;
-	private EventListType eventList;
 
 	public EPCISEventMarshaller() {
 		of = new ObjectFactory();
 		epcisDoc = of.createEPCISDocument();
 		epcisBody = of.createEPCISBodyType();
-		eventList = of.createEventListType();
-		epcisBody.setEventList(eventList);
+		
 		epcisDoc.setEPCISBody(epcisBody);
 	}
 
-	public void make(ObjectEventType objectEvent) {
+	public void make(EventListType eventList) {
 		
-		eventList.getObjectEventsAndAggregationEventsAndQuantityEvents().add(objectEvent);
+		epcisBody.setEventList(eventList);
 	}
 
 	public String marshal() throws JAXBException, UnsupportedEncodingException {

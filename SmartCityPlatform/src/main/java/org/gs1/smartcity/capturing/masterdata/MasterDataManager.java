@@ -13,7 +13,7 @@ public abstract class MasterDataManager {
 
 	public abstract VocabularyType modelingVocabulary(String type, Object object);
 
-	public void registerEPCIS(String data) throws IOException {
+	public int registerEPCIS(String data) throws IOException {
 
 		String url = "http://143.248.56.100:8080/epcis/Service/VocabularyCapture";
 
@@ -24,7 +24,7 @@ public abstract class MasterDataManager {
 		
 		HttpResponse response = client.execute(post);
 		
-		System.out.println("Response Code: " + response.getStatusLine().getStatusCode());
+		return response.getStatusLine().getStatusCode();
 
 	}
 

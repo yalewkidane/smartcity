@@ -3,26 +3,15 @@ package org.gs1.smartcity.db.mongo;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.data.mongodb.core.MongoOperations;
+import org.gs1.smartcity.datatype.bus.GSRNType;
 
 public class GsrnDAO extends DataAccessObject {
 
-private MongoOperations mongoOps;
-	
-	public GsrnDAO() {
-		
-		MongoInstance mongo = MongoInstance.getInstance();
-		mongoOps = mongo.getMongoOps();
-		
-	}
-	
-	public void register(String objectID, String GSRN){
+	public void register(String objectID, String gsrn){
 
-		Map<String, String> map = new HashMap<String, String>();
-		map.put(objectID, GSRN);
+		GSRNType map = new GSRNType();
+		map.setObjectID(objectID);
+		map.setGsrn(gsrn);
 
 		mongoOps.insert(map, "GSRN");
 
@@ -30,13 +19,12 @@ private MongoOperations mongoOps;
 	
 	public String queryKey(String objectID){
 
-		@SuppressWarnings("unchecked")
-		Map<String, String> map = mongoOps.findOne(query(where("objectID").is(objectID)), HashMap.class, "GSRN");
+		GSRNType map = mongoOps.findOne(query(where("objectID").is(objectID)), GSRNType.class, "GSRN");
 
 		if(map == null) {
 			return null;
 		}
-		return map.get(objectID);
+		return map.getGsrn();
 	}
 	
 }

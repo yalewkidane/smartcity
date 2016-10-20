@@ -3,40 +3,28 @@ package org.gs1.smartcity.db.mongo;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.springframework.data.mongodb.core.MongoOperations;
+import org.gs1.smartcity.datatype.bus.GLNType;
 
 public class GlnDAO extends DataAccessObject {
 	
-private MongoOperations mongoOps;
-	
-	public GlnDAO() {
-		
-		MongoInstance mongo = MongoInstance.getInstance();
-		mongoOps = mongo.getMongoOps();
-		
-	}
-	
-	public void register(String objectID, String GLN){
+	public void register(String objectID, String gln){
 
-		Map<String, String> map = new HashMap<String, String>();
-		map.put(objectID, GLN);
-
+		GLNType map = new GLNType();
+		map.setObjectID(objectID);
+		map.setGln(gln);
+		
 		mongoOps.insert(map, "GLN");
 
 	}
 	
 	public String queryKey(String objectID){
 
-		@SuppressWarnings("unchecked")
-		Map<String, String> map = mongoOps.findOne(query(where("objectID").is(objectID)), HashMap.class, "GLN");
+		GLNType map = mongoOps.findOne(query(where("objectID").is(objectID)), GLNType.class, "GLN");
 
 		if(map == null) {
 			return null;
 		}
-		return map.get(objectID);
+		return map.getGln();
 	}
 
 }

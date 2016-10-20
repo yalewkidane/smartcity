@@ -1,44 +1,32 @@
 package org.gs1.smartcity.capturing.services;
 
-import java.io.IOException;
-import javax.xml.bind.JAXBException;
-import javax.xml.parsers.ParserConfigurationException;
+import java.util.List;
 
-import org.gs1.epcglobal.epcis.VocabularyType;
-import org.gs1.smartcity.capturing.EPCISVocabularyMarshaller;
+import org.gs1.smartcity.capturing.eventdata.EventDataManager;
+import org.gs1.smartcity.capturing.eventdata.EventDataManagerFactory;
 import org.gs1.smartcity.capturing.masterdata.MasterDataManager;
-import org.gs1.smartcity.capturing.services.bus.BusMasterDataManager;
-import org.gs1.smartcity.capturing.services.bus.BusServiceFactory;
-import org.gs1.smartcity.capturing.services.bus.BusUrlGenerator;
-import org.gs1.smartcity.util.QueryProcessor;
+import org.gs1.smartcity.capturing.masterdata.MasterDataManagerFactory;
 
-public class ExistingServiceManager {
+public abstract class ExistingServiceManager {
 
-	public void queryData() throws IOException, JAXBException, ParserConfigurationException {
+	protected UrlGenerator urlGenerator;
+	protected VocabularyTranslator vocTranslator;
+	protected EventTranslator eventTranslator;
+	protected MasterDataManager masterDataManager;
+	protected EventDataManager eventDataManager;
+	
+	public ExistingServiceManager(String type) {
 		
-		QueryProcessor queryProcessor = new QueryProcessor();
-		
-		TransFactory transFactory = new TransFactory();
-		VocabularyTranslator trans = transFactory.getTrans(ServiceFactory.BUS);
-		
-		UrlGenerator urlGenerator = new BusUrlGenerator(ServiceFactory.DAEJEON_BUS);
-		
-		String url = urlGenerator.generate(BusServiceFactory.DAEJEON_BUS_COMPANY_INFO, "1", null);
-		String data = queryProcessor.query(url);
-		System.out.println(url);
-		Object obj = trans.translate(BusServiceFactory.DAEJEON_BUS_COMPANY_INFO, data);
-		
-		MasterDataManager mdm = new BusMasterDataManager();
-		VocabularyType voc = mdm.modelingVocabulary(BusServiceFactory.BUS_COMPANY_INFO, obj);
-		
-		EPCISVocabularyMarshaller vm = new EPCISVocabularyMarshaller();
-		vm.make(voc);
-		
-		String result = vm.marshal();
-		System.out.println(result);
-		
-		mdm.registerEPCIS(result);
-		
+		urlGenerator = (new UrlGeneratorFactory()).getUrlGenerator(type);
+		vocTranslator = (new VocabularyTransFactory()).getTrans(type);
+		eventTranslator = (new EventTransFactory()).getTrans(type);
+		masterDataManager = (new MasterDataManagerFactory()).getManager(type);
+		eventDataManager = (new EventDataManagerFactory()).getManager(type);
 	}
+	
+	public abstract String queryExistingServiceData(String serviceType, String infoType, List<String> params);
+	public abstract String queryExistingServiceEvent(String serviceType, String infoType, List<String> params);
+	public abstract void registerMasterData(String data);
+	public abstract void registerEventData(String data);
 
 }

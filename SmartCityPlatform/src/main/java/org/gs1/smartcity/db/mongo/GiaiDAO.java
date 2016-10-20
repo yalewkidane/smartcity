@@ -3,25 +3,15 @@ package org.gs1.smartcity.db.mongo;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
 
-import java.util.HashMap;
-
-import org.springframework.data.mongodb.core.MongoOperations;
+import org.gs1.smartcity.datatype.bus.GIAIType;
 
 public class GiaiDAO extends DataAccessObject {
 
-	private MongoOperations mongoOps;
-	
-	public GiaiDAO() {
-		
-		MongoInstance mongo = MongoInstance.getInstance();
-		mongoOps = mongo.getMongoOps();
-		
-	}
-	
-	public void register(String objectID, String GIAI){
+	public void register(String objectID, String giai){
 
-		HashMap<String, String> map = new HashMap<String, String>();
-		map.put(objectID, GIAI);
+		GIAIType map = new GIAIType();
+		map.setObjectID(objectID);
+		map.setGiai(giai);
 
 		mongoOps.insert(map, "GIAI");
 
@@ -29,13 +19,12 @@ public class GiaiDAO extends DataAccessObject {
 	
 	public String queryKey(String objectID){
 
-		@SuppressWarnings("unchecked")
-		HashMap<String, String> map = mongoOps.findOne(query(where("objectID").is(objectID)), HashMap.class, "GIAI");
+		GIAIType map = mongoOps.findOne(query(where("objectID").is(objectID)), GIAIType.class, "GIAI");
 
 		if(map == null) {
 			return null;
 		}
-		return map.get(objectID);
+		return map.getGiai();
 	}
 	
 }

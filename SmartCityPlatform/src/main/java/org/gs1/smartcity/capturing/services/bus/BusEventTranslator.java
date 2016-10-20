@@ -2,18 +2,19 @@ package org.gs1.smartcity.capturing.services.bus;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.gs1.epcglobal.epcis.EventListType;
-import org.gs1.epcglobal.epcis.ObjectEventType;
 import org.gs1.epcglobal.epcis.VocabularyType;
 import org.gs1.smartcity.capturing.EPCISDataAggregator;
 import org.gs1.smartcity.capturing.services.EventTranslator;
+import org.gs1.smartcity.capturing.services.ServiceFactory;
 import org.gs1.smartcity.datatype.ExtensionType;
 import org.gs1.smartcity.datatype.bus.BusLifeEventType;
 import org.w3c.dom.DOMException;
@@ -25,7 +26,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 public class BusEventTranslator extends EventTranslator {
-	
+
 	private static final String DIRECTION = "direction";
 
 	DocumentBuilderFactory factory;
@@ -34,45 +35,48 @@ public class BusEventTranslator extends EventTranslator {
 
 	public BusEventTranslator() throws ParserConfigurationException {
 
-		edm = new BusEventDataManager();
-
 		factory = DocumentBuilderFactory.newInstance();
 		builder = factory.newDocumentBuilder();
 	}
 
-	public EventListType translate(String type, String data) {
+	public Object translate(String serviceType, String infoType, String data) {
 
-		if(type.equals(BusServiceFactory.BUSAN_BUS_LINE_ROUTE)) {
-			try {
-				return translateBusanBusLifeInfo(data);
-			} catch (SAXException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (DOMException e) {
-				e.printStackTrace();
-			} catch (JAXBException e) {
-				e.printStackTrace();
+		if(serviceType.equals(ServiceFactory.BUSAN_BUS)) {
+			if(infoType.equals(BusServiceFactory.BUS_LINE_ROUTE)) {
+				try {
+					return translateBusanBusLifeInfo(data);
+				} catch (SAXException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (DOMException e) {
+					e.printStackTrace();
+				} catch (JAXBException e) {
+					e.printStackTrace();
+				}
 			}
-		} else if(type.equals(BusServiceFactory.DAEJEON_BUS_LINE_POS)) {
-			try {
-				return translateDaejeonBusLifeInfo(data);
-			} catch (DOMException e) {
-				e.printStackTrace();
-			} catch (SAXException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (JAXBException e) {
-				e.printStackTrace();
+		} else if(serviceType.equals(ServiceFactory.DAEJEON_BUS)) {
+			if(infoType.equals(BusServiceFactory.BUS_LINE_POS)) {
+				try {
+					return translateDaejeonBusLifeInfo(data);
+				} catch (DOMException e) {
+					e.printStackTrace();
+				} catch (SAXException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (JAXBException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		return null;
 	}
 
-	private EventListType translateBusanBusLifeInfo(String data) throws SAXException, IOException, DOMException, JAXBException {
-		
-		EventListType eventList = new EventListType();
+	private List<BusLifeEventType> translateBusanBusLifeInfo(String data) throws SAXException, IOException, DOMException, JAXBException {
+
+		//EventListType eventList = new EventListType();
+		List<BusLifeEventType> eventList = new ArrayList<BusLifeEventType>();
 
 		document = builder.parse(new InputSource(new StringReader(data)));
 
@@ -108,16 +112,16 @@ public class BusEventTranslator extends EventTranslator {
 				event.addExtension(extension);
 			}
 
-			ObjectEventType objectEvent = edm.modelingObjectEvent(BusServiceFactory.BUS_LIFE_INFO, event);
-			eventList.getObjectEventsAndAggregationEventsAndQuantityEvents().add(objectEvent);
+			eventList.add(event);
 		}
-		
+
 		return eventList;
 	}
 
-	private EventListType translateDaejeonBusLifeInfo(String data) throws SAXException, IOException, DOMException, JAXBException {
+	private List<BusLifeEventType> translateDaejeonBusLifeInfo(String data) throws SAXException, IOException, DOMException, JAXBException {
 
-		EventListType eventList = new EventListType();
+		//EventListType eventList = new EventListType();
+		List<BusLifeEventType> eventList = new ArrayList<BusLifeEventType>();
 
 		document = builder.parse(new InputSource(new StringReader(data)));
 
@@ -153,10 +157,9 @@ public class BusEventTranslator extends EventTranslator {
 				event.addExtension(extension);
 			}
 
-			ObjectEventType objectEvent = edm.modelingObjectEvent(BusServiceFactory.BUS_LIFE_INFO, event);
-			eventList.getObjectEventsAndAggregationEventsAndQuantityEvents().add(objectEvent);
+			eventList.add(event);
 		}
-		
+
 		return eventList;
 	}
 }

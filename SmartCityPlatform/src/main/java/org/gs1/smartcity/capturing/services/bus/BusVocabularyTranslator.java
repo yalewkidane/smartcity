@@ -9,6 +9,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.gs1.smartcity.capturing.services.ServiceFactory;
 import org.gs1.smartcity.capturing.services.VocabularyTranslator;
 import org.gs1.smartcity.datatype.bus.BusCompanyInfoType;
 import org.gs1.smartcity.datatype.bus.BusIntervalType;
@@ -38,67 +39,71 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 		builder = factory.newDocumentBuilder();
 	}
 
-	public Object translate(String type, String data)  {
+	public Object translate(String serviceType, String infoType, String data)  {
 
-		if (type.equals(BusServiceFactory.BUSAN_BUS_LINE_INFO) || type.equals(BusServiceFactory.BUSAN_BUS_LINE_INFO_ALL)) {
-			try {
-				return translateBusanBusLineInfo(data);
-			} catch (SAXException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} else if (type.equals(BusServiceFactory.BUSAN_BUS_STOP_INFO)) {
-			try {
-				return translateBusanBusStopInfo(data);
-			} catch (SAXException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} else if (type.equals(BusServiceFactory.BUSAN_BUS_LINE_ROUTE)) {
-			try {
-				return translateBusanBusLineRouteInfo(data);
-			} catch (SAXException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} else if (type.equals(BusServiceFactory.BUSAN_BUS_STOP_ARR)) {
+		if(serviceType.equals(ServiceFactory.BUSAN_BUS)) {
+			if (infoType.equals(BusServiceFactory.BUS_LINE_INFO) || infoType.equals(BusServiceFactory.BUS_LINE_INFO_ALL)) {
+				try {
+					return translateBusanBusLineInfo(data);
+				} catch (SAXException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} else if (infoType.equals(BusServiceFactory.BUS_STOP_INFO)) {
+				try {
+					return translateBusanBusStopInfo(data);
+				} catch (SAXException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} else if (infoType.equals(BusServiceFactory.BUS_LINE_ROUTE)) {
+				try {
+					return translateBusanBusLineRouteInfo(data);
+				} catch (SAXException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} else if (infoType.equals(BusServiceFactory.BUS_STOP_ARR)) {
 
-		} else if (type.equals(BusServiceFactory.BUSAN_BUS_LINE_STOP)) {
+			} else if (infoType.equals(BusServiceFactory.BUS_LINE_STOP_ARR)) {
 
-		} else if (type.equals(BusServiceFactory.DAEJEON_BUS_LINE_INFO) || type.equals(BusServiceFactory.DAEJEON_BUS_LINE_INFO_ALL)) {
-			try {
-				return translateDaejeonBusLineInfo(data);
-			} catch (SAXException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
-		} else if (type.equals(BusServiceFactory.DAEJEON_BUS_STOP_INFO)) {
-			try {
-				return translateDaejeonBusStopInfo(data);
-			} catch (SAXException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} else if (type.equals(BusServiceFactory.DAEJEON_BUS_LINE_ROUTE)) {
-			try {
-				return translateDaejeonBusLineRouteInfo(data);
-			} catch (SAXException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} else if (type.equals(BusServiceFactory.DAEJEON_BUS_COMPANY_INFO)) {
-			try {
-				return translateDaejeonBusCompanyInfo(data);
-			} catch (SAXException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
+		} else if (serviceType.equals(ServiceFactory.DAEJEON_BUS)) {
+			if (infoType.equals(BusServiceFactory.BUS_LINE_INFO) || infoType.equals(BusServiceFactory.BUS_LINE_INFO_ALL)) {
+				try {
+					return translateDaejeonBusLineInfo(data);
+				} catch (SAXException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} else if (infoType.equals(BusServiceFactory.BUS_STOP_INFO)) {
+				try {
+					return translateDaejeonBusStopInfo(data);
+				} catch (SAXException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} else if (infoType.equals(BusServiceFactory.BUS_LINE_ROUTE)) {
+				try {
+					return translateDaejeonBusLineRouteInfo(data);
+				} catch (SAXException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} else if (infoType.equals(BusServiceFactory.BUS_COMPANY_INFO)) {
+				try {
+					return translateDaejeonBusCompanyInfo(data);
+				} catch (SAXException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 
@@ -118,13 +123,15 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 			Element element = (Element) nNode;
 
 			BusLineInfoType info = new BusLineInfoType();
-			
-			//DAOFactory factory = new DAOFactory();
-			//DataAccessObject dao = factory.getDAO(DAOFactory.GSRN);
-			//info.setGsrn(dao.queryKey(element.getElementsByTagName("lineId").item(0).getFirstChild().getNodeValue()));
 
-			info.setGsrn("8801234123456");
-			
+			DAOFactory factory = new DAOFactory();
+			DataAccessObject dao = factory.getDAO(DAOFactory.GSRN);
+			info.setGsrn(dao.queryKey(element.getElementsByTagName("lineId").item(0).getFirstChild().getNodeValue()));
+			System.out.println("lineID: " + element.getElementsByTagName("lineId").item(0).getFirstChild().getNodeValue());
+			System.out.println("gsrn: " + dao.queryKey(element.getElementsByTagName("lineId").item(0).getFirstChild().getNodeValue()));
+
+			//info.setGsrn("8801234123456");
+
 			info.setLineID(element.getElementsByTagName("lineId").item(0).getFirstChild().getNodeValue());
 			info.setNumber(element.getElementsByTagName("buslinenum").item(0).getFirstChild().getNodeValue());
 			info.setBusType(element.getElementsByTagName("bustype").item(0).getFirstChild().getNodeValue());
@@ -175,12 +182,12 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 			Element element = (Element) nNode;
 
 			BusStopInfoType info = new BusStopInfoType();
-			
-//			DAOFactory factory = new DAOFactory();
-//			DataAccessObject dao = factory.getDAO(DAOFactory.GLN);
-//			info.setGln(dao.queryKey(element.getElementsByTagName("bstopId").item(0).getFirstChild().getNodeValue()));
-			
-			info.setGln("8801234123456");
+
+			DAOFactory factory = new DAOFactory();
+			DataAccessObject dao = factory.getDAO(DAOFactory.GLN);
+			info.setGln(dao.queryKey(element.getElementsByTagName("bstopId").item(0).getFirstChild().getNodeValue()));
+
+			//info.setGln("8801234123456");
 
 			info.setStopID(element.getElementsByTagName("bstopId").item(0).getFirstChild().getNodeValue());
 			info.setNumber(element.getElementsByTagName("bstopArsno").item(0).getFirstChild().getNodeValue());
@@ -195,20 +202,21 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 	}
 
 	private BusLineRouteType translateBusanBusLineRouteInfo(String data) throws SAXException, IOException {
-		
+
 		String dataBody = data.substring(data.lastIndexOf("<?xml"));
 		String key = data.substring(0, data.lastIndexOf("<?xml"));
-		
+
 		document = builder.parse(new InputSource(new StringReader(dataBody)));
 
 		NodeList nList = document.getElementsByTagName("item");
 
 		BusLineRouteType info = new BusLineRouteType();
-		
-//		DAOFactory factory = new DAOFactory();
-//		DataAccessObject dao = factory.getDAO(DAOFactory.GSRN);
-//		info.setGsrn(dao.queryKey(key));
-		info.setGsrn("8801234123456");
+
+		DAOFactory factory = new DAOFactory();
+		DataAccessObject dao = factory.getDAO(DAOFactory.GSRN);
+		info.setGsrn(dao.queryKey(key));
+
+		//info.setGsrn("8801234123456");
 
 		for (int i = 0; i < nList.getLength(); i++) {
 			Node nNode = nList.item(i);
@@ -229,7 +237,7 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 	private List<BusLineInfoType> translateDaejeonBusLineInfo(String data) throws SAXException, IOException {
 
 		List<BusLineInfoType> infoList = new ArrayList<BusLineInfoType>();
-		
+
 		document = builder.parse(new InputSource(new StringReader(data)));
 
 		NodeList nList = document.getElementsByTagName("itemList");
@@ -239,11 +247,12 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 			Element element = (Element) nNode;
 
 			BusLineInfoType info = new BusLineInfoType();
-			
-//			DAOFactory factory = new DAOFactory();
-//			DataAccessObject dao = factory.getDAO(DAOFactory.GSRN);
-//			info.setGsrn(dao.queryKey(element.getElementsByTagName("ROUTE_CD").item(0).getFirstChild().getNodeValue()));
-			info.setGsrn("8801234123456");
+
+			DAOFactory factory = new DAOFactory();
+			DataAccessObject dao = factory.getDAO(DAOFactory.GSRN);
+			info.setGsrn(dao.queryKey(element.getElementsByTagName("ROUTE_CD").item(0).getFirstChild().getNodeValue()));
+
+			//info.setGsrn("8801234123456");
 
 			info.setLineID(element.getElementsByTagName("ROUTE_CD").item(0).getFirstChild().getNodeValue());
 			info.setNumber(element.getElementsByTagName("ROUTE_NO").item(0).getFirstChild().getNodeValue());
@@ -340,7 +349,7 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 			if(element.getElementsByTagName("RUN_TM").item(0) != null) {
 				info.setAvgRunTime(element.getElementsByTagName("RUN_TM").item(0).getFirstChild().getNodeValue().substring(0, 2));
 			}
-			
+
 			infoList.add(info);
 		}
 
@@ -348,7 +357,7 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 	}
 
 	private List<BusStopInfoType> translateDaejeonBusStopInfo(String data) throws SAXException, IOException {
-		
+
 		List<BusStopInfoType> infoList = new ArrayList<BusStopInfoType>();
 
 		document = builder.parse(new InputSource(new StringReader(data)));
@@ -360,11 +369,12 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 			Element element = (Element) nNode;
 
 			BusStopInfoType info = new BusStopInfoType();
-			
-//			DAOFactory factory = new DAOFactory();
-//			DataAccessObject dao = factory.getDAO(DAOFactory.GLN);
-//			info.setGln(dao.queryKey(element.getElementsByTagName("BUS_NODE_ID").item(0).getFirstChild().getNodeValue()));
-			info.setGln("8801234123456");
+
+			DAOFactory factory = new DAOFactory();
+			DataAccessObject dao = factory.getDAO(DAOFactory.GLN);
+			info.setGln(dao.queryKey(element.getElementsByTagName("BUS_NODE_ID").item(0).getFirstChild().getNodeValue()));
+
+			//info.setGln("8801234123456");
 
 			info.setStopID(element.getElementsByTagName("BUS_NODE_ID").item(0).getFirstChild().getNodeValue());
 			info.setNumber(element.getElementsByTagName("ARO_BUSSTOP_ID").item(0).getFirstChild().getNodeValue());
@@ -378,7 +388,7 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 
 			infoList.add(info);
 		}
-		
+
 		return infoList;
 	}
 
@@ -392,11 +402,12 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 		NodeList nList = document.getElementsByTagName("itemList");
 
 		BusLineRouteType info = new BusLineRouteType();
-		
-//		DAOFactory factory = new DAOFactory();
-//		DataAccessObject dao = factory.getDAO(DAOFactory.GSRN);
-//		info.setGsrn(dao.queryKey(key));
-		info.setGsrn("8801234123456");
+
+		DAOFactory factory = new DAOFactory();
+		DataAccessObject dao = factory.getDAO(DAOFactory.GSRN);
+		info.setGsrn(dao.queryKey(key));
+
+		//info.setGsrn("8801234123456");
 
 		for (int i = 0; i < nList.getLength(); i++) {
 			Node nNode = nList.item(i);
@@ -428,12 +439,13 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 			Element element = (Element) nNode;
 
 			BusCompanyInfoType info = new BusCompanyInfoType();
-			
-//			DAOFactory factory = new DAOFactory();
-//			DataAccessObject dao = factory.getDAO(DAOFactory.GLN);
-//			info.setGln(dao.queryKey(element.getElementsByTagName("COMP_CD").item(0).getFirstChild().getNodeValue()));
+
+			//			DAOFactory factory = new DAOFactory();
+			//			DataAccessObject dao = factory.getDAO(DAOFactory.GLN);
+			//			info.setGln(dao.queryKey(element.getElementsByTagName("COMP_CD").item(0).getFirstChild().getNodeValue()));
+
 			info.setGln("8801234123456");
-			
+
 			info.setCompanyID(element.getElementsByTagName("COMP_CD").item(0).getFirstChild().getNodeValue());
 			info.setName(element.getElementsByTagName("COMP_NM").item(0).getFirstChild().getNodeValue());
 			info.setAddr(element.getElementsByTagName("ADDR1").item(0).getFirstChild().getNodeValue());
