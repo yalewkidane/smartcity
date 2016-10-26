@@ -2,13 +2,11 @@ package org.gs1.smartcity.capturing.services.bus;
 
 import java.util.List;
 
-import javax.xml.namespace.QName;
-
 import org.gs1.epcglobal.epcis.ActionType;
 import org.gs1.epcglobal.epcis.BusinessLocationType;
 import org.gs1.epcglobal.epcis.BusinessTransactionListType;
 import org.gs1.epcglobal.epcis.BusinessTransactionType;
-import org.gs1.epcglobal.epcis.EventListType;
+import org.gs1.epcglobal.epcis.ObjectEventExtension2Type;
 import org.gs1.epcglobal.epcis.ObjectEventExtensionType;
 import org.gs1.epcglobal.epcis.ObjectEventType;
 import org.gs1.smartcity.capturing.eventdata.EventDataManager;
@@ -18,20 +16,23 @@ import org.gs1.smartcity.datatype.bus.BusLifeEventType;
 public class BusEventDataManager extends EventDataManager {
 
 	@SuppressWarnings("unchecked")
-	public EventListType modelingObjectEvent(String type, Object object) {
+	public String modeling(String type, Object object) {
 
-		if(type.equals(BusServiceFactory.BUS_LIFE_INFO)) {
-			return busLifeModeling((List<BusLifeEventType>) object);
+		String result = null;
+
+		if(type.equals(BusServiceFactory.BUS_LINE_ROUTE)) {
+			busLifeModeling((List<BusLifeEventType>) object);
 		} else if(type.equals(BusServiceFactory.BUS_DRIVER_LIFE_INFO)) {
-			return busDriverLifeModeling((List<BusDriverLifeEventType>) object);
+			busDriverLifeModeling((List<BusDriverLifeEventType>) object);
 		}
 
-		return null;
+		marshaller.make(eventList);
+		result = marshaller.marshal();
+
+		return result;
 	}
 
-	private EventListType busLifeModeling(List<BusLifeEventType> eventList) {
-
-		EventListType epcisEventList = new EventListType();
+	private void busLifeModeling(List<BusLifeEventType> eventList) {
 
 		for(int i = 0; i < eventList.size(); i++) {
 			BusLifeEventType event = eventList.get(i);
@@ -39,6 +40,7 @@ public class BusEventDataManager extends EventDataManager {
 
 			objectEvent.setAction(ActionType.OBSERVE);
 			objectEvent.setEventTime(event.getEventTime());
+			objectEvent.setEventTimeZoneOffset("+09:00");
 			objectEvent.setEpcList(event.getEpcList());
 
 			BusinessLocationType bizLocation = new BusinessLocationType();
@@ -59,20 +61,18 @@ public class BusEventDataManager extends EventDataManager {
 			objectEvent.setBizTransactionList(bizTransactionList);
 
 			ObjectEventExtensionType extension = new ObjectEventExtensionType();
-			for(int j = 0; i < event.getExtensions().size(); j++) {
-				QName registration = new QName("", event.getExtensions().get(j).getName());
-				extension.getOtherAttributes().put(registration, event.getExtensions().get(j).getValue());
+			for(int j = 0; j < event.getExtensions().size(); j++) {
+				ObjectEventExtension2Type extension2 = new ObjectEventExtension2Type();
+				extension2.getAnies().add(event.getExtensions().get(j));
+				extension.setExtension(extension2);
+				System.out.println(extension.getExtension().getAnies().get(0).getAttribute("direction"));
 			}
 
-			epcisEventList.getObjectEventsAndAggregationEventsAndQuantityEvents().add(objectEvent);
+			this.eventList.getObjectEventsAndAggregationEventsAndQuantityEvents().add(objectEvent);
 		}
-
-		return epcisEventList;
 	}
 
-	private EventListType busDriverLifeModeling(List<BusDriverLifeEventType> eventList) {
-
-		EventListType epcisEventList = new EventListType();
+	private void busDriverLifeModeling(List<BusDriverLifeEventType> eventList) {
 
 		for(int i = 0; i < eventList.size(); i++) {
 			BusDriverLifeEventType event = eventList.get(i);
@@ -97,13 +97,13 @@ public class BusEventDataManager extends EventDataManager {
 
 			ObjectEventExtensionType extension = new ObjectEventExtensionType();
 			for(int j = 0; j < event.getExtensions().size(); j++) {
-				QName registration = new QName("", event.getExtensions().get(j).getName());
-				extension.getOtherAttributes().put(registration, event.getExtensions().get(j).getValue());
+				ObjectEventExtension2Type extension2 = new ObjectEventExtension2Type();
+				extension2.getAnies().add(event.getExtensions().get(j));
+				extension.setExtension(extension2);
 			}
-			
-			epcisEventList.getObjectEventsAndAggregationEventsAndQuantityEvents().add(objectEvent);
+
+			this.eventList.getObjectEventsAndAggregationEventsAndQuantityEvents().add(objectEvent);
 		}
-		return epcisEventList;
 	}
 
 }

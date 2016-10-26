@@ -57,7 +57,7 @@ import org.w3c.dom.Element;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "ObjectEventType", propOrder = {
+@XmlType(name = "ObjectEvent", propOrder = {
     "epcList",
     "action",
     "bizStep",
@@ -68,7 +68,7 @@ import org.w3c.dom.Element;
     "extension",
     "anies"
 })
-@XmlRootElement
+@XmlRootElement(name = "ObjectEvent")
 public class ObjectEventType
     extends EPCISEventType
     implements Serializable

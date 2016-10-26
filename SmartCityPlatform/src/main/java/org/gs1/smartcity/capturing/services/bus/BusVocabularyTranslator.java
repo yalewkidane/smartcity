@@ -5,10 +5,6 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.gs1.smartcity.capturing.services.ServiceFactory;
 import org.gs1.smartcity.capturing.services.VocabularyTranslator;
 import org.gs1.smartcity.datatype.bus.BusCompanyInfoType;
@@ -20,7 +16,6 @@ import org.gs1.smartcity.datatype.bus.BusStopInfoType;
 import org.gs1.smartcity.datatype.bus.BusTimeType;
 import org.gs1.smartcity.db.mongo.DAOFactory;
 import org.gs1.smartcity.db.mongo.DataAccessObject;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -29,43 +24,15 @@ import org.xml.sax.SAXException;
 
 public class BusVocabularyTranslator extends VocabularyTranslator {
 
-	DocumentBuilderFactory factory;
-	DocumentBuilder builder;
-	Document document;
-
-	public BusVocabularyTranslator() throws ParserConfigurationException {
-
-		factory = DocumentBuilderFactory.newInstance();
-		builder = factory.newDocumentBuilder();
-	}
-
 	public Object translate(String serviceType, String infoType, String data)  {
 
 		if(serviceType.equals(ServiceFactory.BUSAN_BUS)) {
 			if (infoType.equals(BusServiceFactory.BUS_LINE_INFO) || infoType.equals(BusServiceFactory.BUS_LINE_INFO_ALL)) {
-				try {
-					return translateBusanBusLineInfo(data);
-				} catch (SAXException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				return translateBusanBusLineInfo(data);
 			} else if (infoType.equals(BusServiceFactory.BUS_STOP_INFO)) {
-				try {
-					return translateBusanBusStopInfo(data);
-				} catch (SAXException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				return translateBusanBusStopInfo(data);
 			} else if (infoType.equals(BusServiceFactory.BUS_LINE_ROUTE)) {
-				try {
-					return translateBusanBusLineRouteInfo(data);
-				} catch (SAXException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				return translateBusanBusLineRouteInfo(data);
 			} else if (infoType.equals(BusServiceFactory.BUS_STOP_ARR)) {
 
 			} else if (infoType.equals(BusServiceFactory.BUS_LINE_STOP_ARR)) {
@@ -73,48 +40,30 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 			}
 		} else if (serviceType.equals(ServiceFactory.DAEJEON_BUS)) {
 			if (infoType.equals(BusServiceFactory.BUS_LINE_INFO) || infoType.equals(BusServiceFactory.BUS_LINE_INFO_ALL)) {
-				try {
-					return translateDaejeonBusLineInfo(data);
-				} catch (SAXException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				return translateDaejeonBusLineInfo(data);
 			} else if (infoType.equals(BusServiceFactory.BUS_STOP_INFO)) {
-				try {
-					return translateDaejeonBusStopInfo(data);
-				} catch (SAXException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				return translateDaejeonBusStopInfo(data);
 			} else if (infoType.equals(BusServiceFactory.BUS_LINE_ROUTE)) {
-				try {
-					return translateDaejeonBusLineRouteInfo(data);
-				} catch (SAXException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				return translateDaejeonBusLineRouteInfo(data);
 			} else if (infoType.equals(BusServiceFactory.BUS_COMPANY_INFO)) {
-				try {
-					return translateDaejeonBusCompanyInfo(data);
-				} catch (SAXException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				return translateDaejeonBusCompanyInfo(data);
 			}
 		}
 
 		return null;
 	}
 
-	private List<BusLineInfoType> translateBusanBusLineInfo(String data) throws SAXException, IOException {
+	private List<BusLineInfoType> translateBusanBusLineInfo(String data) {
 
 		List<BusLineInfoType> infoList = new ArrayList<BusLineInfoType>();
 
-		document = builder.parse(new InputSource(new StringReader(data)));
+		try {
+			document = builder.parse(new InputSource(new StringReader(data)));
+		} catch (SAXException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		NodeList nList = document.getElementsByTagName("item");
 
@@ -127,8 +76,6 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 			DAOFactory factory = new DAOFactory();
 			DataAccessObject dao = factory.getDAO(DAOFactory.GSRN);
 			info.setGsrn(dao.queryKey(element.getElementsByTagName("lineId").item(0).getFirstChild().getNodeValue()));
-			System.out.println("lineID: " + element.getElementsByTagName("lineId").item(0).getFirstChild().getNodeValue());
-			System.out.println("gsrn: " + dao.queryKey(element.getElementsByTagName("lineId").item(0).getFirstChild().getNodeValue()));
 
 			//info.setGsrn("8801234123456");
 
@@ -169,11 +116,17 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 		return infoList;
 	}
 
-	private List<BusStopInfoType> translateBusanBusStopInfo(String data) throws SAXException, IOException {
+	private List<BusStopInfoType> translateBusanBusStopInfo(String data) {
 
 		List<BusStopInfoType> infoList = new ArrayList<BusStopInfoType>();
 
-		document = builder.parse(new InputSource(new StringReader(data)));
+		try {
+			document = builder.parse(new InputSource(new StringReader(data)));
+		} catch (SAXException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		NodeList nList = document.getElementsByTagName("item");
 
@@ -201,12 +154,18 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 		return infoList;
 	}
 
-	private BusLineRouteType translateBusanBusLineRouteInfo(String data) throws SAXException, IOException {
+	private BusLineRouteType translateBusanBusLineRouteInfo(String data) {
 
 		String dataBody = data.substring(data.lastIndexOf("<?xml"));
 		String key = data.substring(0, data.lastIndexOf("<?xml"));
 
-		document = builder.parse(new InputSource(new StringReader(dataBody)));
+		try {
+			document = builder.parse(new InputSource(new StringReader(dataBody)));
+		} catch (SAXException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		NodeList nList = document.getElementsByTagName("item");
 
@@ -234,11 +193,17 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 		return info;
 	}
 
-	private List<BusLineInfoType> translateDaejeonBusLineInfo(String data) throws SAXException, IOException {
+	private List<BusLineInfoType> translateDaejeonBusLineInfo(String data) {
 
 		List<BusLineInfoType> infoList = new ArrayList<BusLineInfoType>();
 
-		document = builder.parse(new InputSource(new StringReader(data)));
+		try {
+			document = builder.parse(new InputSource(new StringReader(data)));
+		} catch (SAXException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		NodeList nList = document.getElementsByTagName("itemList");
 
@@ -356,11 +321,17 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 		return infoList;
 	}
 
-	private List<BusStopInfoType> translateDaejeonBusStopInfo(String data) throws SAXException, IOException {
+	private List<BusStopInfoType> translateDaejeonBusStopInfo(String data) {
 
 		List<BusStopInfoType> infoList = new ArrayList<BusStopInfoType>();
 
-		document = builder.parse(new InputSource(new StringReader(data)));
+		try {
+			document = builder.parse(new InputSource(new StringReader(data)));
+		} catch (SAXException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		NodeList nList = document.getElementsByTagName("itemList");
 
@@ -392,12 +363,18 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 		return infoList;
 	}
 
-	private BusLineRouteType translateDaejeonBusLineRouteInfo(String data) throws SAXException, IOException {
+	private BusLineRouteType translateDaejeonBusLineRouteInfo(String data) {
 
 		String dataBody = data.substring(data.lastIndexOf("<?xml"));
 		String key = data.substring(0, data.lastIndexOf("<?xml"));
 
-		document = builder.parse(new InputSource(new StringReader(dataBody)));
+		try {
+			document = builder.parse(new InputSource(new StringReader(dataBody)));
+		} catch (SAXException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		NodeList nList = document.getElementsByTagName("itemList");
 
@@ -426,11 +403,17 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 		return info;
 	}
 
-	public List<BusCompanyInfoType> translateDaejeonBusCompanyInfo(String data) throws SAXException, IOException {
+	public List<BusCompanyInfoType> translateDaejeonBusCompanyInfo(String data) {
 
 		List<BusCompanyInfoType> infoList = new ArrayList<BusCompanyInfoType>();
 
-		document = builder.parse(new InputSource(new StringReader(data)));
+		try {
+			document = builder.parse(new InputSource(new StringReader(data)));
+		} catch (SAXException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		NodeList nList = document.getElementsByTagName("itemList");
 

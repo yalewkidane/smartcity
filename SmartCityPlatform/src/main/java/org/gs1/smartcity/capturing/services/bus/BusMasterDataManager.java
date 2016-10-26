@@ -5,7 +5,6 @@ import java.util.List;
 import org.gs1.epcglobal.epcis.AttributeType;
 import org.gs1.epcglobal.epcis.VocabularyElementListType;
 import org.gs1.epcglobal.epcis.VocabularyElementType;
-import org.gs1.epcglobal.epcis.VocabularyType;
 import org.gs1.smartcity.capturing.masterdata.MasterDataManager;
 import org.gs1.smartcity.datatype.bus.BusCompanyInfoType;
 import org.gs1.smartcity.datatype.bus.BusDriverInfoType;
@@ -17,28 +16,33 @@ import org.gs1.smartcity.datatype.bus.BusVehicleInfoType;
 public class BusMasterDataManager extends MasterDataManager {
 
 	@SuppressWarnings("unchecked")
-	public VocabularyType modelingVocabulary(String type, Object object) {
+	public String modeling(String type, Object object) {
+		
+		String result = null;
 
 		if (type.equals(BusServiceFactory.BUS_LINE_INFO)) {
-			return lineModeling((List<BusLineInfoType>) object);
+			lineModeling((List<BusLineInfoType>) object);
 		} else if (type.equals(BusServiceFactory.BUS_STOP_INFO)) {
-			return stopModeling((List<BusStopInfoType>) object);
+			stopModeling((List<BusStopInfoType>) object);
 		} else if (type.equals(BusServiceFactory.BUS_DRIVER_INFO)) {
-			return driverModeling((BusDriverInfoType) object);
+			driverModeling((BusDriverInfoType) object);
 		} else if (type.equals(BusServiceFactory.BUS_COMPANY_INFO)) {
-			return companyModeling((List<BusCompanyInfoType>) object);
+			companyModeling((List<BusCompanyInfoType>) object);
 		} else if (type.equals(BusServiceFactory.BUS_LINE_ROUTE)) {
-			return lineRouteModeling((BusLineRouteType) object);
+			lineRouteModeling((BusLineRouteType) object);
 		} else if (type.equals(BusServiceFactory.BUS_VEHICLE_INFO)) {
-			return vehicleModeling((List<BusVehicleInfoType>) object);
+			vehicleModeling((List<BusVehicleInfoType>) object);
 		}
+		
+		headerModeling();
+		marshaller.make(sbdh, voc);
+		result = marshaller.marshal();
 
-		return null;
+		return result;
 	}
 
-	private VocabularyType lineModeling(List<BusLineInfoType> infoList) {
+	private void lineModeling(List<BusLineInfoType> infoList) {
 
-		VocabularyType voc = new VocabularyType();
 		voc.setType("urn:gs1:epcisapp:bus:line:info");
 		VocabularyElementListType vocElementList = new VocabularyElementListType();
 
@@ -165,13 +169,10 @@ public class BusMasterDataManager extends MasterDataManager {
 		}
 
 		voc.setVocabularyElementList(vocElementList);
-
-		return voc;
 	}
 
-	private VocabularyType stopModeling(List<BusStopInfoType> infoList) {
+	private void stopModeling(List<BusStopInfoType> infoList) {
 
-		VocabularyType voc = new VocabularyType();
 		voc.setType("urn:gs1:epcisapp:bus:stop:info");
 		VocabularyElementListType vocElementList = new VocabularyElementListType();
 
@@ -238,18 +239,14 @@ public class BusMasterDataManager extends MasterDataManager {
 		}
 
 		voc.setVocabularyElementList(vocElementList);
-
-		return voc;
 	}
 
-	private VocabularyType driverModeling(BusDriverInfoType info) {
+	private void driverModeling(BusDriverInfoType info) {
 
-		return null;
 	}
 
-	private VocabularyType companyModeling(List<BusCompanyInfoType> infoList) {
+	private void companyModeling(List<BusCompanyInfoType> infoList) {
 
-		VocabularyType voc = new VocabularyType();
 		voc.setType("urn:gs1:epcisapp:bus:company:info");
 		VocabularyElementListType vocElementList = new VocabularyElementListType();
 
@@ -282,13 +279,10 @@ public class BusMasterDataManager extends MasterDataManager {
 		}
 
 		voc.setVocabularyElementList(vocElementList);
-
-		return voc;
 	}
 
-	private VocabularyType lineRouteModeling(BusLineRouteType info) {
+	private void lineRouteModeling(BusLineRouteType info) {
 
-		VocabularyType voc = new VocabularyType();
 		voc.setType("urn:gs1:epcisapp:bus:line:route");
 		VocabularyElementListType vocElementList = new VocabularyElementListType();
 
@@ -304,13 +298,10 @@ public class BusMasterDataManager extends MasterDataManager {
 		vocElementList.getVocabularyElements().add(vocElement);
 
 		voc.setVocabularyElementList(vocElementList);
-
-		return voc;
 	}
 
-	private VocabularyType vehicleModeling(List<BusVehicleInfoType> infoList) {
+	private void vehicleModeling(List<BusVehicleInfoType> infoList) {
 
-		VocabularyType voc = new VocabularyType();
 		voc.setType("urn:gs1:epcisapp:bus:vehicle:info");
 		VocabularyElementListType vocElementList = new VocabularyElementListType();
 
@@ -333,8 +324,6 @@ public class BusMasterDataManager extends MasterDataManager {
 		}
 
 		voc.setVocabularyElementList(vocElementList);
-
-		return voc;
 	}
 
 }

@@ -31,7 +31,7 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-	private final static QName _EPCISDocument_QNAME = new QName("", "EPCISDocument");
+	private final static QName _EPCISDocument_QNAME = new QName("urn:epcglobal:epcis:xsd:1", "EPCISDocument");
 	private final static QName _EPCISBody_QNAME = new QName("", "EPCISBody");
 	private final static QName _EventList_QNAME = new QName("", "EventList");
     private final static QName _EventListTypeObjectEvent_QNAME = new QName("", "ObjectEvent");

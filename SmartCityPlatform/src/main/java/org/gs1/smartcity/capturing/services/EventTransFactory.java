@@ -1,7 +1,5 @@
 package org.gs1.smartcity.capturing.services;
 
-import javax.xml.parsers.ParserConfigurationException;
-
 import org.gs1.smartcity.capturing.services.bus.BusEventTranslator;
 
 public class EventTransFactory {
@@ -12,11 +10,7 @@ public class EventTransFactory {
 
 		if(type.equals(ServiceFactory.BUS)) {
 
-			try {
-				trans = new BusEventTranslator();
-			} catch (ParserConfigurationException e) {
-				e.printStackTrace();
-			}
+			trans = new BusEventTranslator();
 		}
 
 		return trans;
