@@ -11,6 +11,7 @@ package org.gs1.smartcity.datatype.bus.master;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 
@@ -45,6 +46,7 @@ import javax.xml.bind.annotation.XmlType;
     "intervalSat",
     "intervalSun"
 })
+@XmlRootElement
 public class BusIntervalType {
 
     @XmlElement(name = "Interval", required = true)

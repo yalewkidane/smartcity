@@ -39,13 +39,13 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "BusStopListType", propOrder = {
-    "stopList"
+    "busStop"
 })
-@XmlRootElement
+@XmlRootElement(name="BusStopList")
 public class BusStopListType {
 
     @XmlElement(required = true)
-    protected List<BusRouteStopInfoType> stopList;
+    protected List<BusRouteStopInfoType> busStop;
 
     /**
      * Gets the value of the stopList property.
@@ -70,10 +70,10 @@ public class BusStopListType {
      * 
      */
     public List<BusRouteStopInfoType> getStopList() {
-        if (stopList == null) {
-            stopList = new ArrayList<BusRouteStopInfoType>();
+        if (busStop == null) {
+        	busStop = new ArrayList<BusRouteStopInfoType>();
         }
-        return this.stopList;
+        return this.busStop;
     }
 
 }

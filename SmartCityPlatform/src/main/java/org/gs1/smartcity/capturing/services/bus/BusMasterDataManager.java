@@ -17,10 +17,10 @@ public class BusMasterDataManager extends MasterDataManager {
 
 	@SuppressWarnings("unchecked")
 	public String modeling(String type, Object object) {
-		
+
 		String result = null;
 
-		if (type.equals(BusServiceFactory.BUS_LINE_INFO)) {
+		if (type.equals(BusServiceFactory.BUS_LINE_INFO) || type.equals(BusServiceFactory.BUS_LINE_INFO_ALL)) {
 			lineModeling((List<BusLineInfoType>) object);
 		} else if (type.equals(BusServiceFactory.BUS_STOP_INFO)) {
 			stopModeling((List<BusStopInfoType>) object);
@@ -33,7 +33,7 @@ public class BusMasterDataManager extends MasterDataManager {
 		} else if (type.equals(BusServiceFactory.BUS_VEHICLE_INFO)) {
 			vehicleModeling((List<BusVehicleInfoType>) object);
 		}
-		
+
 		headerModeling();
 		marshaller.make(sbdh, voc);
 		result = marshaller.marshal();
@@ -283,17 +283,20 @@ public class BusMasterDataManager extends MasterDataManager {
 
 	private void lineRouteModeling(BusLineRouteType info) {
 
-		voc.setType("urn:gs1:epcisapp:bus:line:route");
+		voc.setType("urn:gs1:epcisapp:bus:line:info");
 		VocabularyElementListType vocElementList = new VocabularyElementListType();
 
 		VocabularyElementType vocElement = new VocabularyElementType();
 		vocElement.setId("urn:epc:id:gsrn:" + info.getGsrn().substring(0, 7) + "." + info.getGsrn().substring(7));
 
-		AttributeType stopList = new AttributeType();
-		stopList.setId("http://epcis.example.com/bus/line/route/stop_list");
-		stopList.getContent().add(info.getStopList());
-
-		vocElement.getAttributes().add(stopList);
+		int len = info.getStopList().getStopList().size();
+		for(int i = 0; i < len; i++) {
+			AttributeType stop = new AttributeType();
+			stop.setId("http://epcis.example.com/bus/line/info/stop/" + (i+1));
+			stop.getContent().add(info.getStopList().getStopList().get(i));
+			vocElement.getAttributes().add(stop);
+		}
+		
 
 		vocElementList.getVocabularyElements().add(vocElement);
 

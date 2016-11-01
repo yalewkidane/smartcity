@@ -68,13 +68,13 @@ public class EPCISVocabularyMarshaller {
 
 	public String marshal() {
 
-		SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-		Schema schema = null;
-		try {
-			schema = sf.newSchema(new File("src/main/java/org/gs1/epcglobal/epcis/schema/EPCglobal-epcis-1_2.xsd"));
-		} catch (SAXException e2) {
-			e2.printStackTrace();
-		}
+//		SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+//		Schema schema = null;
+//		try {
+//			schema = sf.newSchema(new File("src/main/java/org/gs1/epcglobal/epcis/schema/EPCglobal-epcis-1_2.xsd"));
+//		} catch (SAXException e2) {
+//			e2.printStackTrace();
+//		}
 		
 		JAXBElement<EPCISDocument> e = of.createEPCISDocument(epcisDoc);
 		JAXBContext jc = null;
@@ -96,7 +96,7 @@ public class EPCISVocabularyMarshaller {
 		} catch (PropertyException e1) {
 			e1.printStackTrace();
 		}
-		m.setSchema(schema);
+		//m.setSchema(schema);
 
 		Writer writer = new StringWriter();
 		try {
