@@ -24,7 +24,7 @@ public class Test {
 		
 		List<String> params = new ArrayList<String>();
 		params.add("5200179000");
-		//String s = m.queryExistingServiceData(ServiceFactory.BUSAN_BUS, BusServiceFactory.BUS_LINE_INFO, params);
+		//String s = m.queryExistingServiceData(ServiceFactory.BUSAN_BUS, BusServiceFactory.BUS_LINE_ROUTE, params);
 		//m.registerMasterData(s);
 		String s = m.queryExistingServiceEvent(ServiceFactory.BUSAN_BUS, BusServiceFactory.BUS_LINE_ROUTE, params);
 		

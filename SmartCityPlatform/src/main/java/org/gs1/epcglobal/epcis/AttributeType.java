@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.namespace.QName;
 
-import org.gs1.smartcity.datatype.bus.BusIntervalType;
-import org.gs1.smartcity.datatype.bus.BusStopInfoType;
-import org.gs1.smartcity.datatype.bus.BusStopListType;
-import org.gs1.smartcity.datatype.bus.BusTimeType;
+import org.gs1.smartcity.datatype.bus.master.BusIntervalType;
+import org.gs1.smartcity.datatype.bus.master.BusStopInfoType;
+import org.gs1.smartcity.datatype.bus.master.BusStopListType;
+import org.gs1.smartcity.datatype.bus.master.BusTimeType;
 import org.w3c.dom.Element;
 
 

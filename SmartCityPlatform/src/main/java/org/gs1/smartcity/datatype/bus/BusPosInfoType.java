@@ -1,5 +1,7 @@
 package org.gs1.smartcity.datatype.bus;
 
+import org.gs1.smartcity.datatype.bus.master.BusStopInfoType;
+
 public class BusPosInfoType {
 	
 	private String giai;

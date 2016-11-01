@@ -3,7 +3,7 @@ package org.gs1.smartcity.capturing;
 import java.io.File;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.text.SimpleDateFormat;
+import java.math.BigDecimal;
 import java.util.Calendar;
 
 import javax.xml.XMLConstants;
@@ -12,7 +12,6 @@ import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
-import javax.xml.namespace.QName;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
@@ -57,8 +56,8 @@ public class EPCISVocabularyMarshaller {
 		epcisBody.setEventList(eventList);
 		epcisDoc.setEPCISBody(epcisBody);
 		
-		epcisDoc.getOtherAttributes().put(new QName("", "creationDate"), new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(Calendar.getInstance().getTime()));
-		epcisDoc.getOtherAttributes().put(new QName("", "schemaVersion"), "1.2");
+		epcisDoc.setCreationDate(Calendar.getInstance());
+		epcisDoc.setSchemaVersion(new BigDecimal("1.2"));
 	}
 
 	public void make(StandardBusinessDocumentHeader sbdh, VocabularyType voc) {

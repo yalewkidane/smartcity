@@ -26,6 +26,9 @@ public class BusServiceManager extends ExistingServiceManager{
 			e.printStackTrace();
 		}
 
+		if(infoType.equals(BusServiceFactory.BUS_LINE_ROUTE)) {
+			data = params.get(0) + data;
+		}
 		Object object = vocTranslator.translate(serviceType, infoType, data);
 
 		String result = masterDataManager.modeling(infoType, object);

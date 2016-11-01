@@ -6,8 +6,6 @@ import org.gs1.epcglobal.epcis.ActionType;
 import org.gs1.epcglobal.epcis.BusinessLocationType;
 import org.gs1.epcglobal.epcis.BusinessTransactionListType;
 import org.gs1.epcglobal.epcis.BusinessTransactionType;
-import org.gs1.epcglobal.epcis.ObjectEventExtension2Type;
-import org.gs1.epcglobal.epcis.ObjectEventExtensionType;
 import org.gs1.epcglobal.epcis.ObjectEventType;
 import org.gs1.smartcity.capturing.eventdata.EventDataManager;
 import org.gs1.smartcity.datatype.bus.BusDriverLifeEventType;
@@ -60,13 +58,7 @@ public class BusEventDataManager extends EventDataManager {
 			}
 			objectEvent.setBizTransactionList(bizTransactionList);
 
-			ObjectEventExtensionType extension = new ObjectEventExtensionType();
-			for(int j = 0; j < event.getExtensions().size(); j++) {
-				ObjectEventExtension2Type extension2 = new ObjectEventExtension2Type();
-				extension2.getAnies().add(event.getExtensions().get(j));
-				extension.setExtension(extension2);
-				System.out.println(extension.getExtension().getAnies().get(0).getAttribute("direction"));
-			}
+			objectEvent.setBusExtension(event.getExtension());
 
 			this.eventList.getObjectEventsAndAggregationEventsAndQuantityEvents().add(objectEvent);
 		}
@@ -95,12 +87,7 @@ public class BusEventDataManager extends EventDataManager {
 			}
 			objectEvent.setBizTransactionList(bizTransactionList);
 
-			ObjectEventExtensionType extension = new ObjectEventExtensionType();
-			for(int j = 0; j < event.getExtensions().size(); j++) {
-				ObjectEventExtension2Type extension2 = new ObjectEventExtension2Type();
-				extension2.getAnies().add(event.getExtensions().get(j));
-				extension.setExtension(extension2);
-			}
+			objectEvent.setBusExtension(event.getExtension());
 
 			this.eventList.getObjectEventsAndAggregationEventsAndQuantityEvents().add(objectEvent);
 		}

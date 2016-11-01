@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.gs1.epcglobal.EPC;
 import org.gs1.epcglobal.epcis.EPCListType;
-import org.w3c.dom.Element;
+import org.gs1.smartcity.datatype.bus.event.BusExtension;
 
 public class BusObjectEventType {
 
@@ -14,7 +14,7 @@ public class BusObjectEventType {
 	protected EPCListType epcList;
 	protected String bizLocation;
 	protected List<String> bizTransactionList;
-	protected List<Element> extensions;
+	protected BusExtension extension;
 	
 	public BusObjectEventType() {
 		
@@ -81,21 +81,17 @@ public class BusObjectEventType {
 		this.bizTransactionList.add(value);
 	}
 
-	public List<Element> getExtensions() {
-
-		return extensions;
-	}
-
-	public void setExtensions(List<Element> value) {
-
-		this.extensions = value;
-	}
-	
-	public void addExtension(Element value) {
+	public BusExtension getExtension() {
 		
-		if(this.extensions == null) {
-			this.extensions = new ArrayList<Element>();
+		if(extension==null) {
+			extension = new BusExtension();
 		}
-		this.extensions.add(value);
+
+		return extension;
+	}
+
+	public void setExtension(BusExtension value) {
+
+		this.extension = value;
 	}
 }

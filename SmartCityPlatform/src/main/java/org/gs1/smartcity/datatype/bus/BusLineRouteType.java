@@ -1,5 +1,7 @@
 package org.gs1.smartcity.datatype.bus;
 
+import org.gs1.smartcity.datatype.bus.master.BusStopListType;
+
 public class BusLineRouteType {
 
 	private String gsrn;
@@ -28,11 +30,6 @@ public class BusLineRouteType {
 	public void setStopList(BusStopListType value) {
 		
 		this.stopList = value;
-	}
-	
-	public void addStopList(BusRouteStopInfoType value) {
-		
-		this.stopList.add(value);
 	}
 	
 }

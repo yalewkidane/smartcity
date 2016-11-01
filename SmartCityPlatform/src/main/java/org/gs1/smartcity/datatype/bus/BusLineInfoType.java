@@ -1,5 +1,9 @@
 package org.gs1.smartcity.datatype.bus;
 
+import org.gs1.smartcity.datatype.bus.master.BusIntervalType;
+import org.gs1.smartcity.datatype.bus.master.BusStopInfoType;
+import org.gs1.smartcity.datatype.bus.master.BusTimeType;
+
 public class BusLineInfoType {
 
 	private String gsrn;

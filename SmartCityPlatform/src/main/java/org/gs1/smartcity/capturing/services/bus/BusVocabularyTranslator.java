@@ -8,12 +8,12 @@ import java.util.List;
 import org.gs1.smartcity.capturing.services.ServiceFactory;
 import org.gs1.smartcity.capturing.services.VocabularyTranslator;
 import org.gs1.smartcity.datatype.bus.BusCompanyInfoType;
-import org.gs1.smartcity.datatype.bus.BusIntervalType;
 import org.gs1.smartcity.datatype.bus.BusLineInfoType;
 import org.gs1.smartcity.datatype.bus.BusLineRouteType;
-import org.gs1.smartcity.datatype.bus.BusRouteStopInfoType;
-import org.gs1.smartcity.datatype.bus.BusStopInfoType;
-import org.gs1.smartcity.datatype.bus.BusTimeType;
+import org.gs1.smartcity.datatype.bus.master.BusIntervalType;
+import org.gs1.smartcity.datatype.bus.master.BusRouteStopInfoType;
+import org.gs1.smartcity.datatype.bus.master.BusStopInfoType;
+import org.gs1.smartcity.datatype.bus.master.BusTimeType;
 import org.gs1.smartcity.db.mongo.DAOFactory;
 import org.gs1.smartcity.db.mongo.DataAccessObject;
 import org.w3c.dom.Element;
@@ -187,7 +187,7 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 			bsinfo.setNumber(element.getElementsByTagName("arsNo").item(0).getFirstChild().getNodeValue());
 			bsinfo.setNameKR(element.getElementsByTagName("bstopnm").item(0).getFirstChild().getNodeValue());
 
-			info.getStopList().add(bsinfo);
+			info.getStopList().getStopList().add(bsinfo);
 		}
 
 		return info;
@@ -397,7 +397,7 @@ public class BusVocabularyTranslator extends VocabularyTranslator {
 			bsinfo.setNameKR(element.getElementsByTagName("BUSSTOP_NM").item(0).getFirstChild().getNodeValue());
 			bsinfo.setNameEN(element.getElementsByTagName("BUSSTOP_ENG_NM").item(0).getFirstChild().getNodeValue());
 
-			info.getStopList().add(bsinfo);
+			info.getStopList().getStopList().add(bsinfo);
 		}
 
 		return info;

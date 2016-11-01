@@ -5,21 +5,7 @@ public class BusDriverInfoType {
 	private String gsrn;
 	private String name;
 	private String sex;
-	private int birthDay;
-	private int birthMonth;
-	private int birthYear;
-	
-	public BusDriverInfoType() {}
-	
-	public BusDriverInfoType(String gsrn, String name, String sex, int birthDay, int birthMonth, int birthYear) {
-		
-		this.gsrn = gsrn;
-		this.name = name;
-		this.sex = sex;
-		this.birthDay = birthDay;
-		this.birthMonth = birthMonth;
-		this.birthYear = birthYear;
-	}
+	private String birthDate;
 	
 	public String getGsrn() {
 		
@@ -51,33 +37,14 @@ public class BusDriverInfoType {
 		this.sex = value;
 	}
 	
-	public int getBirthDay() {
+	public String getBirthDate() {
 		
-		return birthDay;
+		return birthDate;
 	}
 	
-	public void setBirthDay(int value) {
+	public void setBirthDate(String value) {
 		
-		this.birthDay = value;
+		this.birthDate = value;
 	}
 	
-	public int getBirthMonth() {
-		
-		return birthMonth;
-	}
-	
-	public void setBirthMonth(int value) {
-		
-		this.birthMonth = value;
-	}
-	
-	public int getBirthYear() {
-		
-		return birthYear;
-	}
-	
-	public void setBirthYear(int value) {
-		
-		this.birthYear = value;
-	}
 }

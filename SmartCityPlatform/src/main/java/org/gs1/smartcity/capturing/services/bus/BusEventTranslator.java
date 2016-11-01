@@ -18,9 +18,12 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import org.gs1.smartcity.datatype.bus.event.GPS;
+
 public class BusEventTranslator extends EventTranslator {
 
 	private static final String DIRECTION = "http://epcis.example.com/bus/life/direction";
+	private static final String GPS = "http://epcis.example.com/bus/life/gps";
 
 	public Object translate(String serviceType, String infoType, String data) {
 
@@ -78,10 +81,14 @@ public class BusEventTranslator extends EventTranslator {
 			}
 			if(element.getElementsByTagName("direction").item(0) != null) {
 				event.addBizTransaction(DIRECTION);
-
-				Element extension = document.createElement("direction");
-				extension.setAttribute("direction", element.getElementsByTagName("direction").item(0).getFirstChild().getNodeValue());
-				event.addExtension(extension);
+				event.getExtension().setDirection(Integer.valueOf(element.getElementsByTagName("direction").item(0).getFirstChild().getNodeValue()));
+			}
+			if(element.getElementsByTagName("gpsTm").item(0) != null) {
+				event.addBizTransaction(GPS);
+				GPS gps = new GPS();
+				gps.setX(Double.valueOf((element.getElementsByTagName("lon").item(0).getFirstChild().getNodeValue())));
+				gps.setY(Double.valueOf((element.getElementsByTagName("lat").item(0).getFirstChild().getNodeValue())));
+				event.getExtension().setGPS(gps);
 			}
 
 			eventList.add(event);
@@ -125,12 +132,16 @@ public class BusEventTranslator extends EventTranslator {
 			} else if(element.getElementsByTagName("arsNo").item(0) != null) {
 				event.setBizLocation(aggregator.getVocabulary("http://epcis.example.com/bus/stop/number", element.getElementsByTagName("arsNo").item(0).getFirstChild().getNodeValue()).getVocabularyElementList().getVocabularyElements().get(0).getId());
 			}
-			if(element.getElementsByTagName("direction").item(0) != null) {
+			if(element.getElementsByTagName("DIR").item(0) != null) {
 				event.addBizTransaction(DIRECTION);
-
-				Element extension = document.createElement(DIRECTION);
-				extension.setNodeValue(element.getElementsByTagName("direction").item(0).getFirstChild().getNodeValue());
-				event.addExtension(extension);
+				event.getExtension().setDirection(Integer.valueOf(element.getElementsByTagName("DIR").item(0).getFirstChild().getNodeValue()));
+			}
+			if(element.getElementsByTagName("GPS_LATI").item(0) != null) {
+				event.addBizTransaction(GPS);
+				GPS gps = new GPS();
+				gps.setX(Double.valueOf((element.getElementsByTagName("GPS_LONG").item(0).getFirstChild().getNodeValue())));
+				gps.setY(Double.valueOf((element.getElementsByTagName("GPS_LATI").item(0).getFirstChild().getNodeValue())));
+				event.getExtension().setGPS(gps);
 			}
 
 			eventList.add(event);

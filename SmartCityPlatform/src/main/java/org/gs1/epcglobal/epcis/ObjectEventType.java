@@ -20,6 +20,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
 
+import org.gs1.smartcity.datatype.bus.event.BusExtension;
+import org.gs1.smartcity.datatype.bus.event.DriverExtension;
 import org.w3c.dom.Element;
 
 
@@ -66,6 +68,8 @@ import org.w3c.dom.Element;
     "bizLocation",
     "bizTransactionList",
     "extension",
+    "busExtension",
+    "driverExtension",
     "anies"
 })
 @XmlRootElement(name = "ObjectEvent")
@@ -88,6 +92,10 @@ public class ObjectEventType
     protected BusinessLocationType bizLocation;
     protected BusinessTransactionListType bizTransactionList;
     protected ObjectEventExtensionType extension;
+    @XmlElement(name = "BusExtension", namespace = "http://ns.example.com/epcisapp/bus")
+    protected BusExtension busExtension;
+    @XmlElement(name = "DriverExtension", namespace = "http://ns.example.com/epcisapp/driver")
+    protected DriverExtension driverExtension;
     @XmlAnyElement
     protected List<Element> anies;
 
@@ -281,6 +289,54 @@ public class ObjectEventType
      */
     public void setExtension(ObjectEventExtensionType value) {
         this.extension = value;
+    }
+    
+    /**
+     * busExtension 속성의 값을 가져옵니다.
+     * 
+     * @return
+     *     possible object is
+     *     {@link BusExtension }
+     *     
+     */
+    public BusExtension getBusExtension() {
+        return busExtension;
+    }
+
+    /**
+     * busExtension 속성의 값을 설정합니다.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BusExtension }
+     *     
+     */
+    public void setBusExtension(BusExtension value) {
+        this.busExtension = value;
+    }
+    
+    /**
+     * busExtension 속성의 값을 가져옵니다.
+     * 
+     * @return
+     *     possible object is
+     *     {@link BusExtension }
+     *     
+     */
+    public DriverExtension getDriverExtension() {
+        return driverExtension;
+    }
+
+    /**
+     * busExtension 속성의 값을 설정합니다.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link BusExtension }
+     *     
+     */
+    public void setDriverExtension(DriverExtension value) {
+        this.driverExtension = value;
     }
 
     /**

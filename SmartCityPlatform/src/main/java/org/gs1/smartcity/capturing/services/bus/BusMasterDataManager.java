@@ -10,8 +10,8 @@ import org.gs1.smartcity.datatype.bus.BusCompanyInfoType;
 import org.gs1.smartcity.datatype.bus.BusDriverInfoType;
 import org.gs1.smartcity.datatype.bus.BusLineInfoType;
 import org.gs1.smartcity.datatype.bus.BusLineRouteType;
-import org.gs1.smartcity.datatype.bus.BusStopInfoType;
 import org.gs1.smartcity.datatype.bus.BusVehicleInfoType;
+import org.gs1.smartcity.datatype.bus.master.BusStopInfoType;
 
 public class BusMasterDataManager extends MasterDataManager {
 
