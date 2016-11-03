@@ -11,7 +11,7 @@ public class DAOFactory {
 		DataAccessObject dataAccessObject = null;
 
 		if(type.equals(COMPANY_PREFIX)) {
-			dataAccessObject = new ComapnyPrefixDAO();
+			dataAccessObject = new CompanyPrefixDAO();
 		} else if(type.equals(GIAI)) {
 			dataAccessObject = new GiaiDAO();
 		} else if(type.equals(GLN)) {

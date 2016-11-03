@@ -1,5 +1,6 @@
 package org.gs1.smartcity.capturing.services;
 
+import org.gs1.smartcity.capturing.ServiceFactory;
 import org.gs1.smartcity.capturing.services.bus.BusServiceManager;
 
 public class ExistingServiceManagerFactory {

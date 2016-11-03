@@ -19,10 +19,17 @@ public class BusLineInfoType {
 	private BusTimeType turnStartTime;
 	private BusTimeType turnEndTime;
 	private BusIntervalType interval;
-	private String stopCount;
-	private String halfDistance;
-	private String avgRunTime;
+	private int stopCount;
+	private double halfDistance;
+	private int avgRunTime;
 
+	public BusLineInfoType() {
+		
+		stopCount = 0;
+		halfDistance = 0;
+		avgRunTime = 0;
+	}
+	
 	public String getGsrn() {
 
 		return gsrn;
@@ -153,32 +160,32 @@ public class BusLineInfoType {
 		this.interval = value;
 	}
 
-	public String getStopCount() {
+	public int getStopCount() {
 
 		return stopCount;
 	}
 
-	public void setStopCount(String value) {
+	public void setStopCount(int value) {
 
 		this.stopCount = value;
 	}
 
-	public String getHalfDistance() {
+	public double getHalfDistance() {
 
 		return halfDistance;
 	}
 
-	public void setHalfDistance(String value) {
+	public void setHalfDistance(double value) {
 
 		this.halfDistance = value;
 	}
 
-	public String getAvgRunTime() {
+	public int getAvgRunTime() {
 
 		return avgRunTime;
 	}
 
-	public void setAvgRunTime(String value) {
+	public void setAvgRunTime(int value) {
 
 		this.avgRunTime = value;
 	}

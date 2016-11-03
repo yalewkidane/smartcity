@@ -2,17 +2,17 @@ package org.gs1.smartcity.datatype.bus;
 
 public class CompanyPrefixType {
 
-	protected String companyName;
+	protected String companyID;
 	protected String companyPrefix;
 	
-	public String getComapnyName(){
+	public String getCompanyID(){
 		
-		return companyName;
+		return companyID;
 	}
 	
-	public void setCompanyName(String value){
+	public void setCompanyID(String value){
 		
-		this.companyName = value;
+		this.companyID = value;
 	}
 	
 	public String getCompanyPrefix(){

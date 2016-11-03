@@ -5,7 +5,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.gs1.smartcity.capturing.services.ServiceFactory;
+import org.gs1.smartcity.capturing.ServiceFactory;
 import org.gs1.smartcity.capturing.services.MasterDataTranslator;
 import org.gs1.smartcity.datatype.bus.BusCompanyInfoType;
 import org.gs1.smartcity.datatype.bus.BusLineInfoType;
@@ -140,8 +140,6 @@ public class BusMasterDataTranslator extends MasterDataTranslator {
 			DataAccessObject dao = factory.getDAO(DAOFactory.GLN);
 			info.setGln(dao.queryKey(element.getElementsByTagName("bstopId").item(0).getFirstChild().getNodeValue()));
 
-			//info.setGln("8801234123456");
-
 			info.setStopID(element.getElementsByTagName("bstopId").item(0).getFirstChild().getNodeValue());
 			info.setNumber(element.getElementsByTagName("bstopArsno").item(0).getFirstChild().getNodeValue());
 			info.setNameKR(element.getElementsByTagName("bstopNm").item(0).getFirstChild().getNodeValue());
@@ -175,17 +173,21 @@ public class BusMasterDataTranslator extends MasterDataTranslator {
 		DataAccessObject dao = factory.getDAO(DAOFactory.GSRN);
 		info.setGsrn(dao.queryKey(key));
 
-		//info.setGsrn("8801234123456");
-
 		for (int i = 0; i < nList.getLength(); i++) {
 			Node nNode = nList.item(i);
 			Element element = (Element) nNode;
 
 			BusRouteStopInfoType bsinfo = new BusRouteStopInfoType();
 			bsinfo.setIndex(i+1);
-			bsinfo.setStopID(element.getElementsByTagName("nodeId").item(0).getFirstChild().getNodeValue());
-			bsinfo.setNumber(element.getElementsByTagName("arsNo").item(0).getFirstChild().getNodeValue());
-			bsinfo.setNameKR(element.getElementsByTagName("bstopnm").item(0).getFirstChild().getNodeValue());
+			if(element.getElementsByTagName("nodeId").item(0) != null) {
+				bsinfo.setStopID(element.getElementsByTagName("nodeId").item(0).getFirstChild().getNodeValue());
+			}
+			if(element.getElementsByTagName("arsNo").item(0) != null) {
+				bsinfo.setNumber(element.getElementsByTagName("arsNo").item(0).getFirstChild().getNodeValue());
+			}
+			if(element.getElementsByTagName("bstopnm").item(0) != null) {
+				bsinfo.setNameKR(element.getElementsByTagName("bstopnm").item(0).getFirstChild().getNodeValue());
+			}
 
 			info.getStopList().getStopList().add(bsinfo);
 		}
@@ -217,11 +219,23 @@ public class BusMasterDataTranslator extends MasterDataTranslator {
 			DataAccessObject dao = factory.getDAO(DAOFactory.GSRN);
 			info.setGsrn(dao.queryKey(element.getElementsByTagName("ROUTE_CD").item(0).getFirstChild().getNodeValue()));
 
-			//info.setGsrn("8801234123456");
-
 			info.setLineID(element.getElementsByTagName("ROUTE_CD").item(0).getFirstChild().getNodeValue());
 			info.setNumber(element.getElementsByTagName("ROUTE_NO").item(0).getFirstChild().getNodeValue());
-			info.setBusType(element.getElementsByTagName("ROUTE_TP").item(0).getFirstChild().getNodeValue().substring(0, 1));
+
+			String typenum = element.getElementsByTagName("ROUTE_TP").item(0).getFirstChild().getNodeValue().substring(0, 1);
+			if(typenum == "1") {
+				info.setBusType("급행버스");
+			} else if(typenum == "2") {
+				info.setBusType("간선버스");
+			} else if(typenum == "3") {
+				info.setBusType("지선버스");
+			} else if(typenum == "4") {
+				info.setBusType("외곽버스");
+			} else if(typenum == "5") {
+				info.setBusType("마을버스");
+			} else if(typenum == "6") {
+				info.setBusType("첨단버스");
+			}
 
 			BusStopInfoType startPoint = new BusStopInfoType();
 			BusStopInfoType endPoint = new BusStopInfoType();
@@ -253,40 +267,112 @@ public class BusMasterDataTranslator extends MasterDataTranslator {
 			BusTimeType turnStartTime = new BusTimeType();
 			BusTimeType turnEndTime = new BusTimeType();
 			if(element.getElementsByTagName("ORIGIN_START").item(0) != null) {
-				startTime.setTime(element.getElementsByTagName("ORIGIN_START").item(0).getFirstChild().getNodeValue());
+				String time = element.getElementsByTagName("ORIGIN_START").item(0).getFirstChild().getNodeValue();
+				if(time.length() == 4) {
+					time = time.substring(0, 2) + ":" + time.substring(2);
+				} else if(time.length() == 3) {
+					time = time.substring(0, 1) + ":" + time.substring(1);
+				}
+				startTime.setTime(time);
 			}
 			if(element.getElementsByTagName("ORIGIN_START_SAT").item(0) != null) {
-				startTime.setTimeSat(element.getElementsByTagName("ORIGIN_START_SAT").item(0).getFirstChild().getNodeValue());
+				String time = element.getElementsByTagName("ORIGIN_START_SAT").item(0).getFirstChild().getNodeValue();
+				if(time.length() == 4) {
+					time = time.substring(0, 2) + ":" + time.substring(2);
+				} else if(time.length() == 3) {
+					time = time.substring(0, 1) + ":" + time.substring(1);
+				}
+				startTime.setTime(time);
 			}
 			if(element.getElementsByTagName("ORIGIN_START_SUN").item(0) != null) {
-				startTime.setTimeSun(element.getElementsByTagName("ORIGIN_START_SUN").item(0).getFirstChild().getNodeValue());
+				String time = element.getElementsByTagName("ORIGIN_START_SUN").item(0).getFirstChild().getNodeValue();
+				if(time.length() == 4) {
+					time = time.substring(0, 2) + ":" + time.substring(2);
+				} else if(time.length() == 3) {
+					time = time.substring(0, 1) + ":" + time.substring(1);
+				}
+				startTime.setTime(time);
 			}
 			if(element.getElementsByTagName("ORIGIN_END").item(0) != null) {
-				endTime.setTime(element.getElementsByTagName("ORIGIN_END").item(0).getFirstChild().getNodeValue());
+				String time = element.getElementsByTagName("ORIGIN_END").item(0).getFirstChild().getNodeValue();
+				if(time.length() == 4) {
+					time = time.substring(0, 2) + ":" + time.substring(2);
+				} else if(time.length() == 3) {
+					time = time.substring(0, 1) + ":" + time.substring(1);
+				}
+				startTime.setTime(time);
 			}
 			if(element.getElementsByTagName("ORIGIN_END_SAT").item(0) != null) {
-				endTime.setTimeSat(element.getElementsByTagName("ORIGIN_END_SAT").item(0).getFirstChild().getNodeValue());
+				String time = element.getElementsByTagName("ORIGIN_END_SAT").item(0).getFirstChild().getNodeValue();
+				if(time.length() == 4) {
+					time = time.substring(0, 2) + ":" + time.substring(2);
+				} else if(time.length() == 3) {
+					time = time.substring(0, 1) + ":" + time.substring(1);
+				}
+				startTime.setTime(time);
 			}
 			if(element.getElementsByTagName("ORIGIN_END_SUN").item(0) != null) {
-				endTime.setTimeSun(element.getElementsByTagName("ORIGIN_END_SUN").item(0).getFirstChild().getNodeValue());
+				String time = element.getElementsByTagName("ORIGIN_END_SUN").item(0).getFirstChild().getNodeValue();
+				if(time.length() == 4) {
+					time = time.substring(0, 2) + ":" + time.substring(2);
+				} else if(time.length() == 3) {
+					time = time.substring(0, 1) + ":" + time.substring(1);
+				}
+				startTime.setTime(time);
 			}
 			if(element.getElementsByTagName("TURN_START").item(0) != null) {
-				turnStartTime.setTime(element.getElementsByTagName("TURN_START").item(0).getFirstChild().getNodeValue());
+				String time = element.getElementsByTagName("TURN_START").item(0).getFirstChild().getNodeValue();
+				if(time.length() == 4) {
+					time = time.substring(0, 2) + ":" + time.substring(2);
+				} else if(time.length() == 3) {
+					time = time.substring(0, 1) + ":" + time.substring(1);
+				}
+				startTime.setTime(time);
 			}
 			if(element.getElementsByTagName("TURN_START_SAT").item(0) != null) {
-				turnStartTime.setTimeSat(element.getElementsByTagName("TURN_START_SAT").item(0).getFirstChild().getNodeValue());
+				String time = element.getElementsByTagName("TURN_START_SAT").item(0).getFirstChild().getNodeValue();
+				if(time.length() == 4) {
+					time = time.substring(0, 2) + ":" + time.substring(2);
+				} else if(time.length() == 3) {
+					time = time.substring(0, 1) + ":" + time.substring(1);
+				}
+				startTime.setTime(time);
 			}
 			if(element.getElementsByTagName("TURN_START_SUN").item(0) != null) {
-				turnStartTime.setTimeSun(element.getElementsByTagName("TURN_START_SUN").item(0).getFirstChild().getNodeValue());
+				String time = element.getElementsByTagName("TURN_START_SUN").item(0).getFirstChild().getNodeValue();
+				if(time.length() == 4) {
+					time = time.substring(0, 2) + ":" + time.substring(2);
+				} else if(time.length() == 3) {
+					time = time.substring(0, 1) + ":" + time.substring(1);
+				}
+				startTime.setTime(time);
 			}
 			if(element.getElementsByTagName("TURN_END").item(0) != null) {
-				turnEndTime.setTime(element.getElementsByTagName("TURN_END").item(0).getFirstChild().getNodeValue());
+				String time = element.getElementsByTagName("TURN_END").item(0).getFirstChild().getNodeValue();
+				if(time.length() == 4) {
+					time = time.substring(0, 2) + ":" + time.substring(2);
+				} else if(time.length() == 3) {
+					time = time.substring(0, 1) + ":" + time.substring(1);
+				}
+				startTime.setTime(time);
 			}
 			if(element.getElementsByTagName("TURN_END_SAT").item(0) != null) {
-				turnEndTime.setTimeSat(element.getElementsByTagName("TURN_END_SAT").item(0).getFirstChild().getNodeValue());
+				String time = element.getElementsByTagName("TURN_END_SAT").item(0).getFirstChild().getNodeValue();
+				if(time.length() == 4) {
+					time = time.substring(0, 2) + ":" + time.substring(2);
+				} else if(time.length() == 3) {
+					time = time.substring(0, 1) + ":" + time.substring(1);
+				}
+				startTime.setTime(time);
 			}
 			if(element.getElementsByTagName("TURN_END_SUN").item(0) != null) {
-				turnEndTime.setTimeSun(element.getElementsByTagName("TURN_END_SUN").item(0).getFirstChild().getNodeValue());
+				String time = element.getElementsByTagName("TURN_END_SUN").item(0).getFirstChild().getNodeValue();
+				if(time.length() == 4) {
+					time = time.substring(0, 2) + ":" + time.substring(2);
+				} else if(time.length() == 3) {
+					time = time.substring(0, 1) + ":" + time.substring(1);
+				}
+				startTime.setTime(time);
 			}
 			info.setStartTime(startTime);
 			info.setEndTime(endTime);
@@ -306,13 +392,13 @@ public class BusMasterDataTranslator extends MasterDataTranslator {
 			info.setInterval(interval);
 
 			if(element.getElementsByTagName("BUSSTOP_CNT").item(0) != null) {
-				info.setStopCount(element.getElementsByTagName("BUSSTOP_CNT").item(0).getFirstChild().getNodeValue());
+				info.setStopCount(Integer.valueOf(element.getElementsByTagName("BUSSTOP_CNT").item(0).getFirstChild().getNodeValue()));
 			}
 			if(element.getElementsByTagName("RUN_DIST_HALF").item(0) != null) {
-				info.setHalfDistance(element.getElementsByTagName("RUN_DIST_HALF").item(0).getFirstChild().getNodeValue());
+				info.setHalfDistance(Double.valueOf(element.getElementsByTagName("RUN_DIST_HALF").item(0).getFirstChild().getNodeValue()));
 			}
 			if(element.getElementsByTagName("RUN_TM").item(0) != null) {
-				info.setAvgRunTime(element.getElementsByTagName("RUN_TM").item(0).getFirstChild().getNodeValue().substring(0, 2));
+				info.setAvgRunTime(Integer.valueOf(element.getElementsByTagName("RUN_TM").item(0).getFirstChild().getNodeValue().substring(0, 2)));
 			}
 
 			infoList.add(info);

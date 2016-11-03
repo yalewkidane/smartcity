@@ -1,7 +1,7 @@
 package org.gs1.smartcity.capturing.eventdata;
 
-import org.gs1.smartcity.capturing.services.ServiceFactory;
-import org.gs1.smartcity.capturing.services.bus.BusEventDataManager;
+import org.gs1.smartcity.capturing.ServiceFactory;
+import org.gs1.smartcity.capturing.eventdata.bus.BusEventDataManager;
 
 public class EventDataManagerFactory {
 

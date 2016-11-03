@@ -3,8 +3,8 @@ package org.gs1.smartcity.capturing.services.bus;
 import java.io.IOException;
 import java.util.List;
 
+import org.gs1.smartcity.capturing.ServiceFactory;
 import org.gs1.smartcity.capturing.services.ExistingServiceManager;
-import org.gs1.smartcity.capturing.services.ServiceFactory;
 import org.gs1.smartcity.util.QueryProcessor;
 
 public class BusServiceManager extends ExistingServiceManager{
@@ -14,9 +14,9 @@ public class BusServiceManager extends ExistingServiceManager{
 		super(ServiceFactory.BUS);
 	}
 
-	public String queryExistingServiceData(String serviceType, String infoType, List<String> params) {
+	public String queryExistingServiceData(String serviceName, String serviceType, List<String> params) {
 
-		String url = urlGenerator.generate(serviceType, infoType, params);
+		String url = urlGenerator.generate(serviceName, serviceType, params);
 
 		QueryProcessor queryProcessor = new QueryProcessor();
 		String data = null;
@@ -26,12 +26,12 @@ public class BusServiceManager extends ExistingServiceManager{
 			e.printStackTrace();
 		}
 
-		if(infoType.equals(BusServiceFactory.BUS_LINE_ROUTE)) {
+		if(serviceType.equals(BusServiceFactory.BUS_LINE_ROUTE)) {
 			data = params.get(0) + data;
 		}
-		Object object = vocTranslator.translate(serviceType, infoType, data);
+		Object object = vocTranslator.translate(serviceName, serviceType, data);
 
-		String result = masterDataManager.modeling(infoType, object);
+		String result = masterDataManager.modeling(serviceType, object);
 
 		System.out.println(result);
 
@@ -39,9 +39,9 @@ public class BusServiceManager extends ExistingServiceManager{
 
 	}
 
-	public String queryExistingServiceEvent(String serviceType, String infoType, List<String> params) {
+	public String queryExistingServiceEvent(String serviceName, String serviceType, List<String> params) {
 
-		String url = urlGenerator.generate(serviceType, infoType, params);
+		String url = urlGenerator.generate(serviceName, serviceType, params);
 
 		QueryProcessor queryProcessor = new QueryProcessor();
 		String data = null;
@@ -51,9 +51,9 @@ public class BusServiceManager extends ExistingServiceManager{
 			e.printStackTrace();
 		}
 
-		Object object = eventTranslator.translate(serviceType, infoType, data);
+		Object object = eventTranslator.translate(serviceName, serviceType, data);
 
-		String result = eventDataManager.modeling(infoType, object);
+		String result = eventDataManager.modeling(serviceType, object);
 
 		System.out.println(result);
 

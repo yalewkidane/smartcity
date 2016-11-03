@@ -23,7 +23,7 @@ public class Identification {
 		
 		if(dao.queryKey(objectID) == null) {
 			String companyPrefix = companyPrefixDao.queryKey(companyID); 
-			String reference = String.valueOf(Long.parseLong(dao.getCheckNum()) + 1);
+			String reference = String.valueOf(dao.getCheckNum());
 			if(reference.length() > 8) {
 				return null;
 			}
@@ -40,7 +40,7 @@ public class Identification {
 		
 		if(dao.queryKey(objectID) == null) {
 			String companyPrefix = companyPrefixDao.queryKey(companyID); 
-			String reference = String.valueOf(Long.parseLong(dao.getCheckNum()) + 1);
+			String reference = String.valueOf(dao.getCheckNum() + 1);
 			if(reference.length() > 4) {
 				return null;
 			}
@@ -59,7 +59,7 @@ public class Identification {
 		
 		if(dao.queryKey(objectID) == null) {
 			String companyPrefix = companyPrefixDao.queryKey(companyID); 
-			String reference = String.valueOf(Long.parseLong(dao.getCheckNum()) + 1);
+			String reference = String.valueOf(dao.getCheckNum() + 1);
 			if(reference.length() > 9) {
 				return null;
 			}

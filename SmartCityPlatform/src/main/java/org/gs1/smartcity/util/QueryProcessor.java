@@ -33,10 +33,8 @@ public class QueryProcessor {
 		String output;
 		StringBuffer response = new StringBuffer();
 
-		System.out.println("\nResponse Body:\n");
 
 		while ((output = br.readLine()) != null) {
-			System.out.println(output);
 			response.append(output);
 			if(output.compareTo("") != 0) {
 				response.append("\n");

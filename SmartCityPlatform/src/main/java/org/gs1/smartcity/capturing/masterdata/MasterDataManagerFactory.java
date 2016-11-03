@@ -1,7 +1,7 @@
 package org.gs1.smartcity.capturing.masterdata;
 
-import org.gs1.smartcity.capturing.services.ServiceFactory;
-import org.gs1.smartcity.capturing.services.bus.BusMasterDataManager;
+import org.gs1.smartcity.capturing.ServiceFactory;
+import org.gs1.smartcity.capturing.masterdata.bus.BusMasterDataManager;
 
 public class MasterDataManagerFactory {
 	

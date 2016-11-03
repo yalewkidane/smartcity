@@ -2,25 +2,25 @@ package org.gs1.smartcity.datatype;
 
 public class CheckNumType {
 	
-	private String status;
-	private String checkNum;
+	private String type;
+	private int checkNum;
 	
-	public String getStatus() {
+	public String getType() {
 		
-		return status;
+		return type;
 	}
 	
-	public void setStatus(String value) {
+	public void setType(String value) {
 		
-		this.status = value;
+		this.type = value;
 	}
 	
-	public String getCheckNum() {
+	public int getCheckNum() {
 		
 		return checkNum;
 	}
 	
-	public void setCheckNum(String value) {
+	public void setCheckNum(int value) {
 		
 		this.checkNum = value;
 	}

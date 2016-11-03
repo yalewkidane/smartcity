@@ -24,8 +24,8 @@ public abstract class ExistingServiceManager {
 		eventDataManager = (new EventDataManagerFactory()).getManager(type);
 	}
 	
-	public abstract String queryExistingServiceData(String serviceType, String infoType, List<String> params);
-	public abstract String queryExistingServiceEvent(String serviceType, String infoType, List<String> params);
+	public abstract String queryExistingServiceData(String serviceName, String serviceType, List<String> params);
+	public abstract String queryExistingServiceEvent(String serviceName, String serviceType, List<String> params);
 	public abstract void registerMasterData(String data);
 	public abstract void registerEventData(String data);
 

@@ -39,6 +39,8 @@ public class ObjectFactory {
     private final static QName _EventListTypeQuantityEvent_QNAME = new QName("", "QuantityEvent");
     private final static QName _EventListTypeTransactionEvent_QNAME = new QName("", "TransactionEvent");
     private final static QName _EventListTypeExtension_QNAME = new QName("", "extension");
+    private final static QName _VocabularyList_QNAME = new QName("", "VocabularyList");
+    private final static QName _Vocabulary_QNAME = new QName("", "Vocabulary");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: epcglobal.epcis.xsd._1
@@ -464,7 +466,7 @@ public class ObjectFactory {
     }
     
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link ObjectEventType }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link EPCISDocumentType }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "", name = "EPCISDocument")
@@ -473,7 +475,7 @@ public class ObjectFactory {
     }
     
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link ObjectEventType }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link EPCISBodyType }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "", name = "EPCISBody")
@@ -482,7 +484,7 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link ObjectEventType }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link EventListType }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "", name = "EventList")
@@ -535,4 +537,21 @@ public class ObjectFactory {
         return new JAXBElement<EPCISEventListExtensionType>(_EventListTypeExtension_QNAME, EPCISEventListExtensionType.class, EventListType.class, value);
     }
 
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link VocabularyListType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "VocabularyList")
+    public JAXBElement<VocabularyListType> createVocabularyList(VocabularyListType value) {
+        return new JAXBElement<VocabularyListType>(_VocabularyList_QNAME, VocabularyListType.class, null, value);
+    }
+    
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link VocabularyListType }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "", name = "Vocabulary")
+    public JAXBElement<VocabularyType> createVocabulary(VocabularyType value) {
+        return new JAXBElement<VocabularyType>(_Vocabulary_QNAME, VocabularyType.class, null, value);
+    }
 }
