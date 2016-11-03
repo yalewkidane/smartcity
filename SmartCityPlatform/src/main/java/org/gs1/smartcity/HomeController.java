@@ -8,8 +8,10 @@ import java.util.Locale;
 import java.util.Timer;
 
 import org.gs1.smartcity.capturing.services.EventCapturer;
+import org.gs1.smartcity.services.ServiceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -72,6 +74,18 @@ public class HomeController {
 		timer.purge();
 		
 		return new ResponseEntity<String>(new String("Service event capturing is stoped."), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/getServiceList", method = RequestMethod.GET)
+	public ResponseEntity<String> startServiceEventapture(@RequestParam(value = "id") final String id) {
+
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
+		
+		ServiceManager serviceManager = new ServiceManager();
+		String serviceList = serviceManager.getServiceList(id);
+		
+		return new ResponseEntity<String>(serviceList, responseHeaders, HttpStatus.OK);
 	}
 
 }

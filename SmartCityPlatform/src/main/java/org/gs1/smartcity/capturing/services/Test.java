@@ -23,6 +23,9 @@ import org.gs1.smartcity.db.mongo.GlnDAO;
 import org.gs1.smartcity.db.mongo.GsrnDAO;
 import org.gs1.smartcity.etc.Identification;
 import org.gs1.smartcity.etc.VehicleDAO;
+import org.gs1.smartcity.services.ONSManager;
+import org.gs1.smartcity.services.ServiceListMarshaller;
+import org.gs1.smartcity.util.DomainGenerator;
 import org.gs1.smartcity.util.QueryProcessor;
 
 public class Test {
@@ -174,13 +177,31 @@ public class Test {
 //		sm.registerMasterData(s);
 		
 		
-		List<String> params = new ArrayList<String>();
-		params.add("5200100000");
-		EventCapturer ec = new EventCapturer(ServiceFactory.BUS, ServiceFactory.BUSAN_BUS, BusServiceFactory.BUS_RT_POS_INFO, params);
+//		List<String> params = new ArrayList<String>();
+//		params.add("5200100000");
+//		EventCapturer ec = new EventCapturer(ServiceFactory.BUS, ServiceFactory.BUSAN_BUS, BusServiceFactory.BUS_RT_POS_INFO, params);
+//		
+//		Timer timer = new Timer();
+//		timer.schedule(ec, 0, 60000);
 		
-		Timer timer = new Timer();
-		timer.schedule(ec, 0, 60000);
+//		ONSManager ons = new ONSManager();
+//		//ons.register("gsrn", "880123451234567890", "http://ns.example.com/epcisapp/bus");
+//		DomainGenerator dg = new DomainGenerator();
+//		
+//		System.out.println(dg.generate("gsrn", "880123450000000018"));
 		
+		ServiceListMarshaller m = new ServiceListMarshaller();
+		
+		List<String> list = new ArrayList<String>();
+		
+		list.add("a");
+		list.add("b");
+		list.add("c");
+		
+		m.make(list);
+		String s = m.marshal();
+		
+		System.out.println(s);
 	}
 
 }
