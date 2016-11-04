@@ -10,20 +10,23 @@ public class ServiceManager {
 	private static final String GSRN = "gsrn";
 	private static final String CLASS_URL = "http://smartcity.com"; 
 
-	private DataAccessObject dataAccessObject;
+	private DAOFactory daoFactory;
+	private DataAccessObject daoS;
+	private DataAccessObject daoC;
 	private ONSManager onsManager;
 	private ServiceListMarshaller marshaller;
 
 	public ServiceManager() {
 
-		dataAccessObject = (new DAOFactory()).getDAO(DAOFactory.SERVICE);
+		daoS = daoFactory.getDAO(DAOFactory.SERVICE);
+		daoC = daoFactory.getDAO(DAOFactory.SERVICE_CLASS);
 		onsManager = new ONSManager();
 		marshaller = new ServiceListMarshaller();
 	}
 
 	public String getServiceList(String id) {
 
-		String serviceID = dataAccessObject.queryKey(id);
+		String serviceID = daoS.queryKey(id);
 
 		List<String> serviceList = onsManager.query(GSRN, serviceID, CLASS_URL);
 
@@ -33,10 +36,17 @@ public class ServiceManager {
 		return result;
 	}
 
-	public void registerService(String serviceID, String serviceUrl) {
+	public boolean registerService(String serviceID, String serviceUrl) {
 
-		onsManager.register(GSRN, serviceID, CLASS_URL, serviceUrl);
-
+		boolean reg = onsManager.register(GSRN, serviceID, CLASS_URL, serviceUrl);
+		
+		if(reg == false) {
+			return false;
+		}
+		
+		daoC.register(serviceUrl, serviceID);
+		
+		return true;
 	}
 
 }

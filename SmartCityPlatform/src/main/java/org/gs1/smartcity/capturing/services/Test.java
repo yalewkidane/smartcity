@@ -21,10 +21,12 @@ import org.gs1.smartcity.db.mongo.DataAccessObject;
 import org.gs1.smartcity.db.mongo.GiaiDAO;
 import org.gs1.smartcity.db.mongo.GlnDAO;
 import org.gs1.smartcity.db.mongo.GsrnDAO;
+import org.gs1.smartcity.db.mongo.ObjectServiceDAO;
 import org.gs1.smartcity.etc.Identification;
 import org.gs1.smartcity.etc.VehicleDAO;
 import org.gs1.smartcity.services.ONSManager;
 import org.gs1.smartcity.services.ServiceListMarshaller;
+import org.gs1.smartcity.services.ServiceManager;
 import org.gs1.smartcity.util.DomainGenerator;
 import org.gs1.smartcity.util.QueryProcessor;
 
@@ -107,7 +109,7 @@ public class Test {
 
 
 		//insert bus route master data
-		GsrnDAO gsrnDao = new GsrnDAO();
+		//GsrnDAO gsrnDao = new GsrnDAO();
 //		List<GSRNType> gsrnList = gsrnDao.queryAll();
 ////		for(int i = 0; i < 10; i++) {
 ////			
@@ -184,24 +186,22 @@ public class Test {
 //		Timer timer = new Timer();
 //		timer.schedule(ec, 0, 60000);
 		
-//		ONSManager ons = new ONSManager();
-//		//ons.register("gsrn", "880123451234567890", "http://ns.example.com/epcisapp/bus");
-//		DomainGenerator dg = new DomainGenerator();
+//		ServiceManager ons = new ServiceManager();
+//		ons.registerService("880111110000000030", "http://ns.example.com/epcisapp/bus/vehicle");
 //		
-//		System.out.println(dg.generate("gsrn", "880123450000000018"));
+//		ServiceDAO serviceDao = new ServiceDAO();
+//		GsrnDAO gsrnDao = new GsrnDAO();
+//		GlnDAO glnDao = new GlnDAO();
+//		GiaiDAO giaiDao = new GiaiDAO();
+//		
+//		List<GIAIType> giaiList = giaiDao.queryAll();
+//		for(GIAIType giai : giaiList) {
+//			System.out.println(giai.getGiai());
+//			serviceDao.register(giai.getGiai(), "880111110000000030");
+//		}
 		
-		ServiceListMarshaller m = new ServiceListMarshaller();
 		
-		List<String> list = new ArrayList<String>();
 		
-		list.add("a");
-		list.add("b");
-		list.add("c");
-		
-		m.make(list);
-		String s = m.marshal();
-		
-		System.out.println(s);
 	}
 
 }

@@ -13,14 +13,15 @@ public class BusObjectEventType {
 	protected Calendar eventTime;
 	protected EPCListType epcList;
 	protected String bizLocation;
+	protected String bizStep;
 	protected List<String> bizTransactionList;
 	protected BusExtension extension;
-	
+
 	public BusObjectEventType() {
-		
+
 		epcList = new EPCListType();
 	}
-	
+
 	public Calendar getEventTime() {
 
 		return eventTime;
@@ -40,14 +41,14 @@ public class BusObjectEventType {
 
 		this.epcList = value;
 	}
-	
+
 	public void addEpc(EPC value) {
-		
+
 		this.epcList.getEpcs().add(value);
 	}
-	
+
 	public void addEpc(String value) {
-		
+
 		EPC e = new EPC();
 		e.setValue(value);
 		this.epcList.getEpcs().add(e);
@@ -63,6 +64,16 @@ public class BusObjectEventType {
 		this.bizLocation = value;
 	}
 
+	public String getBizStep() {
+
+		return bizStep;
+	}
+
+	public void setBizStep(String value) {
+
+		this.bizStep = value;
+	}
+
 	public List<String> getBizTransactionList() {
 
 		return bizTransactionList;
@@ -72,9 +83,9 @@ public class BusObjectEventType {
 
 		this.bizTransactionList = value;
 	}
-	
+
 	public void addBizTransaction(String value) {
-		
+
 		if(this.bizTransactionList == null) {
 			this.bizTransactionList = new ArrayList<String>();
 		}
@@ -82,7 +93,7 @@ public class BusObjectEventType {
 	}
 
 	public BusExtension getExtension() {
-		
+
 		if(extension==null) {
 			extension = new BusExtension();
 		}

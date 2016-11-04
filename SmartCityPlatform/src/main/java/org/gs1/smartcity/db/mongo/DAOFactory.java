@@ -7,6 +7,7 @@ public class DAOFactory {
 	public static final String GLN = "gln";
 	public static final String GSRN = "gsrn";
 	public static final String SERVICE = "service";
+	public static final String SERVICE_CLASS = "serviceClass";
 
 	public DataAccessObject getDAO(String type) {
 		DataAccessObject dataAccessObject = null;
@@ -20,7 +21,9 @@ public class DAOFactory {
 		} else if(type.equals(GSRN)) {
 			dataAccessObject = new GsrnDAO();
 		} else if(type.equals(SERVICE)) {
-			dataAccessObject = new ServiceDAO();
+			dataAccessObject = new ObjectServiceDAO();
+		} else if(type.equals(SERVICE_CLASS)) {
+			dataAccessObject = new ServiceClassDAO();
 		}
 
 		return dataAccessObject;

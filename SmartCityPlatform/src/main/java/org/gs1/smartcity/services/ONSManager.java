@@ -29,16 +29,16 @@ import org.xbill.DNS.SimpleResolver;
 import org.xbill.DNS.Type;
 
 public class ONSManager {
-	
+
 	private static final String PROPERTY_PATH = "smartcity.properties";
 
 	private static String onsServiceUrl;	//ONS management
 	private static String onsServerIP;		//ONS server IP address
 	private static String username;			//admin user name
 	private static String password;			//admin password
-	
+
 	private DomainGenerator domainGenerator;
-	
+
 	public ONSManager() {
 
 		Properties prop = new Properties();
@@ -51,21 +51,55 @@ public class ONSManager {
 		onsServerIP = prop.getProperty("ons_server_ip");
 		username = prop.getProperty("admin_username");
 		password = prop.getProperty("admin_password");
-		
+
 		domainGenerator = new DomainGenerator();
 	}
 
-	public void register(String type, String id, String classUrl, String serviceUrl) {
+	public boolean register(String type, String id, String classUrl, String serviceUrl) {
 
 		String domain = domainGenerator.generate(type, id);
 
 		String token = onsLogin();
+		if(token == null) {
+			System.out.println("registration is failed(login fail)");
+			return false;
+		}
 
-		addDomain(domain, token);
-		addRecords(domain, token, classUrl, serviceUrl);
-
-		System.out.println("registration is done");
+		boolean add = addDomain(domain, token);
+		if(add == false) {
+			System.out.println("registration is failed(domain add is failed)");
+			return false;
+		}
+		add = addRecords(domain, token, classUrl, serviceUrl);
+		if(add == true) {
+			System.out.println("registration is done");
+			return true;
+		} else {
+			System.out.println("registration is failed(record add is failed)");
+			return false;
+		}
 	}
+
+	public boolean delete(String type, String id) {
+
+		String domain = domainGenerator.generate(type, id);
+
+		String token = onsLogin();
+		if(token == null) {
+			System.out.println("deletion is failed(login fail)");
+			return false;
+		}
+
+		boolean delete = deleteDomain(domain, token);
+		if(delete == true) {
+			System.out.println("deletion is done");
+			return true;
+		} else {
+			System.out.println("deletion is failed(delted fail)");
+			return false;
+		}
+	}
+
 
 	public List<String> query(String type, String id, String classUrl) {
 
@@ -99,18 +133,7 @@ public class ONSManager {
 
 		return urlList;
 	}
-	
-	public void delete(String type, String id) {
-		
-		String domain = domainGenerator.generate(type, id);
-		
-		String token = onsLogin();
-		
-		deleteDomain(domain, token);
-		
-		System.out.println("deletion is done");
-	}
-	
+
 	private String onsLogin() {
 
 		String queryUrl = onsServiceUrl + "oauth/token";
@@ -152,6 +175,11 @@ public class ONSManager {
 			e1.printStackTrace();
 		}
 
+		if(response.getStatusLine().getStatusCode() != 200) {
+			System.out.println("login is failed: error code: " + response.getStatusLine().getStatusCode());
+			return null;
+		}
+
 		String entity = null;
 		try {
 			entity = EntityUtils.toString(response.getEntity());
@@ -165,7 +193,7 @@ public class ONSManager {
 			JSONObject jobj = new JSONObject(entity);
 
 			String token = jobj.getString("access_token");
-			System.out.println("login is done");
+			System.out.println("login is done : " + token);
 			return token;
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -176,38 +204,7 @@ public class ONSManager {
 		return null;
 	}
 
-	private void deleteDomain(String domain, String token) {
-
-		String queryUrl = onsServiceUrl + "company/" + username + "/server/" + onsServerIP + "/unOwnerOf";
-
-		HttpClient client = HttpClientBuilder.create().build();
-
-		HttpDel delRequest = new HttpDel(queryUrl);
-		
-		String auth = "Bearer " + token;
-
-		String parameters = "\"domainname\":" + "\"" +  domain + "\"";
-
-		delRequest.setHeader("Authorization", auth);
-		delRequest.setHeader("Content-type", "application/json");
-		try {
-			delRequest.setEntity(new StringEntity("{ " + parameters + " }"));
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-
-		try {
-			client.execute(delRequest);
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		System.out.println("domain is deleted");
-	}
-	
-	private void addDomain(String domain, String token) {
+	private boolean addDomain(String domain, String token) {
 
 		String queryUrl = onsServiceUrl + "company/" + username + "/server/" + onsServerIP + "/map";
 
@@ -227,18 +224,63 @@ public class ONSManager {
 			e.printStackTrace();
 		}
 
+		HttpResponse response = null;
 		try {
-			client.execute(postRequest);
+			response = client.execute(postRequest);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		System.out.println("domain is added");
+		if(response.getStatusLine().getStatusCode() != 200) {
+			System.out.println("domain add is failed: error code: " + response.getStatusLine().getStatusCode());
+			return false;
+		} else {
+			System.out.println("domain is added");
+			return true;
+		}
 	}
 
-	private void addRecords(String domain, String token, String classUrl, String serviceUrl) {
+	private boolean deleteDomain(String domain, String token) {
+
+		String queryUrl = onsServiceUrl + "company/" + username + "/server/" + onsServerIP + "/unOwnerOf";
+
+		HttpClient client = HttpClientBuilder.create().build();
+
+		HttpDel delRequest = new HttpDel(queryUrl);
+
+		String auth = "Bearer " + token;
+
+		String parameters = "\"domainname\":" + "\"" +  domain + "\"";
+
+		delRequest.setHeader("Authorization", auth);
+		delRequest.setHeader("Content-type", "application/json");
+		try {
+			delRequest.setEntity(new StringEntity("{ " + parameters + " }"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+
+		HttpResponse response = null;
+		try {
+			response = client.execute(delRequest);
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		if(response.getStatusLine().getStatusCode() != 200) {
+			System.out.println("domain delete is failed: error code: " + response.getStatusLine().getStatusCode());
+			return false;
+		} else {
+			System.out.println("domain is deleted");
+			return true;
+		}
+	}
+
+	private boolean addRecords(String domain, String token, String classUrl, String serviceUrl) {
 
 		String queryUrl = onsServiceUrl + "company/" + username + "/domain/" + domain + "/newRecords";
 
@@ -249,7 +291,7 @@ public class ONSManager {
 		String auth = "Bearer " + token;
 		String rdata = "0 0 \\\"U\\\" \\\"" + classUrl + "\\\" \\\"!^.*$!"
 				+ serviceUrl + "!\\\" .";
-		
+
 		String parameters = "\"records\":[{\"id\":\"-1\",\"name\":\"" +  domain + "\",\"type\":\"NAPTR\",\"ttl\":\"0\",\"content\":\"" + rdata + "\"},"
 				+ "{\"id\":\"-1\",\"name\":\"" +  domain + "\",\"type\":\"A\",\"ttl\":\"0\",\"content\":\"" + onsServerIP + "\"}]";
 
@@ -261,15 +303,22 @@ public class ONSManager {
 			e.printStackTrace();
 		}
 
+		HttpResponse response = null;
 		try {
-			client.execute(postRequest);
+			response = client.execute(postRequest);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		System.out.println("records is added");
+		if(response.getStatusLine().getStatusCode() != 200) {
+			System.out.println("record add is failed: error code: " + response.getStatusLine().getStatusCode());
+			return false;
+		} else {
+			System.out.println("records are added");
+			return true;
+		}
 	}
 
 }

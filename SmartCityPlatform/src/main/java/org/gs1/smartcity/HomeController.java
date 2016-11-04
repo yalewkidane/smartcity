@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 
+import org.gs1.smartcity.capturing.ObjectCollector;
 import org.gs1.smartcity.capturing.services.EventCapturer;
 import org.gs1.smartcity.services.ServiceManager;
 import org.slf4j.Logger;
@@ -77,7 +78,7 @@ public class HomeController {
 	}
 	
 	@RequestMapping(value = "/getServiceList", method = RequestMethod.GET)
-	public ResponseEntity<String> startServiceEventapture(@RequestParam(value = "id") final String id) {
+	public ResponseEntity<String> getServiceList(@RequestParam(value = "id") final String id) {
 
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Type", "text/html; charset=utf-8");
@@ -86,6 +87,62 @@ public class HomeController {
 		String serviceList = serviceManager.getServiceList(id);
 		
 		return new ResponseEntity<String>(serviceList, responseHeaders, HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/registerService", method = RequestMethod.POST)
+	public ResponseEntity<String> registerServiceCapture(@RequestParam(value = "serviceID") final String serviceID,
+			@RequestParam(value = "serviceUrl") final String serviceUrl) {
+
+		ServiceManager ons = new ServiceManager();
+		boolean reg = ons.registerService(serviceID, serviceUrl);
+		if(reg == true) {
+			return new ResponseEntity<String>(new String("Service is registered(ID: " + serviceID + ")"), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<String>(new String("Service is failed"), HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	@RequestMapping(value = "/registerCompanyPrefix", method = RequestMethod.POST)
+	public ResponseEntity<String> registerCompanyPrefix(@RequestParam(value = "companyID") final String companyID,
+			@RequestParam(value = "companyPrefix") final String companyPrefix) {
+
+		ObjectCollector objectCollector = new ObjectCollector();
+		objectCollector.collect(companyID, companyPrefix, null, "companyPrefix");
+		
+		return new ResponseEntity<String>(new String("CompanyPrefix is registered(companyID: " + companyID + ", companyPrefix: " + companyPrefix + ")"), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/registerGSRN", method = RequestMethod.POST)
+	public ResponseEntity<String> registerGSRN(@RequestParam(value = "objectID") final String objectID,
+			@RequestParam(value = "gsrn") final String gsrn,
+			@RequestParam(value = "serviceUrl") final String serviceUrl) {
+
+		ObjectCollector objectCollector = new ObjectCollector();
+		objectCollector.collect(objectID, gsrn, serviceUrl, "gsrn");
+		
+		return new ResponseEntity<String>(new String("GSRN is registered(objectID: " + objectID + ", GSRN: " + gsrn + ")"), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/registerGLN", method = RequestMethod.POST)
+	public ResponseEntity<String> registerGLN(@RequestParam(value = "objectID") final String objectID,
+			@RequestParam(value = "gln") final String gln,
+			@RequestParam(value = "serviceUrl") final String serviceUrl) {
+
+		ObjectCollector objectCollector = new ObjectCollector();
+		objectCollector.collect(objectID, gln, serviceUrl, "gln");
+		
+		return new ResponseEntity<String>(new String("GLN is registered(objectID: " + objectID + ", GLN: " + gln + ")"), HttpStatus.OK);
+	}
+	
+	@RequestMapping(value = "/registerGIAI", method = RequestMethod.POST)
+	public ResponseEntity<String> registerGIAI(@RequestParam(value = "objectID") final String objectID,
+			@RequestParam(value = "giai") final String giai,
+			@RequestParam(value = "serviceUrl") final String serviceUrl) {
+
+		ObjectCollector objectCollector = new ObjectCollector();
+		objectCollector.collect(objectID, giai, serviceUrl, "giai");
+		
+		return new ResponseEntity<String>(new String("GIAI is registered(objectID: " + objectID + ", GIAI: " + giai + ")"), HttpStatus.OK);
 	}
 
 }
