@@ -75,10 +75,16 @@ public class BusEventTranslator extends EventTranslator {
 			}
 			if(element.getElementsByTagName("nodeId").item(0) != null) {
 				//event.setBizLocation("000000");
-				event.setBizLocation(aggregator.getVocabulary("http://epcis.example.com/bus/stop/id", element.getElementsByTagName("nodeId").item(0).getFirstChild().getNodeValue()).getVocabularyElementList().getVocabularyElements().get(0).getId());
+				VocabularyType voc = aggregator.getVocabulary("http://epcis.example.com/bus/stop/id", element.getElementsByTagName("nodeId").item(0).getFirstChild().getNodeValue());
+				if(voc != null) {
+					event.setBizLocation(voc.getVocabularyElementList().getVocabularyElements().get(0).getId());
+				}
 			} else if(element.getElementsByTagName("arsNo").item(0) != null) {
 				//event.setBizLocation("000000");
-				event.setBizLocation(aggregator.getVocabulary("http://epcis.example.com/bus/stop/number", element.getElementsByTagName("arsNo").item(0).getFirstChild().getNodeValue()).getVocabularyElementList().getVocabularyElements().get(0).getId());
+				VocabularyType voc = aggregator.getVocabulary("http://epcis.example.com/bus/stop/number", element.getElementsByTagName("arsNo").item(0).getFirstChild().getNodeValue());
+				if(voc != null) {
+					event.setBizLocation(voc.getVocabularyElementList().getVocabularyElements().get(0).getId());
+				}
 			}
 			if(element.getElementsByTagName("direction").item(0) != null) {
 				event.addBizTransaction(DIRECTION);

@@ -18,6 +18,7 @@ public class ServiceManager {
 
 	public ServiceManager() {
 
+		daoFactory = new DAOFactory();
 		daoS = daoFactory.getDAO(DAOFactory.SERVICE);
 		daoC = daoFactory.getDAO(DAOFactory.SERVICE_CLASS);
 		onsManager = new ONSManager();
@@ -29,7 +30,7 @@ public class ServiceManager {
 		String serviceID = daoS.queryKey(id);
 
 		List<String> serviceList = onsManager.query(GSRN, serviceID, CLASS_URL);
-
+		
 		marshaller.make(serviceList);
 		String result = marshaller.marshal();
 		

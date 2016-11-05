@@ -93,8 +93,8 @@ public class HomeController {
 	public ResponseEntity<String> registerServiceCapture(@RequestParam(value = "serviceID") final String serviceID,
 			@RequestParam(value = "serviceUrl") final String serviceUrl) {
 
-		ServiceManager ons = new ServiceManager();
-		boolean reg = ons.registerService(serviceID, serviceUrl);
+		ServiceManager serviceManager = new ServiceManager();
+		boolean reg = serviceManager.registerService(serviceID, serviceUrl);
 		if(reg == true) {
 			return new ResponseEntity<String>(new String("Service is registered(ID: " + serviceID + ")"), HttpStatus.OK);
 		} else {

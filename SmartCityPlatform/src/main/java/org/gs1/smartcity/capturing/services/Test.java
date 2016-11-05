@@ -200,6 +200,15 @@ public class Test {
 //			serviceDao.register(giai.getGiai(), "880111110000000030");
 //		}
 		
+//		List<String> params = new ArrayList<String>();
+//		params.add("5200010000");
+//		EventCapturer eventCapturer = new EventCapturer("bus", "busanBus", "busRealTimePosInfo", params);
+//		
+//		Timer timer = new Timer();
+//		timer.schedule(eventCapturer, 0, 60000);
+		
+	
+		
 		
 		
 	}

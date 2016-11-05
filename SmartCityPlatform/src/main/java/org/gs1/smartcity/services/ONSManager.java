@@ -112,7 +112,7 @@ public class ONSManager {
 
 		try {
 			Lookup lookup = new Lookup(domain, Type.NAPTR);
-			lookup.setResolver(new SimpleResolver("8.8.8.8"));
+			lookup.setResolver(new SimpleResolver("52.69.212.96"));
 			lookup.setCache(null);
 			result = lookup.run();
 			int code = lookup.getResult();
@@ -124,7 +124,7 @@ public class ONSManager {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-
+		
 		for(String r : res){
 			if(r.toLowerCase().contains(classUrl)){
 				urlList.add(r.substring(r.lastIndexOf("!^.*$!") + 6, r.lastIndexOf("!")));

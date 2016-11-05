@@ -33,7 +33,7 @@ public class EPCISDataAggregator {
 
 		QueryProcessor queryProcessor = new QueryProcessor();
 		String url = "http://" + epcis_ip + ":" + epcis_port + "/epcis/Service/Poll/SimpleMasterDataQuery?includeAttributes=true&includeChildren=true&EQATTR_" + attributeName + "=" + attributeValue;
-
+		
 		String data = null;
 		try {
 			data = queryProcessor.query(url);
