@@ -13,18 +13,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class ServiceListType {
 	
 	@XmlElement(name="Service")
-	private List<String> serviceList;
+	private List<ServiceType> serviceList;
 	
-	public List<String> getServiceList() {
+	public List<ServiceType> getServiceList() {
 		
 		if(serviceList == null) {
 			
-			serviceList = new ArrayList<String>();
+			serviceList = new ArrayList<ServiceType>();
 		}
 		return serviceList;
 	}
 	
-	public void serServiceList(List<String> service) {
+	public void serServiceList(List<ServiceType> service) {
 		
 		this.serviceList = service;
 	}

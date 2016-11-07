@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.query.Update;
 
 public class GlnDAO extends DataAccessObject {
 
-	public void register(String objectID, String gln){
+	public boolean register(String objectID, String gln){
 
 		GLNType map = new GLNType();
 		map.setObjectID(objectID);
@@ -19,10 +19,10 @@ public class GlnDAO extends DataAccessObject {
 
 		if(mongoOps.findOne(query(where("objectID").is(objectID)), GLNType.class, "GLN") != null || mongoOps.findOne(query(where("gln").is(gln)), GLNType.class, "GLN") != null) {
 			System.out.println("duplicate error!");
-			return;
+			return false;
 		}
 		mongoOps.insert(map, "GLN");
-
+		return true;
 	}
 
 	public String queryKey(String objectID){
@@ -42,19 +42,23 @@ public class GlnDAO extends DataAccessObject {
 		return list;
 	}
 	
-	public void update(String objectID, String gln) {
+	public boolean update(String objectID, String gln) {
 
 		Update update = new Update();
 		update.set("gln", gln);
 		mongoOps.updateFirst(query(where("objectID").is(objectID)), update, GLNType.class, "GLN");
+		
+		return true;
 	}
 
-	public void delete(String objectID) {
+	public boolean delete(String objectID) {
 
 		mongoOps.remove(query(where("objectID").is(objectID)), GLNType.class, "GLN");
+		
+		return true;
 	}
 
-	public void putCheckNum(int checkNum) {
+	public boolean putCheckNum(int checkNum) {
 
 		CheckNumType map = new CheckNumType();
 		map.setType("gln");
@@ -62,6 +66,8 @@ public class GlnDAO extends DataAccessObject {
 
 		mongoOps.remove(query(where("type").is("gln")), CheckNumType.class, "CheckNum");
 		mongoOps.insert(map, "CheckNum");
+		
+		return true;
 	}
 
 	public int getCheckNum() {

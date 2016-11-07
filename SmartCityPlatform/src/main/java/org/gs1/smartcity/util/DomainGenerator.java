@@ -4,6 +4,7 @@ public class DomainGenerator {
 	
 	public String generate(String type, String id) {
 		
+		System.out.println(id);
 		StringBuilder sb = new StringBuilder(id);
 		id = sb.reverse().toString();
 		

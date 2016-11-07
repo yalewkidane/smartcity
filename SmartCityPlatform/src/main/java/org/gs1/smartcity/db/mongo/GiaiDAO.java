@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.query.Update;
 
 public class GiaiDAO extends DataAccessObject {
 
-	public void register(String objectID, String giai){
+	public boolean register(String objectID, String giai){
 
 		GIAIType map = new GIAIType();
 		map.setObjectID(objectID);
@@ -19,10 +19,10 @@ public class GiaiDAO extends DataAccessObject {
 
 		if(mongoOps.findOne(query(where("objectID").is(objectID)), GIAIType.class, "GIAI") != null || mongoOps.findOne(query(where("giai").is(giai)), GIAIType.class, "GIAI") != null) {
 			System.out.println("duplicate error!");
-			return;
+			return false;
 		}
 		mongoOps.insert(map, "GIAI");
-
+		return true;
 	}
 
 	public String queryKey(String objectID){
@@ -42,19 +42,23 @@ public class GiaiDAO extends DataAccessObject {
 		return list;
 	}
 
-	public void update(String objectID, String giai) {
+	public boolean update(String objectID, String giai) {
 
 		Update update = new Update();
 		update.set("giai", giai);
 		mongoOps.updateFirst(query(where("objectID").is(objectID)), update, GIAIType.class, "GIAI");
+		
+		return true;
 	}
 
-	public void delete(String objectID) {
+	public boolean delete(String objectID) {
 
 		mongoOps.remove(query(where("objectID").is(objectID)), GIAIType.class, "GIAI");
+		
+		return true;
 	}
 
-	public void putCheckNum(int checkNum) {
+	public boolean putCheckNum(int checkNum) {
 
 		CheckNumType map = new CheckNumType();
 		map.setType("giai");
@@ -62,6 +66,8 @@ public class GiaiDAO extends DataAccessObject {
 
 		mongoOps.remove(query(where("type").is("giai")), CheckNumType.class, "CheckNum");
 		mongoOps.insert(map, "CheckNum");
+		
+		return true;
 	}
 
 	public int getCheckNum() {

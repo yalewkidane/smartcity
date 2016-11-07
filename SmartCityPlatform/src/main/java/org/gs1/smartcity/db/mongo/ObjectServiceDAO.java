@@ -9,22 +9,23 @@ import org.springframework.data.mongodb.core.query.Update;
 
 public class ObjectServiceDAO extends DataAccessObject {
 
-	public void register(String objectID, String serviceID){
+	public boolean register(String objectID, String serviceID){
 
 		ObejctServiceType map = new ObejctServiceType();
 		map.setObjectID(objectID);
 		map.setServiceID(serviceID);
 
-		if(mongoOps.findOne(query(where("objectID").is(objectID)), ObejctServiceType.class, "Service") != null) {
+		if(mongoOps.findOne(query(where("objectID").is(objectID)), ObejctServiceType.class, "ObjectService") != null) {
 			System.out.println("duplicate error!");
-			return;
+			return false;
 		}
-		mongoOps.insert(map, "Service");
+		mongoOps.insert(map, "ObjectService");
+		return true;
 	}
 	
 	public String queryKey(String objectID){
 
-		ObejctServiceType map = mongoOps.findOne(query(where("objectID").is(objectID)), ObejctServiceType.class, "Service");
+		ObejctServiceType map = mongoOps.findOne(query(where("objectID").is(objectID)), ObejctServiceType.class, "ObjectService");
 
 		if(map == null) {
 			return null;
@@ -32,31 +33,37 @@ public class ObjectServiceDAO extends DataAccessObject {
 		return map.getServiceID();
 	}
 	
-	public void update(String objectID, String serviceID) {
+	public boolean update(String objectID, String serviceID) {
 
 		Update update = new Update();
 		update.set("serviceID", serviceID);
-		mongoOps.updateFirst(query(where("objectID").is(objectID)), update, ObejctServiceType.class, "Service");
+		mongoOps.updateFirst(query(where("objectID").is(objectID)), update, ObejctServiceType.class, "ObjectService");
+		
+		return true;
 	}
 
-	public void delete(String objectID) {
+	public boolean delete(String objectID) {
 
-		mongoOps.remove(query(where("objectID").is(objectID)), ObejctServiceType.class, "Service");
+		mongoOps.remove(query(where("objectID").is(objectID)), ObejctServiceType.class, "ObjectService");
+		
+		return true;
 	}
 
-	public void putCheckNum(int checkNum) {
+	public boolean putCheckNum(int checkNum) {
 
 		CheckNumType map = new CheckNumType();
-		map.setType("service");
+		map.setType("objectService");
 		map.setCheckNum(checkNum);
 
-		mongoOps.remove(query(where("type").is("service")), CheckNumType.class, "CheckNum");
+		mongoOps.remove(query(where("type").is("objectService")), CheckNumType.class, "CheckNum");
 		mongoOps.insert(map, "CheckNum");
+		
+		return true;
 	}
 
 	public int getCheckNum() {
 
-		CheckNumType map = mongoOps.findOne(query(where("type").is("service")), CheckNumType.class, "CheckNum");
+		CheckNumType map = mongoOps.findOne(query(where("type").is("objectService")), CheckNumType.class, "CheckNum");
 
 		return map.getCheckNum();
 	}

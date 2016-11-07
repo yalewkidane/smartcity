@@ -13,11 +13,11 @@ public abstract class DataAccessObject {
 
 	}
 
-	public abstract void register(String key, String value);
+	public abstract boolean register(String key, String value);
 	public abstract String queryKey(String key);
-	public abstract void update(String key, String value);
-	public abstract void delete(String key);
+	public abstract boolean update(String key, String value);
+	public abstract boolean delete(String key);
 	
-	public abstract void putCheckNum(int checkNum);
+	public abstract boolean putCheckNum(int checkNum);
 	public abstract int getCheckNum();
 }

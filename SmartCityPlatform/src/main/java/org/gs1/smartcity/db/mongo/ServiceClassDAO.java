@@ -9,22 +9,23 @@ import org.springframework.data.mongodb.core.query.Update;
 
 public class ServiceClassDAO extends DataAccessObject {
 
-	public void register(String serviceUrl, String serviceID){
+	public boolean register(String serviceID, String serviceName){
 
 		ServiceClassType map = new ServiceClassType();
-		map.setServiceUrl(serviceUrl);
 		map.setServiceID(serviceID);
+		map.setServiceName(serviceName);
 
-		if(mongoOps.findOne(query(where("serviceUrl").is(serviceUrl)), ServiceClassType.class, "ServiceClass") != null) {
+		if(mongoOps.findOne(query(where("serviceID").is(serviceID)), ServiceClassType.class, "ServiceClass") != null) {
 			System.out.println("duplicate error!");
-			return;
+			return false;
 		}
 		mongoOps.insert(map, "ServiceClass");
+		return true;
 	}
 	
-	public String queryKey(String serviceUrl){
+	public String queryKey(String serviceName){
 
-		ServiceClassType map = mongoOps.findOne(query(where("serviceUrl").is(serviceUrl)), ServiceClassType.class, "ServiceClass");
+		ServiceClassType map = mongoOps.findOne(query(where("serviceName").is(serviceName)), ServiceClassType.class, "ServiceClass");
 
 		if(map == null) {
 			return null;
@@ -32,19 +33,23 @@ public class ServiceClassDAO extends DataAccessObject {
 		return map.getServiceID();
 	}
 	
-	public void update(String serviceUrl, String serviceID) {
+	public boolean update(String serviceID, String serviceName) {
 
 		Update update = new Update();
-		update.set("serviceID", serviceID);
-		mongoOps.updateFirst(query(where("serviceUrl").is(serviceUrl)), update, ServiceClassType.class, "ServiceClass");
+		update.set("serviceName", serviceName);
+		mongoOps.updateFirst(query(where("serviceID").is(serviceID)), update, ServiceClassType.class, "ServiceClass");
+		
+		return true;
 	}
 
-	public void delete(String serviceUrl) {
+	public boolean delete(String serviceID) {
 
-		mongoOps.remove(query(where("serviceUrl").is(serviceUrl)), ServiceClassType.class, "ServiceClass");
+		mongoOps.remove(query(where("serviceID").is(serviceID)), ServiceClassType.class, "ServiceClass");
+		
+		return true;
 	}
 
-	public void putCheckNum(int checkNum) {
+	public boolean putCheckNum(int checkNum) {
 
 		CheckNumType map = new CheckNumType();
 		map.setType("serviceClass");
@@ -52,6 +57,8 @@ public class ServiceClassDAO extends DataAccessObject {
 
 		mongoOps.remove(query(where("type").is("serviceClass")), CheckNumType.class, "CheckNum");
 		mongoOps.insert(map, "CheckNum");
+		
+		return true;
 	}
 
 	public int getCheckNum() {

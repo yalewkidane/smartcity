@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.query.Update;
 
 public class GsrnDAO extends DataAccessObject {
 
-	public void register(String objectID, String gsrn){
+	public boolean register(String objectID, String gsrn){
 
 		GSRNType map = new GSRNType();
 		map.setObjectID(objectID);
@@ -19,9 +19,10 @@ public class GsrnDAO extends DataAccessObject {
 
 		if(mongoOps.findOne(query(where("objectID").is(objectID)), GSRNType.class, "GSRN") != null || mongoOps.findOne(query(where("gsrn").is(gsrn)), GSRNType.class, "GSRN") != null) {
 			System.out.println("duplicate error!");
-			return;
+			return false;
 		}
 		mongoOps.insert(map, "GSRN");
+		return true;
 	}
 	
 	public String queryKey(String objectID){
@@ -41,19 +42,23 @@ public class GsrnDAO extends DataAccessObject {
 		return list;
 	}
 	
-	public void update(String objectID, String gsrn) {
+	public boolean update(String objectID, String gsrn) {
 
 		Update update = new Update();
 		update.set("gsrn", gsrn);
 		mongoOps.updateFirst(query(where("objectID").is(objectID)), update, GSRNType.class, "GSRN");
+		
+		return true;
 	}
 
-	public void delete(String objectID) {
+	public boolean delete(String objectID) {
 
 		mongoOps.remove(query(where("objectID").is(objectID)), GSRNType.class, "GSRN");
+		
+		return true;
 	}
 
-	public void putCheckNum(int checkNum) {
+	public boolean putCheckNum(int checkNum) {
 
 		CheckNumType map = new CheckNumType();
 		map.setType("gsrn");
@@ -61,6 +66,8 @@ public class GsrnDAO extends DataAccessObject {
 
 		mongoOps.remove(query(where("type").is("gsrn")), CheckNumType.class, "CheckNum");
 		mongoOps.insert(map, "CheckNum");
+		
+		return true;
 	}
 
 	public int getCheckNum() {

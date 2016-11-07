@@ -23,7 +23,6 @@ import org.gs1.smartcity.db.mongo.GlnDAO;
 import org.gs1.smartcity.db.mongo.GsrnDAO;
 import org.gs1.smartcity.db.mongo.ObjectServiceDAO;
 import org.gs1.smartcity.etc.Identification;
-import org.gs1.smartcity.etc.VehicleDAO;
 import org.gs1.smartcity.services.ONSManager;
 import org.gs1.smartcity.services.ServiceListMarshaller;
 import org.gs1.smartcity.services.ServiceManager;
@@ -208,7 +207,11 @@ public class Test {
 //		timer.schedule(eventCapturer, 0, 60000);
 		
 	
+		ServiceManager m = new ServiceManager();
 		
+		String s = m.getServiceList("880123450000000209");
+		
+		System.out.println(s);
 		
 		
 	}

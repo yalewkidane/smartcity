@@ -55,7 +55,7 @@ public class ONSManager {
 		domainGenerator = new DomainGenerator();
 	}
 
-	public boolean register(String type, String id, String classUrl, String serviceUrl) {
+	public boolean register(String type, String id, String classUrl) {
 
 		String domain = domainGenerator.generate(type, id);
 
@@ -70,7 +70,29 @@ public class ONSManager {
 			System.out.println("registration is failed(domain add is failed)");
 			return false;
 		}
-		add = addRecords(domain, token, classUrl, serviceUrl);
+
+		add = addRecords(domain, token, classUrl, null);
+		if(add == true) {
+			System.out.println("registration is done");
+			return true;
+		} else {
+			System.out.println("registration is failed(record add is failed)");
+			return false;
+		}
+
+	}
+	
+	public boolean registerRdata(String type, String id, String classUrl, String serviceUrl) {
+		
+		String domain = domainGenerator.generate(type, id);
+
+		String token = onsLogin();
+		if(token == null) {
+			System.out.println("registration is failed(login fail)");
+			return false;
+		}
+		
+		boolean add = addRecords(domain, token, classUrl, serviceUrl);
 		if(add == true) {
 			System.out.println("registration is done");
 			return true;
@@ -124,7 +146,7 @@ public class ONSManager {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		for(String r : res){
 			if(r.toLowerCase().contains(classUrl)){
 				urlList.add(r.substring(r.lastIndexOf("!^.*$!") + 6, r.lastIndexOf("!")));
@@ -289,11 +311,13 @@ public class ONSManager {
 		HttpPost postRequest = new HttpPost(queryUrl);
 
 		String auth = "Bearer " + token;
-		String rdata = "0 0 \\\"U\\\" \\\"" + classUrl + "\\\" \\\"!^.*$!"
-				+ serviceUrl + "!\\\" .";
-
-		String parameters = "\"records\":[{\"id\":\"-1\",\"name\":\"" +  domain + "\",\"type\":\"NAPTR\",\"ttl\":\"0\",\"content\":\"" + rdata + "\"},"
-				+ "{\"id\":\"-1\",\"name\":\"" +  domain + "\",\"type\":\"A\",\"ttl\":\"0\",\"content\":\"" + onsServerIP + "\"}]";
+		String parameters = null;
+		if(serviceUrl != null) {
+			String rdata = "0 0 \\\"U\\\" \\\"" + classUrl + "\\\" \\\"!^.*$!" + serviceUrl + "!\\\" .";
+			parameters = "\"records\":[{\"id\":\"-1\",\"name\":\"" +  domain + "\",\"type\":\"NAPTR\",\"ttl\":\"0\",\"content\":\"" + rdata + "\"}]";
+		} else {
+			parameters = "\"records\":[{\"id\":\"-1\",\"name\":\"" +  domain + "\",\"type\":\"A\",\"ttl\":\"0\",\"content\":\"" + onsServerIP + "\"}]";
+		}
 
 		postRequest.setHeader("Authorization", auth);
 		postRequest.setHeader("Content-type", "application/json");

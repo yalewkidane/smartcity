@@ -2,27 +2,27 @@ package org.gs1.smartcity.datatype;
 
 public class ServiceType {
 	
-	private String objectID;
-	private String serviceID;
+	private String serviceName;
+	private String serviceUrl;
 	
-	public String getObjectID() {
+	public String getServiceName() {
 		
-		return objectID;
+		return serviceName;
 	}
 	
-	public void setObjectID(String value) {
+	public void setServiceName(String value) {
 		
-		this.objectID = value;
+		this.serviceName = value;
 	}
 	
-	public String getServiceID() {
+	public String getServiceUrl() {
 		
-		return serviceID;
+		return serviceUrl;
 	}
 	
-	public void setServiceID(String value) {
+	public void setServiceUrl(String value) {
 		
-		this.serviceID = value;
+		this.serviceUrl = value;
 	}
 
 }

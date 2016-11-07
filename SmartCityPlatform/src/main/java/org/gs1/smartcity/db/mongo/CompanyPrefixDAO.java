@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.query.Update;
 
 public class CompanyPrefixDAO extends DataAccessObject {
 
-	public void register(String companyID, String companyPrefix){
+	public boolean register(String companyID, String companyPrefix){
 
 		CompanyPrefixType map = new CompanyPrefixType();
 		map.setCompanyID(companyID);
@@ -19,9 +19,10 @@ public class CompanyPrefixDAO extends DataAccessObject {
 
 		if(mongoOps.findOne(query(where("companyID").is(companyID)), CompanyPrefixType.class, "CompanyPrefix") != null || mongoOps.findOne(query(where("companyPrefix").is(companyPrefix)), CompanyPrefixType.class, "CompanyPrefix") != null) {
 			System.out.println("duplicate error!");
-			return;
+			return false;
 		}
 		mongoOps.insert(map, "CompanyPrefix");
+		return true;
 	}
 
 	public String queryKey(String companyID){
@@ -42,19 +43,23 @@ public class CompanyPrefixDAO extends DataAccessObject {
 		return list;
 	}
 
-	public void update(String companyID, String companyPrefix) {
+	public boolean update(String companyID, String companyPrefix) {
 
 		Update update = new Update();
 		update.set("companyPrefix", companyPrefix);
 		mongoOps.updateFirst(query(where("companyID").is(companyID)), update, CompanyPrefixType.class, "CompanyPrefix");
+		
+		return true;
 	}
 
-	public void delete(String companyID) {
+	public boolean delete(String companyID) {
 
 		mongoOps.remove(query(where("companyID").is(companyID)), CompanyPrefixType.class, "CompanyPrefix");
+		
+		return true;
 	}
 
-	public void putCheckNum(int checkNum) {
+	public boolean putCheckNum(int checkNum) {
 
 		CheckNumType map = new CheckNumType();
 		map.setType("companyPrefix");
@@ -62,6 +67,8 @@ public class CompanyPrefixDAO extends DataAccessObject {
 
 		mongoOps.remove(query(where("type").is("companyPrefix")), CheckNumType.class, "CheckNum");
 		mongoOps.insert(map, "CheckNum");
+		
+		return true;
 	}
 
 	public int getCheckNum() {

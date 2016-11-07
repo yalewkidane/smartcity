@@ -10,6 +10,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
 
 import org.gs1.smartcity.datatype.ServiceListType;
+import org.gs1.smartcity.datatype.ServiceType;
 
 public class ServiceListMarshaller {
 	
@@ -20,7 +21,7 @@ public class ServiceListMarshaller {
 		serviceList = new ServiceListType();
 	}
 	
-	public void make(List<String> services) {
+	public void make(List<ServiceType> services) {
 		
 		serviceList.getServiceList().addAll(services);
 	}
