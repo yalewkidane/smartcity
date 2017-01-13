@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlType;
  *         &lt;element name="Interval" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="IntervalNrom" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="IntervalPeak" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
+ *         &lt;element name="IntervalHoli" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="IntervalSat" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="IntervalSun" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *       &lt;/sequence&gt;
@@ -43,21 +44,24 @@ import javax.xml.bind.annotation.XmlType;
     "interval",
     "intervalNorm",
     "intervalPeak",
+    "intervalHoli",
     "intervalSat",
     "intervalSun"
 })
 @XmlRootElement
 public class BusIntervalType {
 
-    @XmlElement(name = "Interval", required = true)
+    @XmlElement(name = "Interval")
     protected String interval;
-    @XmlElement(name = "IntervalNorm", required = true)
+    @XmlElement(name = "IntervalNorm")
     protected String intervalNorm;
-    @XmlElement(name = "IntervalPeak", required = true)
+    @XmlElement(name = "IntervalPeak")
     protected String intervalPeak;
-    @XmlElement(name = "IntervalSat", required = true)
+    @XmlElement(name = "IntervalHoli")
+    protected String intervalHoli;
+    @XmlElement(name = "IntervalSat")
     protected String intervalSat;
-    @XmlElement(name = "IntervalSun", required = true)
+    @XmlElement(name = "IntervalSun")
     protected String intervalSun;
 
     /**
@@ -130,6 +134,30 @@ public class BusIntervalType {
      */
     public void setIntervalPeak(String value) {
         this.intervalPeak = value;
+    }
+    
+    /**
+     * intervalHoli 속성의 값을 가져옵니다.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getIntervalHoli() {
+        return intervalHoli;
+    }
+
+    /**
+     * intervalHoli 속성의 값을 설정합니다.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setIntervalHoli(String value) {
+        this.intervalHoli = value;
     }
 
     /**

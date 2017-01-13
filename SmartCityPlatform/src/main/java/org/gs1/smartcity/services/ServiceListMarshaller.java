@@ -9,8 +9,8 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
 
-import org.gs1.smartcity.datatype.ServiceListType;
-import org.gs1.smartcity.datatype.ServiceType;
+import org.gs1.smartcity.datatype.service.ServiceListType;
+import org.gs1.smartcity.datatype.service.ServiceType;
 
 public class ServiceListMarshaller {
 	

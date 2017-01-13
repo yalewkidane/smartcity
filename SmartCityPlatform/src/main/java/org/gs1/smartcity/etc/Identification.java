@@ -9,15 +9,12 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.gs1.epcglobal.epcis.VocabularyType;
-import org.gs1.smartcity.capturing.EPCISDataAggregator;
-import org.gs1.smartcity.datatype.bus.CompanyPrefixType;
-import org.gs1.smartcity.datatype.bus.GLNType;
-import org.gs1.smartcity.db.mongo.CompanyPrefixDAO;
+import org.gs1.smartcity.datatype.identification.CompanyPrefixType;
+import org.gs1.smartcity.datatype.identification.GLNType;
 import org.gs1.smartcity.db.mongo.DAOFactory;
 import org.gs1.smartcity.db.mongo.DataAccessObject;
-import org.gs1.smartcity.db.mongo.GiaiDAO;
-import org.gs1.smartcity.db.mongo.GlnDAO;
+import org.gs1.smartcity.db.mongo.identification.CompanyPrefixDAO;
+import org.gs1.smartcity.db.mongo.identification.GlnDAO;
 import org.gs1.smartcity.util.CheckBit;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -55,7 +52,7 @@ public class Identification {
 			e.printStackTrace();
 		}
 
-		DAOFactory factory = new DAOFactory();
+		DAOFactory factory = DAOFactory.getInstance();
 		DataAccessObject daoG = factory.getDAO(DAOFactory.GSRN);
 
 		NodeList nList = document.getElementsByTagName("itemList");
@@ -92,7 +89,7 @@ public class Identification {
 			e.printStackTrace();
 		}
 
-		DAOFactory factory = new DAOFactory();
+		DAOFactory factory = DAOFactory.getInstance();
 		DataAccessObject daoG = factory.getDAO(DAOFactory.GSRN);
 
 		NodeList nList = document.getElementsByTagName("itemList");
@@ -129,7 +126,7 @@ public class Identification {
 			e.printStackTrace();
 		}
 
-		DAOFactory factory = new DAOFactory();
+		DAOFactory factory = DAOFactory.getInstance();
 		DataAccessObject daoG = factory.getDAO(DAOFactory.GLN);
 
 		NodeList nList = document.getElementsByTagName("itemList");
@@ -184,7 +181,7 @@ public class Identification {
 
 		NodeList nList = document.getElementsByTagName("itemList");
 
-		DAOFactory factory = new DAOFactory();
+		DAOFactory factory = DAOFactory.getInstance();
 		DataAccessObject daoC = factory.getDAO(DAOFactory.COMPANY_PREFIX);
 		DataAccessObject daoG = factory.getDAO(DAOFactory.GIAI);
 

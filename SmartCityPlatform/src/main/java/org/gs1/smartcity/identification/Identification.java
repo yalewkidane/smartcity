@@ -12,14 +12,14 @@ public class Identification {
 	
 	public Identification() {
 		
-		companyPrefixDao = (new DAOFactory()).getDAO(DAOFactory.COMPANY_PREFIX);
+		companyPrefixDao = (DAOFactory.getInstance()).getDAO(DAOFactory.COMPANY_PREFIX);
 		dao = null;
 		id = null;
 	}
 	
 	public String identifyGIAI(String companyID, String objectID) {
 		
-		dao = (new DAOFactory()).getDAO(DAOFactory.GIAI);
+		dao = (DAOFactory.getInstance()).getDAO(DAOFactory.GIAI);
 		
 		if(dao.queryKey(objectID) == null) {
 			String companyPrefix = companyPrefixDao.queryKey(companyID); 
@@ -36,7 +36,7 @@ public class Identification {
 	
 	public String identifyGLN(String companyID, String objectID) {
 		
-		dao = (new DAOFactory()).getDAO(DAOFactory.GLN);
+		dao = (DAOFactory.getInstance()).getDAO(DAOFactory.GLN);
 		
 		if(dao.queryKey(objectID) == null) {
 			String companyPrefix = companyPrefixDao.queryKey(companyID); 
@@ -55,7 +55,7 @@ public class Identification {
 	
 	public String identifyGSRN(String companyID, String objectID) {
 		
-		dao = (new DAOFactory()).getDAO(DAOFactory.GSRN);
+		dao = (DAOFactory.getInstance()).getDAO(DAOFactory.GSRN);
 		
 		if(dao.queryKey(objectID) == null) {
 			String companyPrefix = companyPrefixDao.queryKey(companyID); 

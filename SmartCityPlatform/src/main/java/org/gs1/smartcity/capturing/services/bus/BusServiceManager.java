@@ -17,6 +17,7 @@ public class BusServiceManager extends ExistingServiceManager{
 	public String queryExistingServiceData(String serviceName, String serviceType, List<String> params) {
 
 		String url = urlGenerator.generate(serviceName, serviceType, params);
+		System.out.println(url);
 
 		QueryProcessor queryProcessor = new QueryProcessor();
 		String data = null;
@@ -25,6 +26,7 @@ public class BusServiceManager extends ExistingServiceManager{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		System.out.println(data);
 
 		if(serviceType.equals(BusServiceFactory.BUS_LINE_ROUTE)) {
 			data = params.get(0) + data;
@@ -50,12 +52,11 @@ public class BusServiceManager extends ExistingServiceManager{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		System.out.println("data : " + data);
 
 		Object object = eventTranslator.translate(serviceName, serviceType, data);
 
 		String result = eventDataManager.modeling(serviceType, object);
-
-		System.out.println(result);
 
 		return result;
 	}

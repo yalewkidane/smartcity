@@ -43,6 +43,7 @@ public class BusMasterDataManager extends MasterDataManager {
 	}
 
 	private void lineModeling(List<BusLineInfoType> infoList) {
+		System.out.println("size: " + infoList.size());
 
 		voc.setType("urn:gs1:epcisapp:bus:line:info");
 		VocabularyElementListType vocElementList = new VocabularyElementListType();

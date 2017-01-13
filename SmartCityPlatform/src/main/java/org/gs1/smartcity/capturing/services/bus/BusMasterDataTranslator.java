@@ -66,14 +66,14 @@ public class BusMasterDataTranslator extends MasterDataTranslator {
 		}
 
 		NodeList nList = document.getElementsByTagName("item");
-
+		System.out.println(nList.getLength());
 		for (int i = 0; i < nList.getLength(); i++) {
 			Node nNode = nList.item(i);
 			Element element = (Element) nNode;
 
 			BusLineInfoType info = new BusLineInfoType();
 
-			DAOFactory factory = new DAOFactory();
+			DAOFactory factory = DAOFactory.getInstance();
 			DataAccessObject dao = factory.getDAO(DAOFactory.GSRN);
 			info.setGsrn(dao.queryKey(element.getElementsByTagName("lineId").item(0).getFirstChild().getNodeValue()));
 
@@ -107,6 +107,9 @@ public class BusMasterDataTranslator extends MasterDataTranslator {
 				if(element.getElementsByTagName("headwayPeak") != null) {
 					interval.setIntervalPeak(element.getElementsByTagName("headwayPeak").item(0).getFirstChild().getNodeValue());
 				}
+				if(element.getElementsByTagName("headwayHoli") != null) {
+					interval.setIntervalHoli(element.getElementsByTagName("headwayHoli").item(0).getFirstChild().getNodeValue());
+				}
 				info.setInterval(interval);
 			}
 
@@ -136,7 +139,7 @@ public class BusMasterDataTranslator extends MasterDataTranslator {
 
 			BusStopInfoType info = new BusStopInfoType();
 
-			DAOFactory factory = new DAOFactory();
+			DAOFactory factory = DAOFactory.getInstance();
 			DataAccessObject dao = factory.getDAO(DAOFactory.GLN);
 			info.setGln(dao.queryKey(element.getElementsByTagName("bstopId").item(0).getFirstChild().getNodeValue()));
 
@@ -169,7 +172,7 @@ public class BusMasterDataTranslator extends MasterDataTranslator {
 
 		BusLineRouteType info = new BusLineRouteType();
 
-		DAOFactory factory = new DAOFactory();
+		DAOFactory factory = DAOFactory.getInstance();
 		DataAccessObject dao = factory.getDAO(DAOFactory.GSRN);
 		info.setGsrn(dao.queryKey(key));
 
@@ -215,7 +218,7 @@ public class BusMasterDataTranslator extends MasterDataTranslator {
 
 			BusLineInfoType info = new BusLineInfoType();
 
-			DAOFactory factory = new DAOFactory();
+			DAOFactory factory = DAOFactory.getInstance();
 			DataAccessObject dao = factory.getDAO(DAOFactory.GSRN);
 			info.setGsrn(dao.queryKey(element.getElementsByTagName("ROUTE_CD").item(0).getFirstChild().getNodeValue()));
 
@@ -427,7 +430,7 @@ public class BusMasterDataTranslator extends MasterDataTranslator {
 
 			BusStopInfoType info = new BusStopInfoType();
 
-			DAOFactory factory = new DAOFactory();
+			DAOFactory factory = DAOFactory.getInstance();
 			DataAccessObject dao = factory.getDAO(DAOFactory.GLN);
 			info.setGln(dao.queryKey(element.getElementsByTagName("BUS_NODE_ID").item(0).getFirstChild().getNodeValue()));
 
@@ -466,7 +469,7 @@ public class BusMasterDataTranslator extends MasterDataTranslator {
 
 		BusLineRouteType info = new BusLineRouteType();
 
-		DAOFactory factory = new DAOFactory();
+		DAOFactory factory = DAOFactory.getInstance();
 		DataAccessObject dao = factory.getDAO(DAOFactory.GSRN);
 		info.setGsrn(dao.queryKey(key));
 
@@ -489,7 +492,7 @@ public class BusMasterDataTranslator extends MasterDataTranslator {
 		return info;
 	}
 
-	public List<BusCompanyInfoType> translateDaejeonBusCompanyInfo(String data) {
+	private List<BusCompanyInfoType> translateDaejeonBusCompanyInfo(String data) {
 
 		List<BusCompanyInfoType> infoList = new ArrayList<BusCompanyInfoType>();
 

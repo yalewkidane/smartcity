@@ -1,6 +1,5 @@
 package org.gs1.smartcity;
 
-import java.io.IOException;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,9 +8,8 @@ import java.util.Locale;
 import java.util.Timer;
 
 import org.gs1.smartcity.capturing.ObjectCollector;
-import org.gs1.smartcity.capturing.services.EventCapturer;
+import org.gs1.smartcity.capturing.eventdata.EventCapturer;
 import org.gs1.smartcity.services.ServiceManager;
-import org.gs1.smartcity.util.QueryProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -22,7 +20,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Handles requests for the application home page.
@@ -32,8 +29,6 @@ public class HomeController {
 
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	private Timer timer;
-	private static final String epcis_ip = "143.248.55.137";
-	private static final String epcis_port = "8080";
 
 	/**
 	 * Simply selects the home view to render by returning its name.
@@ -162,27 +157,6 @@ public class HomeController {
 		objectCollector.collect(objectID, giai, serviceUrl, "giai");
 		
 		return new ResponseEntity<String>(new String("GIAI is registered(objectID: " + objectID + ", GIAI: " + giai + ")"), HttpStatus.OK);
-	}
-	
-	@RequestMapping(value = "/bus/line/service", method = RequestMethod.GET)
-	public ModelAndView busLineInfoService(@RequestParam(value = "id") final String id) {
-
-		ModelAndView model = new ModelAndView();
-		model.setViewName("busLineInfo");
-		
-		QueryProcessor queryProcessor = new QueryProcessor();
-		String elementId = "urn:epc:id:gsrn:" + id.substring(0, 8) + "." + id.substring(8);
-		String url = "http://" + epcis_ip + ":" + epcis_port + "/epcis/Service/Poll/SimpleMasterDataQuery?includeAttributes=true&includeChildren=true&EQ_name=" + elementId;
-		String serviceData = null;
-		try {
-			serviceData = queryProcessor.query(url);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		model.addObject("serviceData", serviceData);
-		
-		return model;
 	}
 
 }

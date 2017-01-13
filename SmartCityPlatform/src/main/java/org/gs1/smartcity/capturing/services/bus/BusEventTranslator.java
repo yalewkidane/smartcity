@@ -56,8 +56,6 @@ public class BusEventTranslator extends EventTranslator {
 			Node nNode = nList.item(i);
 			Element element = (Element) nNode;
 
-			EPCISDataAggregator aggregator = new EPCISDataAggregator();
-
 			BusObjectEventType event = new BusObjectEventType();
 			event.setEventTime(Calendar.getInstance());
 

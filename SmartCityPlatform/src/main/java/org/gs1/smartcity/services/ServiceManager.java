@@ -3,7 +3,7 @@ package org.gs1.smartcity.services;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.gs1.smartcity.datatype.ServiceType;
+import org.gs1.smartcity.datatype.service.ServiceType;
 import org.gs1.smartcity.db.mongo.DAOFactory;
 import org.gs1.smartcity.db.mongo.DataAccessObject;
 
@@ -21,7 +21,7 @@ public class ServiceManager {
 
 	public ServiceManager() {
 
-		daoFactory = new DAOFactory();
+		daoFactory = DAOFactory.getInstance();
 		daoO = daoFactory.getDAO(DAOFactory.OBJECT_SERVICE);
 		daoC = daoFactory.getDAO(DAOFactory.SERVICE_CLASS);
 		daoS = daoFactory.getDAO(DAOFactory.SERVICE);

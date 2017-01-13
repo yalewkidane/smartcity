@@ -4,7 +4,6 @@ import java.util.Calendar;
 
 import org.gs1.epcglobal.epcis.VocabularyType;
 import org.gs1.smartcity.capturing.DataManager;
-import org.gs1.smartcity.capturing.EPCISVocabularyMarshaller;
 import org.unece.cefact.namespaces.standardbusinessdocumentheader.DocumentIdentification;
 import org.unece.cefact.namespaces.standardbusinessdocumentheader.Partner;
 import org.unece.cefact.namespaces.standardbusinessdocumentheader.PartnerIdentification;

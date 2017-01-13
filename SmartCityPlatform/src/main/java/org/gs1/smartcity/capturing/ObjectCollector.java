@@ -12,7 +12,7 @@ public class ObjectCollector {
 	
 	public ObjectCollector() {
 		
-		daoFactory = new DAOFactory();
+		daoFactory = DAOFactory.getInstance();
 		daoC = daoFactory.getDAO(DAOFactory.SERVICE_CLASS);
 		daoS = daoFactory.getDAO(DAOFactory.SERVICE);
 	}
