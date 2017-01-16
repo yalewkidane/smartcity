@@ -1,6 +1,8 @@
 # smartcity
 
-Smart City Architecture
+##Smart City Architecture
+
+![Alt text](/SmartCityPlatform/Images/architecture.png)
 
 For The bus system, there are existing service manager, master data manager, and event data manager packeges.
 Existing service manager sends the query to the existing bus services to acquire the data and translate the obtained data. 
@@ -9,4 +11,4 @@ formatted data. The received data is converted into bus object through the trans
 the master data manager and the event data manager, respectively. Data manager converts the bus object into EPCIS master data 
 and event data and registers them in EPCIS.df
 
-![Alt text](/SmartCityPlatform/Images/architecture.png)
+
